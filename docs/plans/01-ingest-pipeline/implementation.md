@@ -430,7 +430,7 @@ Fixtures are trimmed real responses: two entries each, one with `media:content`,
 one with no image, one title carrying an HTML entity, and — in `hn.json` — one
 hit with `url: null`.
 
-- [ ] **Step 1 — Failing test:** `lib/ingest/parse.test.ts`
+- [x] **Step 1 — Failing test:** `lib/ingest/parse.test.ts`
 
 ```ts
 import { readFileSync } from 'node:fs'
@@ -502,8 +502,8 @@ describe('parseFeed', () => {
 })
 ```
 
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** one `XMLParser` with
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** one `XMLParser` with
   `{ ignoreAttributes: false, attributeNamePrefix: '@' }`, one branch per format.
   Every title and summary goes through `sanitizeText` (200 for titles, 400 for
   summaries). Dates become `new Date(raw).toISOString()`; an item whose date is
@@ -511,8 +511,8 @@ describe('parseFeed', () => {
   Image order inside the parser: `media:content@url` → `media:thumbnail@url` →
   `enclosure@url` → `null` (the `og:image` fallback is network work, Task 8).
   Every parse is wrapped so a malformed body yields `[]`.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest package.json pnpm-lock.yaml && git commit -m "feat(01): RSS, Atom and Hacker News parsers"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest package.json pnpm-lock.yaml && git commit -m "feat(01): RSS, Atom and Hacker News parsers"`
 
 ---
 
