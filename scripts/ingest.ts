@@ -105,7 +105,11 @@ function report(result: IngestResult, args: Args): void {
     for (const item of edition.items) {
       line(`  ${String(item.rank).padStart(2)}. ${item.title}`)
       const image = args.dryRun ? 'images not resolved' : item.image ? 'image' : 'no image'
-      line(`      ${item.source.name} · ${image}`)
+      // Publisher first, because that is the byline the reader will see. The
+      // feed follows only when it is a different thing, which is exactly when a
+      // human reviewing the run wants to know where the item came from.
+      const found = item.feed.name === item.publisher ? '' : ` (via ${item.feed.name})`
+      line(`      ${item.publisher}${found} · ${image}`)
     }
     line()
     line(`Summary           ${edition.summary}`)

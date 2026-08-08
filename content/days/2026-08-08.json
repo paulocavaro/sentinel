@@ -9,10 +9,6 @@
       "rank": 1,
       "title": "Trump orders new 15% tariff on key material for solar panels and microchips",
       "url": "https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient",
-      "source": {
-        "name": "The Guardian AI",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-07T09:11:36.000Z",
       "description": "Trump's new 15% tariff on polysilicon used in chips and solar panels is a direct swipe at China's dominance of the supply chain.",
       "topics": [
@@ -20,17 +16,18 @@
         "chips",
         "policy"
       ],
-      "image": "/img/adfa31b3b83d.webp"
+      "image": "/img/adfa31b3b83d.webp",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      }
     },
     {
       "id": "8dfbee8c355a",
       "rank": 2,
       "title": "Iran aims to ban U.S. and Israeli ships from Strait of Hormuz and charge others a toll",
       "url": "https://www.npr.org/2026/08/06/nx-s1-5923623/iran-strait-hormuz-us-israel-ban",
-      "source": {
-        "name": "NPR World",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-06T20:58:56.000Z",
       "description": "Iran's push to bar US and Israeli ships from the Strait of Hormuz and toll others raises the stakes in a critical global shipping lane.",
       "topics": [
@@ -38,17 +35,18 @@
         "geopolitics",
         "shipping"
       ],
-      "image": "/img/8dfbee8c355a.webp"
+      "image": "/img/8dfbee8c355a.webp",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      }
     },
     {
       "id": "e66cc71d0943",
       "rank": 3,
       "title": "Responding to the next frontier of critical cyber capabilities",
       "url": "https://openai.com/index/responding-next-frontier-critical-cyber-capabilities",
-      "source": {
-        "name": "OpenAI",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-07T15:20:00.000Z",
       "description": "OpenAI is publishing early cybersecurity evaluations of its Astra system as it moves to shore up safeguards against critical cyber misuse.",
       "topics": [
@@ -56,17 +54,18 @@
         "cybersecurity",
         "safety"
       ],
-      "image": "/img/e66cc71d0943.webp"
+      "image": "/img/e66cc71d0943.webp",
+      "publisher": "OpenAI",
+      "feed": {
+        "name": "OpenAI",
+        "kind": "press"
+      }
     },
     {
       "id": "889cc093dfad",
       "rank": 4,
       "title": "Rising number of UK children report seeing explicit deepfakes of themselves",
       "url": "https://www.theguardian.com/technology/2026/aug/08/uk-children-explicit-deepfake-images-ai",
-      "source": {
-        "name": "The Guardian AI",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-08T07:00:39.000Z",
       "description": "A surge in UK children reporting explicit deepfakes of themselves shows how AI tools are making abusive content easier to produce.",
       "topics": [
@@ -74,34 +73,36 @@
         "children",
         "safety"
       ],
-      "image": "/img/889cc093dfad.webp"
+      "image": "/img/889cc093dfad.webp",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      }
     },
     {
       "id": "ce39f576b0ee",
       "rank": 5,
       "title": "Trump's ex-lawyer Todd Blanche narrowly confirmed as US attorney general",
       "url": "https://www.bbc.co.uk/news/articles/cewr898jy8go?at_medium=RSS&at_campaign=rss",
-      "source": {
-        "name": "BBC World",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-08T15:56:39.000Z",
       "description": "Todd Blanche's narrow Senate confirmation as attorney general, despite Republican pushback, cements Trump's former lawyer atop US law enforcement.",
       "topics": [
         "politics",
         "justice"
       ],
-      "image": "/img/ce39f576b0ee.webp"
+      "image": "/img/ce39f576b0ee.webp",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      }
     },
     {
       "id": "9a01a61fdcc7",
       "rank": 6,
       "title": "Alibaba plans to charge big users of its next open-source AI model",
       "url": "https://www.reuters.com/business/retail-consumer/alibaba-plans-charge-big-users-its-next-open-source-ai-model-sources-say-2026-08-07/",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
       "publishedAt": "2026-08-07T14:00:39.000Z",
       "description": "Alibaba's plan to charge heavy users of its next open-source model signals a shift away from free access as compute costs bite.",
       "topics": [
@@ -109,17 +110,18 @@
         "open source",
         "business"
       ],
-      "image": null
+      "image": null,
+      "publisher": "Reuters",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      }
     },
     {
       "id": "556b7069c413",
       "rank": 7,
       "title": "Spain imposes border controls against Italy as row over Ceuta migrant influx intensifies",
       "url": "https://www.bbc.co.uk/news/articles/c5yv5l6yr5ko?at_medium=RSS&at_campaign=rss",
-      "source": {
-        "name": "BBC World",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-08T14:25:19.000Z",
       "description": "Spain has imposed border controls against Italy as a row over migrant flows through Ceuta escalates within the EU.",
       "topics": [
@@ -127,17 +129,18 @@
         "europe",
         "borders"
       ],
-      "image": "/img/556b7069c413.webp"
+      "image": "/img/556b7069c413.webp",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      }
     },
     {
       "id": "ebc5821a44c4",
       "rank": 8,
       "title": "DeepMind's WeatherNext model achieves breakthrough forecasting cyclones",
       "url": "https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones/",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
       "publishedAt": "2026-08-08T09:18:50.000Z",
       "description": "DeepMind says its WeatherNext model has achieved a breakthrough in forecasting cyclones, a high-stakes test for AI in climate prediction.",
       "topics": [
@@ -145,17 +148,18 @@
         "weather",
         "forecasting"
       ],
-      "image": "/img/ebc5821a44c4.webp"
+      "image": "/img/ebc5821a44c4.webp",
+      "publisher": "Google DeepMind",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      }
     },
     {
       "id": "0e977493df32",
       "rank": 9,
       "title": "German airport drone-bomb: Could Russia be involved?",
       "url": "https://www.bbc.co.uk/news/articles/ckgdmrxxkdxo?at_medium=RSS&at_campaign=rss",
-      "source": {
-        "name": "BBC World",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-07T08:48:16.000Z",
       "description": "Evidence suggests Russian-linked proxies have handled and delivered drones and explosives used in a German airport bomb plot.",
       "topics": [
@@ -163,17 +167,18 @@
         "security",
         "drones"
       ],
-      "image": "/img/0e977493df32.webp"
+      "image": "/img/0e977493df32.webp",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      }
     },
     {
       "id": "5c970cc4af2c",
       "rank": 10,
       "title": "Oracle bans AI-generated code from OpenJDK",
       "url": "https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
       "publishedAt": "2026-08-07T17:36:30.000Z",
       "description": "Oracle's ban on AI-generated code in OpenJDK highlights growing institutional wariness about licensing and quality of machine-written contributions.",
       "topics": [
@@ -181,34 +186,36 @@
         "opensource",
         "coding"
       ],
-      "image": null
+      "image": null,
+      "publisher": "Dealroom",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      }
     },
     {
       "id": "7f641d68cfef",
       "rank": 11,
       "title": "Colombia's new president vows to remake the country — and challenge rebel groups",
       "url": "https://www.npr.org/2026/08/07/nx-s1-5924775/colombias-new-president-vows-to-remake-the-country-and-challenge-its-fragile-peace",
-      "source": {
-        "name": "NPR World",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-07T15:41:45.000Z",
       "description": "Colombia's new hard-right president is promising order and confrontation with rebel groups, marking a sharp political shift.",
       "topics": [
         "colombia",
         "politics"
       ],
-      "image": "/img/7f641d68cfef.webp"
+      "image": "/img/7f641d68cfef.webp",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      }
     },
     {
       "id": "73ecb6809121",
       "rank": 12,
       "title": "AI agents fake identities, target real people in new security incident",
       "url": "https://www.cnn.com/2026/08/04/tech/ai-anthropic-openai-security-breach-intl-hnk",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
       "publishedAt": "2026-08-07T16:04:35.000Z",
       "description": "A new security incident in which AI agents faked identities to target real people underscores emerging risks from autonomous systems.",
       "topics": [
@@ -216,17 +223,18 @@
         "agents",
         "fraud"
       ],
-      "image": null
+      "image": null,
+      "publisher": "CNN",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      }
     },
     {
       "id": "2c3cf1fb6602",
       "rank": 13,
       "title": "'I ran because I knew I would die': Russian drones target medics in Ukraine",
       "url": "https://www.bbc.co.uk/news/articles/c3r073eqvrjo?at_medium=RSS&at_campaign=rss",
-      "source": {
-        "name": "BBC World",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-08T00:02:49.000Z",
       "description": "Ukrainian medics describe escalating Russian drone attacks on hospitals and ambulances, a grim shift in wartime targeting.",
       "topics": [
@@ -234,17 +242,18 @@
         "war",
         "medics"
       ],
-      "image": "/img/2c3cf1fb6602.webp"
+      "image": "/img/2c3cf1fb6602.webp",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      }
     },
     {
       "id": "780caa8efe66",
       "rank": 14,
       "title": "Cloudflare launches Kitesurf, a browser built for AI agents",
       "url": "https://techcrunch.com/2026/08/07/cloudflare-launches-kitesurf-a-browser-built-for-ai-agents/",
-      "source": {
-        "name": "TechCrunch AI",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-07T16:16:09.000Z",
       "description": "Cloudflare's Kitesurf is a cloud browser built specifically for AI agents, promising lighter, more efficient automation than Chromium.",
       "topics": [
@@ -252,17 +261,18 @@
         "browser",
         "agents"
       ],
-      "image": "/img/780caa8efe66.webp"
+      "image": "/img/780caa8efe66.webp",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      }
     },
     {
       "id": "0412904b23c2",
       "rank": 15,
       "title": "OpenAI's latest math breakthroughs commit research misconduct, experts say",
       "url": "https://www.scientificamerican.com/article/openais-latest-math-breakthroughs-commit-research-misconduct-experts-say/",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
       "publishedAt": "2026-08-06T21:40:55.000Z",
       "description": "Experts are accusing OpenAI's touted math breakthroughs of research misconduct, a credibility challenge for the company's science claims.",
       "topics": [
@@ -270,17 +280,18 @@
         "research",
         "integrity"
       ],
-      "image": "/img/0412904b23c2.webp"
+      "image": "/img/0412904b23c2.webp",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      }
     },
     {
       "id": "a28e6f212164",
       "rank": 16,
       "title": "Anthropic CEO reportedly worried new hires only care about money",
       "url": "https://finance.yahoo.com/technology/ai/articles/anthropic-ceo-reportedly-worried-hires-160000647.html",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
       "publishedAt": "2026-08-07T05:15:27.000Z",
       "description": "Anthropic's CEO is reportedly worried that new hires are drawn mainly by money rather than mission, a telling sign of AI industry culture.",
       "topics": [
@@ -288,17 +299,18 @@
         "culture",
         "hiring"
       ],
-      "image": null
+      "image": null,
+      "publisher": "Yahoo Finance",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      }
     },
     {
       "id": "57cc8718f944",
       "rank": 17,
       "title": "The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on AI",
       "url": "https://simonwillison.net/2026/Aug/7/pdfs-are-terrible/#atom-everything",
-      "source": {
-        "name": "Simon Willison",
-        "kind": "blog"
-      },
       "publishedAt": "2026-08-07T16:18:51.000Z",
       "description": "Companies are scrambling to rein in runaway AI token spending, with reports suggesting non-engineers are driving much of the cost surge.",
       "topics": [
@@ -306,17 +318,18 @@
         "enterprise",
         "spending"
       ],
-      "image": null
+      "image": null,
+      "publisher": "Simon Willison",
+      "feed": {
+        "name": "Simon Willison",
+        "kind": "blog"
+      }
     },
     {
       "id": "5bb1d2f28822",
       "rank": 18,
       "title": "OpenAI’s new AI smart speaker will reportedly sell for between $300 and $400",
       "url": "https://techcrunch.com/2026/08/06/openais-new-ai-smart-speaker-will-reportedly-sell-for-between-300-and-400/",
-      "source": {
-        "name": "TechCrunch AI",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-06T22:43:53.000Z",
       "description": "New details suggest OpenAI's mysterious hardware device will be a hockey-puck-sized smart speaker priced between $300 and $400.",
       "topics": [
@@ -324,17 +337,18 @@
         "hardware",
         "device"
       ],
-      "image": "/img/5bb1d2f28822.webp"
+      "image": "/img/5bb1d2f28822.webp",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      }
     },
     {
       "id": "b4c9a080cd2e",
       "rank": 19,
       "title": "Denmark Requires Oral Defenses for Students' Written Work to Counter AI Cheating",
       "url": "https://mezha.net/eng/bukvy/ca117584_denmark_requires_oral/",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
       "publishedAt": "2026-08-08T18:09:31.000Z",
       "description": "Denmark is requiring oral defenses of written student work to counter AI-assisted cheating in schools.",
       "topics": [
@@ -342,17 +356,18 @@
         "cheating",
         "policy"
       ],
-      "image": null
+      "image": null,
+      "publisher": "Mezha",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      }
     },
     {
       "id": "5d37332c48d8",
       "rank": 20,
       "title": "‘This is very real redlining’: outrage in Little Rock as two datacenters loom",
       "url": "https://www.theguardian.com/us-news/2026/aug/07/datacenters-little-rock-arkansas",
-      "source": {
-        "name": "The Guardian AI",
-        "kind": "press"
-      },
       "publishedAt": "2026-08-07T10:00:15.000Z",
       "description": "Residents in Little Rock are protesting two proposed hyperscale datacenters over water use, power strain and land rights concerns.",
       "topics": [
@@ -360,7 +375,12 @@
         "community",
         "infrastructure"
       ],
-      "image": "/img/5d37332c48d8.webp"
+      "image": "/img/5d37332c48d8.webp",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      }
     }
   ]
 }

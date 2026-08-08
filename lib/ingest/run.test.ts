@@ -207,7 +207,8 @@ async function writeStaleEdition(): Promise<void> {
         description: 'A line written by a previous run.',
         url: 'https://stale.example.com/1',
         image: null,
-        source: { name: 'Stale Wire', kind: 'press' },
+        publisher: 'Example',
+        feed: { name: 'Stale Wire', kind: 'press' },
         publishedAt: '2026-08-07T10:00:00.000Z',
         topics: ['archive'],
       },
@@ -428,8 +429,8 @@ describe('runIngest', () => {
       Array.from({ length: TARGET_COUNT }, (_, index) => index + 1),
     )
 
-    // The world band, counted from the source that actually published each item.
-    const worldItems = written.items.filter((item) => item.source.name === 'World Desk')
+    // The world band, counted from the feed each item actually came from.
+    const worldItems = written.items.filter((item) => item.feed.name === 'World Desk')
     expect(worldItems).toHaveLength(WORLD_MIN)
 
     // Title, url and date come off the feed, never off the model.
@@ -438,6 +439,10 @@ describe('runIngest', () => {
       expect(item.title).toMatch(/headline number \d+$/)
       expect(item.publishedAt).toBe(new Date(PUB_DATE).toISOString())
       expect(item.description.length).toBeGreaterThan(0)
+      // The byline comes off the article's host, not off the feed: every fixture
+      // article lives on example.com, whatever feed carried it.
+      expect(item.publisher).toBe('Example')
+      expect(item.feed.name).not.toBe(item.publisher)
     }
 
     // Images were re-encoded and written for the items whose feed carried one;
@@ -446,7 +451,7 @@ describe('runIngest', () => {
     expect(files.length).toBe(TARGET_COUNT - WORLD_MIN)
     expect(files.every((file) => file.endsWith('.webp'))).toBe(true)
     for (const item of written.items) {
-      const expected = item.source.name === 'World Desk' ? null : `/img/${item.id}.webp`
+      const expected = item.feed.name === 'World Desk' ? null : `/img/${item.id}.webp`
       expect(item.image).toBe(expected)
     }
   })
@@ -499,7 +504,8 @@ describe('runIngest', () => {
           description: 'Ran yesterday.',
           url: 'https://ai1.example.com/1',
           image: null,
-          source: { name: 'Outlet One', kind: 'press' },
+          publisher: 'Example',
+          feed: { name: 'Outlet One', kind: 'press' },
           publishedAt: '2026-08-07T10:00:00.000Z',
           topics: ['models'],
         },

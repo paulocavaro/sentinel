@@ -38,7 +38,7 @@ decision, resolved in the design phase rather than here.
 
 ### The card
 
-Image (or a designed fallback), source name, publication time, title,
+Image (or a designed fallback), publisher, publication time, title,
 description. Nothing else. The fallback for an item without an image is
 typographic and generated in the component — never a grey placeholder box.
 
@@ -67,7 +67,8 @@ type Item = {
   description: string   // one editorial line, written by the model
   url: string           // the original article
   image: string | null  // path under /img, or null
-  source: { name: string; kind: 'blog' | 'press' | 'paper' | 'video' | 'forum' }
+  publisher: string     // the outlet that published it — the card's byline
+  feed: { name: string; kind: 'blog' | 'press' | 'paper' | 'video' | 'forum' }
   publishedAt: string   // ISO 8601
   topics: string[]
 }
@@ -75,6 +76,13 @@ type Item = {
 
 `rank` is persisted rather than derived. Order is part of the edition: reopening
 a past day must show it exactly as it was published.
+
+`publisher` is derived from `url`, not taken from the feed, because a feed is a
+discovery channel and not a masthead — Hacker News links to Reuters, and "BBC
+World" is a section — so bylining an item with its feed tells the reader the tap
+will land somewhere it will not. `feed` records which source found the item, the
+one piece of provenance the URL cannot recover, and remains what dedupe priority
+keys on.
 
 ## Sources
 

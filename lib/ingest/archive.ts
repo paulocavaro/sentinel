@@ -1,6 +1,7 @@
 import { mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { Curation } from './curate'
+import { publisherFromUrl } from './publisher'
 import { normalizeTitle } from './select'
 import type { Edition, Item, RawItem } from './types'
 
@@ -132,8 +133,9 @@ export type BuildEditionOptions = {
  * Assemble the edition from the curation and the candidates.
  *
  * **The model contributes exactly three things per item: the rank, the
- * description and the topics.** Title, URL, source and publish date are read
- * off the candidate, which came from the feed. That split is the whole point of
+ * description and the topics.** Title, URL, feed and publish date are read off
+ * the candidate, which came from the feed, and the publisher is computed from
+ * the candidate's URL. That split is the whole point of
  * this function. The model never sees a reason to restate a title and is never
  * asked for one, but a model that hallucinated a headline or a URL would
  * otherwise put it on a public page unchallenged, attributed to a real outlet —
@@ -177,7 +179,12 @@ export function buildEdition(
         // From the feed, never from the model.
         title: candidate.title,
         url: candidate.url,
-        source: { name: candidate.source.name, kind: candidate.source.kind },
+        // Derived from the URL the reader will actually open, not from the feed
+        // that surfaced it: seven of the first edition's twenty items were found
+        // by Hacker News and published by Reuters, DeepMind, CNN and others.
+        publisher: publisherFromUrl(candidate.url),
+        // The feed survives as provenance. Dedupe priority still keys on it.
+        feed: { name: candidate.source.name, kind: candidate.source.kind },
         publishedAt: candidate.publishedAt,
         // From the model.
         description: chosen.description,

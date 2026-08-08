@@ -54,7 +54,8 @@ function edition(over: Partial<Edition> = {}): Edition {
         description: 'Why this matters, in one plain sentence.',
         url: 'https://e.com/1',
         image: '/img/000000000001.webp',
-        source: { name: 'Source One', kind: 'press' },
+        publisher: 'E',
+        feed: { name: 'Source One', kind: 'press' },
         publishedAt: '2026-08-07T10:00:00.000Z',
         topics: ['models'],
       },
@@ -259,13 +260,13 @@ describe('buildEdition', () => {
     expect(built.targetCount).toBe(20)
   })
 
-  it('takes title, url, source and publishedAt from the candidate, never from the model', () => {
+  it('takes title, url, feed and publishedAt from the candidate, never from the model', () => {
     const pool = [
       candidate({
         id: id(1),
         title: 'The real headline',
-        url: 'https://e.com/real',
-        source: { id: 's1', name: 'The Real Outlet', kind: 'blog', priority: 2 },
+        url: 'https://www.theverge.com/real',
+        source: { id: 's1', name: 'The Real Feed', kind: 'blog', priority: 2 },
         publishedAt: '2026-08-07T10:00:00.000Z',
       }),
     ]
@@ -280,7 +281,8 @@ describe('buildEdition', () => {
           topics: ['models'],
           title: 'A FORGED HEADLINE',
           url: 'https://evil.com/phish',
-          source: { name: 'Evil', kind: 'press' },
+          publisher: 'Evil',
+          feed: { name: 'Evil', kind: 'press' },
           publishedAt: '1999-01-01T00:00:00.000Z',
         },
       ],
@@ -290,13 +292,61 @@ describe('buildEdition', () => {
     const item = built.items[0]
 
     expect(item.title).toBe('The real headline')
-    expect(item.url).toBe('https://e.com/real')
-    expect(item.source).toEqual({ name: 'The Real Outlet', kind: 'blog' })
+    expect(item.url).toBe('https://www.theverge.com/real')
+    expect(item.publisher).toBe('The Verge')
+    expect(item.feed).toEqual({ name: 'The Real Feed', kind: 'blog' })
     expect(item.publishedAt).toBe('2026-08-07T10:00:00.000Z')
     // The model authors only these three.
     expect(item.description).toBe('Why it matters.')
     expect(item.topics).toEqual(['models'])
     expect(item.rank).toBe(1)
+  })
+
+  it('bylines the publisher of the article, not the feed that found it', () => {
+    // The real shape of the bug: Hacker News is a discovery channel, and seven
+    // of the first edition's twenty items were bylined with it while opening on
+    // somebody else's site. The feed is still on the item, as provenance.
+    const pool = [
+      candidate({
+        id: id(1),
+        url: 'https://www.reuters.com/business/retail-consumer/alibaba-plans',
+        source: { id: 'hn', name: 'Hacker News', kind: 'forum', priority: 9 },
+      }),
+    ]
+    const curation: Curation = {
+      summary: 'A day.',
+      items: [{ id: id(1), rank: 1, description: 'Found on HN, published by Reuters.', topics: ['a'] }],
+    }
+
+    const item = buildEdition(curation, pool, opts()).items[0]
+
+    expect(item.publisher).toBe('Reuters')
+    expect(item.feed).toEqual({ name: 'Hacker News', kind: 'forum' })
+  })
+
+  it('derives the publisher for every item, whatever the feed', () => {
+    const pool = [
+      candidate({ id: id(1), url: 'https://deepmind.google/blog/weathernext' }),
+      candidate({ id: id(2), url: 'https://app.dealroom.co/news/feed/oracle-bans' }),
+      candidate({
+        id: id(3),
+        url: 'https://www.bbc.co.uk/news/articles/cewr898jy8go',
+        source: { id: 'bbc-world', name: 'BBC World', kind: 'press', priority: 2 },
+      }),
+    ]
+    const curation: Curation = {
+      summary: 'A day.',
+      items: [
+        { id: id(1), rank: 1, description: 'One.', topics: ['a'] },
+        { id: id(2), rank: 2, description: 'Two.', topics: ['a'] },
+        { id: id(3), rank: 3, description: 'Three.', topics: ['a'] },
+      ],
+    }
+
+    const built = buildEdition(curation, pool, opts())
+
+    // Including the section feeds: "BBC World" is a section, "BBC" is the outlet.
+    expect(built.items.map((item) => item.publisher)).toEqual(['Google DeepMind', 'Dealroom', 'BBC'])
   })
 
   it('carries the date, generatedAt and summary through', () => {
