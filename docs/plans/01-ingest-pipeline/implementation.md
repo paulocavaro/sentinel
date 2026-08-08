@@ -909,7 +909,7 @@ later "optimize" it into a passthrough copy.
   (candidate count, source failures, the chosen items with ranks, the summary
   line, every validation reason) and exiting with the returned code.
 - [x] **Step 2 — Run the automated gate**
-- [ ] **Step 3 — Real dry run:** `ANTHROPIC_API_KEY=... pnpm ingest --dry-run`.
+- [x] **Step 3 — Real dry run:** `ANTHROPIC_API_KEY=... pnpm ingest --dry-run`.
   Fix parser and fetch edge cases here until it is clean. Nothing is written.
   **Watch for one thing no hermetic test can catch:** `CurationSchema`'s
   `items.min(1)` serializes to `minItems: 1`, and Anthropic's strict structured
@@ -917,19 +917,19 @@ later "optimize" it into a passthrough copy.
   provider picks, the real call can return a 400 on the schema itself. If it
   does, drop `.min(1)` from the schema — the empty-items case is already a
   validation reason in Task 10, which is where it belongs anyway.
-- [ ] **Step 4 — Commit:** `git add scripts package.json lib && git commit -m "feat(01): ingest script"`
+- [x] **Step 4 — Commit:** `git add scripts package.json lib && git commit -m "feat(01): ingest script"`
 
 ---
 
 ### Task 14: The first edition
 
-- [ ] **Step 1 — Real run:** `ANTHROPIC_API_KEY=... pnpm ingest`
-- [ ] **Step 2 — Inspect the JSON by hand:** up to twenty items; ranks unique;
+- [x] **Step 1 — Real run:** `ANTHROPIC_API_KEY=... pnpm ingest`
+- [x] **Step 2 — Inspect the JSON by hand:** up to twenty items; ranks unique;
   three to six world items; no empty descriptions; every `publishedAt` in ISO
   form; images present where expected and null where not.
-- [ ] **Step 3 — Re-run to prove idempotence:** `pnpm ingest` again → exits 0,
+- [x] **Step 3 — Re-run to prove idempotence:** `pnpm ingest` again → exits 0,
   changes nothing. Then `pnpm ingest --force` → rewrites.
-- [ ] **Step 4 — Commit:** `git add content public/img && git commit -m "feat(01): first edition"`
+- [x] **Step 4 — Commit:** `git add content public/img && git commit -m "feat(01): first edition"`
 
 ---
 
