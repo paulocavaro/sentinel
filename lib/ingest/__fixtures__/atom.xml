@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>Simon Willison's Weblog</title>
+  <link href="https://simonwillison.net/" rel="alternate"></link>
+  <link href="https://simonwillison.net/atom/everything/" rel="self"></link>
+  <id>tag:simonwillison.net,2026:/everything/</id>
+  <updated>2026-08-07T09:41:18+00:00</updated>
+  <entry>
+    <title>Claude Code is a terminal-shaped operating system</title>
+    <link href="https://simonwillison.net/2026/Aug/7/claude-code-terminal-os/" rel="alternate"></link>
+    <published>2026-08-07T09:41:18+00:00</published>
+    <updated>2026-08-07T09:41:18+00:00</updated>
+    <id>tag:simonwillison.net,2026:/blogmark/8471/</id>
+    <summary type="html">&lt;p&gt;Six months in, the interesting part isn&amp;#8217;t the model &amp;#8212; it&amp;#8217;s the harness around it.&lt;/p&gt;</summary>
+    <author>
+      <name>Simon Willison</name>
+    </author>
+  </entry>
+  <entry>
+    <title>Notes on running a local model on a 2019 laptop</title>
+    <link href="https://simonwillison.net/2026/Aug/6/local-model-old-laptop/" rel="alternate"></link>
+    <published>2026-08-06T18:02:55+00:00</published>
+    <updated>2026-08-06T18:14:03+00:00</updated>
+    <id>tag:simonwillison.net,2026:/blogmark/8470/</id>
+    <summary type="html">&lt;p&gt;It is slower than the API and it is entirely worth it for the things you learn.&lt;/p&gt;</summary>
+    <author>
+      <name>Simon Willison</name>
+    </author>
+  </entry>
+</feed>

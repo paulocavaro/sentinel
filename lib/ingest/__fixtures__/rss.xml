@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:media="http://search.yahoo.com/mrss/">
+<channel>
+	<title>Artificial Intelligence Archives</title>
+	<atom:link href="https://techcrunch.com/category/artificial-intelligence/feed/" rel="self" type="application/rss+xml" />
+	<link>https://techcrunch.com/category/artificial-intelligence/</link>
+	<description>Startup and Technology News</description>
+	<lastBuildDate>Fri, 07 Aug 2026 11:12:44 +0000</lastBuildDate>
+	<language>en-US</language>
+	<item>
+		<title>Anthropic &amp; Databricks sign a $100M enterprise deal</title>
+		<link>https://techcrunch.com/2026/08/07/anthropic-databricks-sign-enterprise-deal/</link>
+		<dc:creator><![CDATA[Marina Temkin]]></dc:creator>
+		<pubDate>Fri, 07 Aug 2026 10:00:00 +0000</pubDate>
+		<category><![CDATA[AI]]></category>
+		<category><![CDATA[Enterprise]]></category>
+		<guid isPermaLink="false">https://techcrunch.com/?p=3092841</guid>
+		<description><![CDATA[<p>The two companies will sell <b>Claude</b> models directly to Databricks&#8217; 10,000 enterprise customers, in a deal both sides describe as the largest of its kind so far.</p>]]></description>
+		<media:content url="https://techcrunch.com/wp-content/uploads/2026/08/anthropic-databricks.jpg" medium="image" width="1200" height="675" />
+	</item>
+	<item>
+		<title>Seat-based pricing is breaking down, and founders are improvising</title>
+		<link>https://techcrunch.com/2026/08/07/seat-based-pricing-is-breaking-down/</link>
+		<dc:creator><![CDATA[Connie Loizos]]></dc:creator>
+		<pubDate>Fri, 07 Aug 2026 08:30:00 +0000</pubDate>
+		<category><![CDATA[AI]]></category>
+		<guid isPermaLink="false">https://techcrunch.com/?p=3092790</guid>
+		<description><![CDATA[Charging per seat stops making sense the moment the software does the work instead of the person holding the seat.]]></description>
+	</item>
+</channel>
+</rss>
