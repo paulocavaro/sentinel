@@ -21,21 +21,24 @@ standalone.
 
 ## Effort tiers
 
-- **quick** — no think stage, inline mini-plan, no end-of-phase battery
-- **standard** — lean interrogation, one plan review pass, gate + code review
-- **high** — full interrogation, deeper plan review, adds QA
-- **ultra** — the full pipeline, adds security review and the checklist
+- **quick** — no interrogation, inline mini-plan, change made directly, no
+  end-of-phase battery
+- **standard** — interrogation and plan review, maker subagent per task, gate +
+  code review
+- **high** — same, deeper verify cap, adds QA
+- **ultra** — adds security review and the checklist
 
+The tier scales dev-loop's own depth — which roles run, the verify iteration cap,
+how granular the build is. It does not dictate how hard a provider works.
 `/loop` suggests a tier and you can override with `--quick`, `--standard`,
-`--high`, `--ultra`. **Default here is `standard`, ceiling is `ultra`** — a run
+`--high`, `--ultra`. **Default here is `standard`, ceiling is `ultra`**, and a run
 may escalate one step if the task turns out bigger than estimated.
 
 ## Providers
 
-Specialist roles are filled by whatever `## Providers` in `.loop/config.md` maps
-them to. Here: the three persona roles (interrogate, plan review, code review)
-use dev-loop's `builtin-*` skills; QA, security review, design review and ship
-use gstack.
+dev-loop is agnostic to the specialist toolchain: it knows only abstract roles,
+and `## Providers` in `.loop/config.md` maps each one to whatever skill you
+named. A role left unset is skipped, not filled by a default.
 
 ## Commits
 

@@ -22,15 +22,14 @@
 
 ## Visual gate
 - enabled: true
-- engine: browse                    # gstack browse daemon; chrome-plugin as fallback
+- engine: browse
 - refs_dir: design-refs             # approved design HTML, one file per screen
 - spec_docs:
   - docs/spec.md
   - docs/design-system.md           # written once the design direction is approved
-- max_iterations_per_screen: 6
 
 > `design-refs/` is empty until the design phase produces the approved screens.
-> Until then loop-verify runs in review mode against `spec_docs`.
+> Until then loop-verify runs in REVIEW MODE against `spec_docs`.
 
 ## Screens map
 | screen | web route     | reference                  |
@@ -58,21 +57,23 @@
 - ceiling: ultra
 - escalation: on
 
+> Verify iteration cap follows the tier defaults (standard 4, high 6, ultra 8).
+
 ## Providers
 - interrogate: builtin
-- plan_review: builtin
-- code_review: builtin
-- qa: gstack:qa
-- security_review: gstack:cso
-- design_review: gstack:design-review
-- ship: gstack:ship
+- plan_review: autoplan
+- code_review: review
+- qa: qa
+- security_review: cso
+- design_review: impeccable
+- ship: ship
 
 ## Extra rules
 - All UI work loads the design skills: `frontend-design`, `impeccable`,
-  `taste-skill` and `ui-ux-pro-max` (all global). One design direction is
-  produced and approved by the human before any production UI is written; the
-  approved direction is documented in `docs/design-system.md` and saved as HTML
-  under `design-refs/`.
+  `taste-skill` and `ui-ux-pro-max`. One design direction is produced and
+  approved by the human before any production UI is written; the approved
+  direction is documented in `docs/design-system.md` and saved as HTML under
+  `design-refs/`.
 - Next 16 differs from model training data. Read the relevant guide under
   `node_modules/next/dist/docs/` before writing routing, caching or data-fetching
   code. Do not rely on recalled Next.js APIs.
