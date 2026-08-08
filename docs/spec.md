@@ -114,8 +114,14 @@ Runs daily at 09:00 via GitHub Actions.
    about fifty items, which is too thin to curate twenty from honestly; 48 hours
    roughly doubles it, and the archive supplies the exclusion list, so no item
    ever runs twice.
-3. **Deduplicate.** The same story appears in several outlets. Canonical URL
-   first, then title similarity.
+3. **Deduplicate.** Canonical URL first, then title overlap above a high
+   threshold. That threshold was measured against real headline pairs rather than
+   guessed: below it, "OpenAI raises $10B" and "OpenAI raises $40B" merge into
+   one story, which silently deletes news. The cost of setting it high is that a
+   genuine cross-outlet rewrite of the same story is not caught the same day —
+   curation usually declines to rank both, and the archive's title exclusion
+   catches it the next day. Catching it at collection time needs embeddings, not
+   a lower number.
 4. **Resolve images.** `media:content` → `media:thumbnail` → `enclosure` →
    `og:image` from the article page → `null`. Downloaded, resized, written to
    `public/img/`.

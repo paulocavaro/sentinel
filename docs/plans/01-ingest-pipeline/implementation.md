@@ -644,22 +644,22 @@ describe('collect', () => {
 > source priority. (c) `Date.parse` returning `NaN` made both window comparisons
 > false, so unparseable dates vanished silently.
 
-- [ ] **Step 1 — Failing test:** `lib/ingest/select.test.ts` — covering: window
+- [x] **Step 1 — Failing test:** `lib/ingest/select.test.ts` — covering: window
   keeps/drops correctly; a small future tolerance (2h) is allowed, since
   publishers routinely stamp ahead; an unparseable date is dropped **and counted**;
   exclusion by id; **exclusion by normalized title across editions**; dedupe by
   canonical URL; dedupe by title overlap across two outlets; **the survivor of a
   duplicate pair is the better-priority source, not the earliest**; genuinely
   different items survive; `selectCandidates` composes all three in order.
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** `normalizeTitle` lowercases, strips
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** `normalizeTitle` lowercases, strips
   non-alphanumerics to single spaces, trims. `withinWindow` returns
   `{ kept, unparseable }`. `dedupe` groups by canonical URL, then merges groups
   whose normalized-title token sets overlap by ≥0.8 (Jaccard), and keeps the
   member with the lowest `source.priority`, breaking a further tie by earliest
   `publishedAt`. `selectCandidates` runs window → exclude → dedupe.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): window, cross-edition exclusion and priority-aware dedupe"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): window, cross-edition exclusion and priority-aware dedupe"`
 
 ---
 
