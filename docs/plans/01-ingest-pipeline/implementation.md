@@ -76,7 +76,7 @@ runs the script daily and commits the result; Vercel builds from the push.
 > `pathname`, not the output string. `www.`, scheme and parameter order were also
 > unnormalized.
 
-- [ ] **Step 1 — Failing test:** `lib/ingest/canonical.test.ts`
+- [x] **Step 1 — Failing test:** `lib/ingest/canonical.test.ts`
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -140,8 +140,8 @@ describe('itemId', () => {
 })
 ```
 
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:**
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:**
 
 `lib/ingest/types.ts`
 ```ts
@@ -235,8 +235,8 @@ export function itemId(url: string): string {
 }
 ```
 
-- [ ] **Step 4 — Run tests, confirm green:** `pnpm build && pnpm typecheck && pnpm lint && pnpm test`
-- [ ] **Step 5 — Commit:** `git add lib/ingest package.json pnpm-lock.yaml && git commit -m "feat(01): canonical URLs and stable item ids"`
+- [x] **Step 4 — Run tests, confirm green:** `pnpm build && pnpm typecheck && pnpm lint && pnpm test`
+- [x] **Step 5 — Commit:** `git add lib/ingest package.json pnpm-lock.yaml && git commit -m "feat(01): canonical URLs and stable item ids"`
 
 ---
 
