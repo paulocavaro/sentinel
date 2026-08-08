@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { basename, dirname, join } from 'node:path'
 import sharp from 'sharp'
+import { CONCURRENCY } from './config'
 import { mapWithConcurrency } from './concurrency'
 import { fetchBounded } from './safeFetch'
 import type { RawItem } from './types'
@@ -46,9 +47,6 @@ const MAX_HTML_BYTES = 2 * 1024 * 1024
 
 /** Images: past this it is not an article illustration. */
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024
-
-/** Same ceiling as the feed collection stage. */
-const CONCURRENCY = 6
 
 /** Published width. Cards never render wider than this. */
 const OUTPUT_WIDTH = 800

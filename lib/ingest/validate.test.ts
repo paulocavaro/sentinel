@@ -1,21 +1,28 @@
 import { describe, expect, it } from 'vitest'
+import { DESCRIPTION_MAX, MIN_ITEMS, TARGET_COUNT, WORLD_MAX, WORLD_MIN } from './config'
 import type { Curation } from './curate'
 import type { RawItem } from './types'
 import { validateCuration } from './validate'
 import type { ValidateOptions } from './validate'
 
+/**
+ * The real limits, read from `config.ts` — not a second copy of them. These
+ * numbers reach the prompt through `buildPrompt` and the gate through
+ * `validateCuration`, and a test asserting against its own hard-coded pair
+ * would stay green through exactly the divergence that matters.
+ */
 const OPTS: ValidateOptions = {
-  targetCount: 20,
-  minItems: 8,
-  worldMin: 3,
-  worldMax: 6,
-  descriptionMax: 200,
+  targetCount: TARGET_COUNT,
+  minItems: MIN_ITEMS,
+  worldMin: WORLD_MIN,
+  worldMax: WORLD_MAX,
+  descriptionMax: DESCRIPTION_MAX,
 }
 
 const id = (n: number): string => String(n).padStart(12, '0')
 
 /** `count` candidates, the first `worldCount` of them in the world lane. */
-function candidates(count: number, worldCount = 4): RawItem[] {
+function candidates(count: number, worldCount = WORLD_MIN): RawItem[] {
   return Array.from({ length: count }, (_, index) => ({
     id: id(index + 1),
     title: `Story ${index + 1}`,
@@ -74,17 +81,17 @@ describe('validateCuration', () => {
   })
 
   it('rejects more items than the target', () => {
-    const pool = candidates(21)
+    const pool = candidates(TARGET_COUNT + 1)
     const reasons = validateCuration(curation(pool), pool, OPTS)
     expect(reasons).toHaveLength(1)
-    expect(reasons[0]).toMatch(/more than the target of 20/i)
+    expect(reasons[0]).toContain(`more than the target of ${TARGET_COUNT}`)
   })
 
   it('rejects fewer items than the floor', () => {
-    const pool = candidates(5)
+    const pool = candidates(MIN_ITEMS - 1)
     const reasons = validateCuration(curation(pool), pool, OPTS)
     expect(reasons).toHaveLength(1)
-    expect(reasons[0]).toMatch(/fewer than the minimum of 8/i)
+    expect(reasons[0]).toContain(`fewer than the minimum of ${MIN_ITEMS}`)
   })
 
   it('rejects a curation with no items at all', () => {
@@ -121,17 +128,17 @@ describe('validateCuration', () => {
   it('rejects a description over the length cap', () => {
     const pool = candidates(10)
     const bad = curation(pool)
-    bad.items[0].description = `${'word '.repeat(40)}end`
+    bad.items[0].description = `${'word '.repeat(DESCRIPTION_MAX)}end`
 
     const reasons = validateCuration(bad, pool, OPTS)
     expect(reasons).toHaveLength(1)
-    expect(reasons[0]).toMatch(/over the limit of 200/i)
+    expect(reasons[0]).toContain(`over the limit of ${DESCRIPTION_MAX}`)
   })
 
   it('accepts a description exactly at the length cap', () => {
     const pool = candidates(10)
     const edge = curation(pool)
-    edge.items[0].description = 'a'.repeat(200)
+    edge.items[0].description = 'a'.repeat(DESCRIPTION_MAX)
     expect(validateCuration(edge, pool, OPTS)).toEqual([])
   })
 
@@ -224,26 +231,26 @@ describe('validateCuration', () => {
   // -------------------------------------------------------------------------
 
   it('rejects too few world items', () => {
-    const pool = candidates(10, 1)
+    const pool = candidates(10, WORLD_MIN - 1)
     const reasons = validateCuration(curation(pool), pool, OPTS)
     expect(reasons).toHaveLength(1)
     expect(reasons[0]).toMatch(/world/i)
-    expect(reasons[0]).toMatch(/fewer than the minimum of 3/i)
+    expect(reasons[0]).toContain(`fewer than the minimum of ${WORLD_MIN}`)
   })
 
   it('rejects too many world items', () => {
-    const pool = candidates(10, 7)
+    const pool = candidates(10, WORLD_MAX + 1)
     const reasons = validateCuration(curation(pool), pool, OPTS)
     expect(reasons).toHaveLength(1)
     expect(reasons[0]).toMatch(/world/i)
-    expect(reasons[0]).toMatch(/more than the maximum of 6/i)
+    expect(reasons[0]).toContain(`more than the maximum of ${WORLD_MAX}`)
   })
 
   it('counts world items from the candidates, never from anything the model claimed', () => {
     // Same curation, same ids, same everything the model produced — only the
     // lanes recorded on the candidates differ. The verdict must follow the
     // candidates, because the model does not get to assert its own compliance.
-    const enough = candidates(10, 4)
+    const enough = candidates(10, WORLD_MIN)
     const notEnough = candidates(10, 0)
     const chosen = curation(enough)
 

@@ -856,7 +856,7 @@ later "optimize" it into a passthrough copy.
 > important behavioural claim in the phase, and it is exactly the kind that fails
 > silently at 6am on a Sunday.
 
-- [ ] **Step 1 — Failing test:** `lib/ingest/run.test.ts`, every dependency
+- [x] **Step 1 — Failing test:** `lib/ingest/run.test.ts`, every dependency
   injected (fetcher, generator, clock, archive dir, image dir). Covering:
   - today's edition exists and `force` is false → returns `wrote: false`, code 0,
     and **the generator is never called** (no wasted model spend)
@@ -869,8 +869,8 @@ later "optimize" it into a passthrough copy.
   - more than two source failures → code 1, `wrote: false`
   - **images are resolved only for the curated items** — assert the image fetcher
     was called at most `targetCount` times given far more candidates
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** `config.ts` holds `WINDOW_HOURS = 48`,
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** `config.ts` holds `WINDOW_HOURS = 48`,
   `TARGET_COUNT = 20`, `MIN_ITEMS = 8`, `WORLD_MIN = 3`, `WORLD_MAX = 6`,
   `MAX_SOURCE_FAILURES = 2`, `CONCURRENCY = 6`, `CONTENT_DIR = 'content/days'`,
   `IMAGE_DIR = 'public/img'`.
@@ -887,8 +887,8 @@ later "optimize" it into a passthrough copy.
   MAX_SOURCE_FAILURES` → select → curate → validate → **resolve and download
   images for the curated items only** → build → write. Never throws; every failure
   becomes a reason and a non-zero code.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): orchestrator with a tested exit-code contract"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): orchestrator with a tested exit-code contract"`
 
 ---
 

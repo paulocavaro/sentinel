@@ -14,18 +14,22 @@ import type { RawItem } from './types'
  */
 
 /**
- * The editorial band for world items, stated in the prompt.
+ * The limits the prompt asks for.
  *
- * Task 12's `config.ts` holds the authoritative values used by validation.
- * These are the prompt's copy of them: the prompt asks for the band, and
- * validation enforces it against the **candidates**, never against anything the
- * model claimed. If the two ever disagree, validation wins and the run aborts.
+ * **Passed in, never kept here.** These are the same numbers `validateCuration`
+ * enforces, and they live in `config.ts` so there is exactly one copy: a prompt
+ * asking for three to six world items while validation demanded four to eight
+ * would abort every run, and nothing in the output would say why.
  */
-const WORLD_MIN = 3
-const WORLD_MAX = 6
-
-/** The description length asked for in the prompt — and enforced in Task 10. */
-const DESCRIPTION_MAX = 200
+export type PromptOptions = {
+  /** The most items the model may choose. */
+  targetCount: number
+  /** The editorial band for items in the world lane. */
+  worldMin: number
+  worldMax: number
+  /** The longest a single description may be, in characters. */
+  descriptionMax: number
+}
 
 /**
  * **Shape only. Do not add length constraints here.**
@@ -93,7 +97,7 @@ function toInertJson(candidates: readonly PromptCandidate[]): string {
  * inside the block is read as a quoted document rather than as a continuation
  * of the instructions.
  */
-export function buildPrompt(items: readonly RawItem[], targetCount: number): string {
+export function buildPrompt(items: readonly RawItem[], opts: PromptOptions): string {
   const candidates: PromptCandidate[] = items.map((item) => ({
     id: item.id,
     lane: item.lane,
@@ -109,11 +113,11 @@ export function buildPrompt(items: readonly RawItem[], targetCount: number): str
     'write one line about each.',
     '',
     'Rules:',
-    `- Choose at most ${targetCount} items. Choose fewer if the day is thin; never choose more.`,
+    `- Choose at most ${opts.targetCount} items. Choose fewer if the day is thin; never choose more.`,
     '- Rank the chosen items from 1 upward, best first, with no repeated and no skipped ranks.',
     '- Use only ids that appear in the candidate list. Never invent an id.',
-    `- Choose at least ${WORLD_MIN} and at most ${WORLD_MAX} items whose lane is "world"; the rest are "ai".`,
-    `- Write each description as one plain sentence of at most ${DESCRIPTION_MAX} characters,`,
+    `- Choose at least ${opts.worldMin} and at most ${opts.worldMax} items whose lane is "world"; the rest are "ai".`,
+    `- Write each description as one plain sentence of at most ${opts.descriptionMax} characters,`,
     '  saying why the item matters. No links, no URLs, no markup, no markdown.',
     '- Give each item one to three lowercase topic words. Plain words only.',
     '- Write the summary as one plain sentence about the day as a whole, same rules as a description.',
@@ -148,10 +152,10 @@ export function buildPrompt(items: readonly RawItem[], targetCount: number): str
  */
 export async function curate(
   items: readonly RawItem[],
-  targetCount: number,
+  opts: PromptOptions,
   generate: Generator,
 ): Promise<Curation> {
-  const prompt = buildPrompt(items, targetCount)
+  const prompt = buildPrompt(items, opts)
 
   try {
     return await generate(prompt)
