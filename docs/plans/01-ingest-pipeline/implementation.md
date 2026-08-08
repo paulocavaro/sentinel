@@ -759,7 +759,7 @@ later "optimize" it into a passthrough copy.
 > thinking tokens cannot starve the JSON into truncation. Document the
 > `stop_reason: "refusal"` branch — a batch of security headlines can trip it.
 
-- [ ] **Step 1 — Failing test:** `lib/ingest/curate.test.ts` — `buildPrompt`
+- [x] **Step 1 — Failing test:** `lib/ingest/curate.test.ts` — `buildPrompt`
   contains every candidate id, states the target count and the world band, marks
   each candidate's lane, **wraps the candidate block in explicit delimiters with a
   statement that its contents are data and never instructions**, and renders an
@@ -767,15 +767,15 @@ later "optimize" it into a passthrough copy.
   accepts a long description (length is not a schema constraint) and rejects an
   empty items array. `curate` passes the prompt to the injected generator, returns
   its object, and **retries once on a thrown error before giving up**.
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** the schema carries shape only —
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** the schema carries shape only —
   `summary: z.string()`, `items: z.array(z.object({ id, rank: z.number().int().min(1),
   description: z.string(), topics: z.array(z.string()) })).min(1)`. Candidates
   render as a JSON array inside `<candidates>` tags. `defaultGenerator` calls
   `generateObject` with `anthropic('claude-sonnet-5')`, `maxOutputTokens: 8000`,
   and no sampling parameters; it is never imported by tests.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest package.json pnpm-lock.yaml && git commit -m "feat(01): injection-resistant curation with retry"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest package.json pnpm-lock.yaml && git commit -m "feat(01): injection-resistant curation with retry"`
 
 ---
 
@@ -873,7 +873,13 @@ later "optimize" it into a passthrough copy.
 - [ ] **Step 3 — Minimal implementation:** `config.ts` holds `WINDOW_HOURS = 48`,
   `TARGET_COUNT = 20`, `MIN_ITEMS = 8`, `WORLD_MIN = 3`, `WORLD_MAX = 6`,
   `MAX_SOURCE_FAILURES = 2`, `CONCURRENCY = 6`, `CONTENT_DIR = 'content/days'`,
-  `IMAGE_DIR = 'public/img'`. `runIngest` runs: resolve today's UTC date → exists
+  `IMAGE_DIR = 'public/img'`.
+  **`runIngest` must pass the world band into `buildPrompt` rather than letting
+  it keep its own copy.** Task 9 had to hard-code 3–6 because `config.ts` did not
+  exist yet; leaving both is a silent divergence, where changing the band in
+  config would still ask the model for the old one. Change `buildPrompt`'s
+  signature here and delete the duplicate constants.
+  `runIngest` runs: resolve today's UTC date → exists
   and not forced → return early → collect → fail if `failures.length >
   MAX_SOURCE_FAILURES` → select → curate → validate → **resolve and download
   images for the curated items only** → build → write. Never throws; every failure
@@ -902,6 +908,12 @@ later "optimize" it into a passthrough copy.
 - [ ] **Step 2 — Run the automated gate**
 - [ ] **Step 3 — Real dry run:** `ANTHROPIC_API_KEY=... pnpm ingest --dry-run`.
   Fix parser and fetch edge cases here until it is clean. Nothing is written.
+  **Watch for one thing no hermetic test can catch:** `CurationSchema`'s
+  `items.min(1)` serializes to `minItems: 1`, and Anthropic's strict structured
+  output mode does not support array constraints. Depending on which path the
+  provider picks, the real call can return a 400 on the schema itself. If it
+  does, drop `.min(1)` from the schema — the empty-items case is already a
+  validation reason in Task 10, which is where it belongs anyway.
 - [ ] **Step 4 — Commit:** `git add scripts package.json lib && git commit -m "feat(01): ingest script"`
 
 ---
