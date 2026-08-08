@@ -904,11 +904,11 @@ later "optimize" it into a passthrough copy.
 > If `scripts/ingest.ts` uses the `@/*` alias, `tsx` needs `tsconfig-paths` — use
 > relative imports instead and avoid the problem.
 
-- [ ] **Step 1 — Implement:** a thin adapter parsing `--force` and `--dry-run`,
+- [x] **Step 1 — Implement:** a thin adapter parsing `--force` and `--dry-run`,
   building the real dependencies, calling `runIngest`, printing a human summary
   (candidate count, source failures, the chosen items with ranks, the summary
   line, every validation reason) and exiting with the returned code.
-- [ ] **Step 2 — Run the automated gate**
+- [x] **Step 2 — Run the automated gate**
 - [ ] **Step 3 — Real dry run:** `ANTHROPIC_API_KEY=... pnpm ingest --dry-run`.
   Fix parser and fetch edge cases here until it is clean. Nothing is written.
   **Watch for one thing no hermetic test can catch:** `CurationSchema`'s
