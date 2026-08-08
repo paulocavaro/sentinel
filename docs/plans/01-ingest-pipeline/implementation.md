@@ -253,7 +253,7 @@ export function itemId(url: string): string {
 Every feed string passes through here before it reaches the archive, the
 filesystem, or a prompt. This is the single choke point for untrusted input.
 
-- [ ] **Step 1 — Failing test:** `lib/ingest/sanitize.test.ts`
+- [x] **Step 1 — Failing test:** `lib/ingest/sanitize.test.ts`
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -311,14 +311,14 @@ describe('hasMarkupOrUrl', () => {
 })
 ```
 
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** `sanitizeText` decodes entities (loop
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** `sanitizeText` decodes entities (loop
   twice to catch double encoding), strips tags, replaces every character in
   `\p{C}` (control, including newlines) with a space, collapses whitespace, trims,
   then truncates at the last word boundary at or before `maxLength`.
   `hasMarkupOrUrl` returns true for `https?://`, `www.`, `<...>`, or `](`.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): text sanitization for untrusted feed content"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): text sanitization for untrusted feed content"`
 
 ---
 
