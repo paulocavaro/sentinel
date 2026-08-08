@@ -175,9 +175,9 @@ replacement. The cheapest option was chosen on purpose.
 
 ## Stack
 
-Next.js 15 (App Router, static by default), TypeScript, Tailwind, Vercel AI SDK,
-MiniSearch, deployed on Vercel. GitHub Actions runs the daily pipeline. One
-secret: the model API key.
+Next.js 16 (App Router, static by default), React 19, TypeScript, Tailwind 4,
+Vercel AI SDK, MiniSearch, deployed on Vercel. GitHub Actions runs the daily
+pipeline. One secret: the model API key.
 
 The site has exactly one runtime route. Everything else is generated at build
 time from files in this repository.
