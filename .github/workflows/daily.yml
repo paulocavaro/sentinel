@@ -1,0 +1,323 @@
+# The daily edition.
+#
+# One job, run once a day, that curates the day and commits the result. Vercel
+# builds from the push; nothing here deploys anything.
+#
+# Three things in this file are load-bearing and easy to "simplify" back into
+# bugs. Each is commented at the step that carries it:
+#
+#   1. `git add -A` before the emptiness check. An edition and its images are
+#      brand-new *untracked* files, and `git diff --quiet` does not look at
+#      those — the naive version skips the commit forever while the job stays
+#      green.
+#   2. `git config user.name/user.email`. A fresh runner has no git identity and
+#      `git commit` aborts outright without one.
+#   3. `git pull --rebase` immediately before the push, plus one retry. A queued
+#      run checked out before the previous run pushed, so its push is otherwise
+#      rejected non-fast-forward.
+#
+# A failed run is a designed outcome — it leaves yesterday's edition live and
+# writes nothing — but only if somebody finds out, which is what the last step
+# is for.
+
+name: Daily ingest
+
+on:
+  schedule:
+    # 09:23 UTC. Deliberately off the top of the hour: `0 * * * *` is GitHub's
+    # highest-contention slot and scheduled runs there are routinely delayed by
+    # tens of minutes or dropped. The edition is named for the UTC date, so the
+    # exact minute has no editorial meaning.
+    - cron: '23 9 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Rebuild today edition even though one already exists'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  # Never cancel in flight. A cancelled run can be one that has already written
+  # the edition and not yet pushed it, and the cost of the duplicate run is one
+  # early exit on the existence check — far cheaper than a lost day.
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+        with:
+          # Full history, because this job rebases before pushing. A shallow
+          # clone can turn an ordinary rebase into an unrelated-histories error.
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        # No version pinned here on purpose: the action reads `packageManager`
+        # from package.json, so the lockfile and the runner can never disagree.
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run the ingest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Read through the shell rather than interpolated with `${{ }}`: an
+          # input reaching the script body as text is the standard injection
+          # shape for workflows, and a habit worth keeping even where the input
+          # is a boolean that cannot carry a payload.
+          FORCE: ${{ inputs.force }}
+        run: |
+          set -euo pipefail
+          # The summary file lands in the runner temp directory, never in the
+          # working tree, so it can never be picked up by the commit below.
+          if [ "$FORCE" = "true" ]; then
+            pnpm ingest --force --summary-json="$RUNNER_TEMP/ingest-summary.json"
+          else
+            pnpm ingest --summary-json="$RUNNER_TEMP/ingest-summary.json"
+          fi
+
+      - name: Write the job summary
+        # `always()`, because the numbers from a failed run are the ones worth
+        # reading. This step never changes the job's status: a step that
+        # succeeds after a failure does not clear the failure.
+        if: always()
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/job-summary.mjs" <<'NODE'
+          import { readFileSync } from 'node:fs'
+
+          // Reasons are the one field here that can carry model-adjacent text:
+          // an invented item id is echoed back into the sentence that rejects
+          // it, and a provider error message can quote a refusal. They go in a
+          // fenced block, and the fence is defended rather than trusted —
+          // newlines and backticks are what would break out of it.
+          const safe = (value) =>
+            String(value)
+              .replace(/\p{C}/gu, ' ')
+              .replace(/`/g, "'")
+              .replace(/\s+/g, ' ')
+              .trim()
+
+          let run = null
+          try {
+            run = JSON.parse(readFileSync(process.env.SUMMARY_FILE, 'utf8'))
+          } catch {
+            // Left null: the run died before it could write the file.
+          }
+
+          const out = []
+
+          if (run === null) {
+            out.push('## Ingest — no summary')
+            out.push('')
+            out.push(
+              'The run ended before it could write its summary file, so the step log above is the only record of it.',
+            )
+          } else {
+            const status = run.wrote ? 'published' : run.code === 0 ? 'no change' : 'failed'
+            const failures =
+              run.failures.length === 0
+                ? 'none'
+                : `${run.failures.length} — ${run.failures.map(safe).join(', ')}`
+
+            out.push(`## Ingest — ${safe(run.date)} · ${status}`)
+            out.push('')
+            out.push('| | |')
+            out.push('| --- | --- |')
+            out.push(`| Date | ${safe(run.date)} |`)
+            out.push(`| Candidates | ${run.candidateCount} |`)
+            out.push(`| Source failures | ${failures} |`)
+            out.push(`| Unparseable dates | ${run.unparseable} |`)
+            out.push(
+              `| Chosen | ${run.chosen === null ? '—' : `${run.chosen} of at most ${run.targetCount}`} |`,
+            )
+            out.push(`| Written | ${run.path === null ? 'nothing' : `\`${safe(run.path)}\``} |`)
+
+            if (run.reasons.length > 0) {
+              out.push('')
+              out.push(run.code === 0 ? '### Notes' : '### Why it failed')
+              out.push('')
+              out.push('```text')
+              for (const reason of run.reasons) out.push(safe(reason))
+              out.push('```')
+            }
+          }
+
+          process.stdout.write(`${out.join('\n')}\n`)
+          NODE
+          SUMMARY_FILE="$RUNNER_TEMP/ingest-summary.json" \
+            node "$RUNNER_TEMP/job-summary.mjs" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit the edition
+        id: commit
+        run: |
+          set -euo pipefail
+
+          # A fresh runner has no git identity, and `git commit` aborts rather
+          # than guessing one. This is the github-actions[bot] account, so the
+          # commit is attributed to the bot and not to a person.
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          # Both paths exist from the first edition onwards, but `git add` on a
+          # missing pathspec is a fatal error, so the very first run would fail
+          # on a technicality.
+          mkdir -p content public/img
+
+          # `git add -A` FIRST, then check the *index*. An edition and its
+          # images are new untracked files; `git diff --quiet` inspects tracked
+          # files only, so checking before staging would report "nothing
+          # changed" on precisely the days something did.
+          git add -A content public/img
+
+          if git diff --cached --quiet; then
+            echo 'Nothing to commit — the run wrote no new files.'
+            echo 'committed=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          DATE="$(node -e 'try { process.stdout.write(String(JSON.parse(require("node:fs").readFileSync(process.env.SUMMARY_FILE, "utf8")).date ?? "")) } catch { /* fall through */ }' || true)"
+          if [ -z "$DATE" ]; then DATE="$(date -u +%F)"; fi
+
+          git commit -m "chore(ingest): edition $DATE"
+          echo 'committed=true' >> "$GITHUB_OUTPUT"
+        env:
+          SUMMARY_FILE: ${{ runner.temp }}/ingest-summary.json
+
+      - name: Push
+        if: steps.commit.outputs.committed == 'true'
+        run: |
+          set -euo pipefail
+
+          # Rebase immediately before pushing, not at checkout time. The gap
+          # between this job starting and this line is a model call and a set of
+          # image downloads — minutes during which a queued run can land its own
+          # commit, which is what makes the push non-fast-forward.
+          git pull --rebase origin "$GITHUB_REF_NAME"
+
+          if ! git push origin "HEAD:$GITHUB_REF_NAME"; then
+            echo 'Push rejected. Rebasing on the current ref and retrying once.'
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - name: Report the failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Named explicitly rather than inferred from the git remote: this step
+          # also has to work when the failure was the checkout itself, and a
+          # runner with no working tree has no remote to infer from.
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          SUMMARY_FILE: ${{ runner.temp }}/ingest-summary.json
+          LABEL: ingest-failure
+        run: |
+          set -euo pipefail
+
+          cat > "$RUNNER_TEMP/issue-body.mjs" <<'NODE'
+          import { readFileSync } from 'node:fs'
+
+          // Same defence as the job summary, and for the same reason: an
+          // invented item id travels inside the sentence that rejects it, and
+          // an issue body renders markdown. Everything model-adjacent stays in
+          // a fenced block whose fence cannot be escaped.
+          const safe = (value) =>
+            String(value)
+              .replace(/\p{C}/gu, ' ')
+              .replace(/`/g, "'")
+              .replace(/\s+/g, ' ')
+              .trim()
+
+          let run = null
+          try {
+            run = JSON.parse(readFileSync(process.env.SUMMARY_FILE, 'utf8'))
+          } catch {
+            // Left null: the run failed before the pipeline could report.
+          }
+
+          const out = []
+          out.push(`**Run:** ${process.env.RUN_URL}`)
+          out.push(`**When:** ${new Date().toISOString()}`)
+          out.push('')
+
+          if (run === null) {
+            out.push(
+              'The job failed before the pipeline wrote a summary — install, checkout or the commit step, rather than the ingest itself. The run log has the detail.',
+            )
+          } else {
+            out.push(`**Edition date:** ${safe(run.date)}`)
+            out.push(
+              `**Candidates:** ${run.candidateCount} · **Unparseable dates:** ${run.unparseable} · **Source failures:** ${
+                run.failures.length === 0 ? 'none' : run.failures.map(safe).join(', ')
+              }`,
+            )
+            out.push('')
+            out.push(
+              run.wrote
+                ? 'An edition **was** written, so the failure is downstream of the pipeline — the commit or the push.'
+                : 'Nothing was written. The previous edition is still live, which is the intended outcome of a bad run.',
+            )
+
+            if (run.reasons.length > 0) {
+              out.push('')
+              out.push('Reasons:')
+              out.push('')
+              out.push('```text')
+              for (const reason of run.reasons) out.push(safe(reason))
+              out.push('```')
+            }
+          }
+
+          out.push('')
+          out.push('---')
+          out.push('')
+          out.push(
+            'One tracking issue holds every ingest failure. Close it once the runs are healthy again; the next failure reopens the conversation by commenting here.',
+          )
+
+          process.stdout.write(`${out.join('\n')}\n`)
+          NODE
+
+          node "$RUNNER_TEMP/issue-body.mjs" > "$RUNNER_TEMP/issue-body.md"
+
+          # Create the label if it is not there yet. `gh issue list --label`
+          # errors on a label the repository has never seen, which would fail
+          # this step on the very first failure — the one it exists to report.
+          gh label create "$LABEL" \
+            --color 'b60205' \
+            --description 'The daily ingest job failed' >/dev/null 2>&1 || true
+
+          # One issue, found by label, never a fresh one per day. A daily job
+          # that opens a daily issue is a daily job nobody reads.
+          # `|| true`, because a lookup that errors must still end in a report.
+          # Falling through to `gh issue create` risks a second open issue; going
+          # quiet risks a failure nobody hears about, which is the whole point of
+          # this step.
+          EXISTING="$(gh issue list --state open --label "$LABEL" --limit 1 --json number --jq '.[0].number // empty' || true)"
+
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body-file "$RUNNER_TEMP/issue-body.md"
+            echo "Commented on the open tracking issue #$EXISTING."
+          else
+            gh issue create \
+              --title 'Daily ingest is failing' \
+              --label "$LABEL" \
+              --body-file "$RUNNER_TEMP/issue-body.md"
+          fi

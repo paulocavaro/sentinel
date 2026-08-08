@@ -951,7 +951,7 @@ later "optimize" it into a passthrough copy.
 > a degraded one" — which is only true if somebody finds out. Nothing in the
 > original plan made a failure visible.
 
-- [ ] **Step 1 — Implement:** `schedule: cron: '23 9 * * *'` (off the top of the
+- [x] **Step 1 — Implement:** `schedule: cron: '23 9 * * *'` (off the top of the
   hour, which is GitHub's highest-contention slot) plus `workflow_dispatch` with a
   `force` boolean. `permissions: { contents: write, issues: write }`.
   `concurrency: { group: ingest, cancel-in-progress: false }`. Steps: checkout →
@@ -963,9 +963,16 @@ later "optimize" it into a passthrough copy.
   failure list and the chosen count into `$GITHUB_STEP_SUMMARY`. Add an
   `if: failure()` step that opens or updates a single tracking issue with the run
   URL and the reasons.
-- [ ] **Step 2 — Run the automated gate**
+- [x] **Step 2 — Run the automated gate**
 - [ ] **Step 3 — Register the secret:** `gh secret set ANTHROPIC_API_KEY`
   **(human — the key is yours; I will not read or set it)**
+> **Ordering constraint found while writing the workflow.** `workflow_dispatch`
+> and `schedule` only resolve from the **default branch**. This phase is on
+> `01-ingest-pipeline`, so `gh workflow run daily.yml` will not find the workflow
+> until the branch is merged. Steps 4–6 are therefore post-merge, exactly like
+> Task 16's production check — or need the file temporarily pushed to `main`,
+> which is worse. Plan for the merge to happen before this proof, not after.
+
 - [ ] **Step 4 — Prove the linux install first:** `gh workflow run daily.yml`
   once. `sharp` ships platform-specific binaries and the lockfile was generated on
   darwin-arm64; `--frozen-lockfile` on linux is a known friction point and must be

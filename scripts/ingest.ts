@@ -15,10 +15,18 @@
  *    would fail at runtime while typechecking cleanly — a break that only shows
  *    up in the scheduled job. Relative imports avoid the problem instead of
  *    solving it.
- * 2. **The summary goes to stdout, the reasons go to stderr.** The job step pipes
- *    stdout into `$GITHUB_STEP_SUMMARY` (Task 15); failure reasons belong in the
- *    log and the issue, not in a summary of an edition that was never published.
+ * 2. **The summary goes to stdout, the reasons go to stderr.** The job log reads
+ *    stdout; failure reasons belong in the log and the issue, not in a summary
+ *    of an edition that was never published.
+ * 3. **`--summary-json=<path>` writes the same run as data.** The scheduled job
+ *    (Task 15) needs the numbers, not the prose, and scraping them back out of
+ *    the human report with `grep` would make that report a parsing contract —
+ *    reword a label and the job summary silently empties. The file is written
+ *    outside the repository (the workflow points it at `$RUNNER_TEMP`), so it is
+ *    never a candidate for the commit.
  */
+
+import { writeFile } from 'node:fs/promises'
 
 import { CONTENT_DIR, IMAGE_DIR } from '../lib/ingest/config'
 import { defaultGenerator } from '../lib/ingest/curate'
@@ -27,9 +35,11 @@ import { httpHtmlFetcher, httpImageFetcher } from '../lib/ingest/images'
 import { runIngest } from '../lib/ingest/run'
 import type { IngestResult } from '../lib/ingest/run'
 
-const USAGE = 'Usage: pnpm ingest [--force] [--dry-run]'
+const USAGE = 'Usage: pnpm ingest [--force] [--dry-run] [--summary-json=<path>]'
 
-type Args = { force: boolean; dryRun: boolean }
+const SUMMARY_FLAG = '--summary-json='
+
+type Args = { force: boolean; dryRun: boolean; summaryJson: string | null }
 
 /**
  * Parse argv, refusing anything unrecognized.
@@ -40,12 +50,22 @@ type Args = { force: boolean; dryRun: boolean }
  * 1 a failed run uses, so a wrapper can tell a bad invocation from a bad day.
  */
 function parseArgs(argv: readonly string[]): Args {
-  const args: Args = { force: false, dryRun: false }
+  const args: Args = { force: false, dryRun: false, summaryJson: null }
 
   for (const arg of argv) {
     if (arg === '--force') args.force = true
     else if (arg === '--dry-run') args.dryRun = true
-    else {
+    else if (arg.startsWith(SUMMARY_FLAG)) {
+      // `--summary-json=<path>`, one token, so the loop stays a loop. A separate
+      // value token would need lookahead and a "flag at the end of argv" case,
+      // for no gain at a call site that is always written by a workflow file.
+      const path = arg.slice(SUMMARY_FLAG.length)
+      if (path === '') {
+        process.stderr.write(`${SUMMARY_FLAG}<path> needs a path.\n${USAGE}\n`)
+        process.exit(2)
+      }
+      args.summaryJson = path
+    } else {
       process.stderr.write(`Unrecognized argument: ${arg}\n${USAGE}\n`)
       process.exit(2)
     }
@@ -103,6 +123,68 @@ function report(result: IngestResult, args: Args): void {
   }
 }
 
+/**
+ * The same run, as data.
+ *
+ * Deliberately flat and deliberately not the whole `Edition`: a consumer wants
+ * the numbers and the path, and embedding twenty items would make the file large
+ * enough that somebody would be tempted to render it. `chosen` is null when the
+ * run aborted before assembling anything, which is not the same fact as zero.
+ */
+type RunSummary = {
+  code: number
+  wrote: boolean
+  dryRun: boolean
+  forced: boolean
+  date: string
+  candidateCount: number
+  unparseable: number
+  failures: string[]
+  chosen: number | null
+  targetCount: number | null
+  summary: string | null
+  path: string | null
+  reasons: string[]
+}
+
+function toSummary(result: IngestResult, args: Args): RunSummary {
+  return {
+    code: result.code,
+    wrote: result.wrote,
+    dryRun: args.dryRun,
+    forced: args.force,
+    date: result.date,
+    candidateCount: result.candidateCount,
+    unparseable: result.unparseable,
+    failures: result.failures,
+    chosen: result.edition ? result.edition.items.length : null,
+    targetCount: result.edition ? result.edition.targetCount : null,
+    summary: result.edition ? result.edition.summary : null,
+    path: result.path,
+    reasons: result.reasons,
+  }
+}
+
+/**
+ * Write the summary file, and never let failing to write it change the run.
+ *
+ * An unwritable path is a problem with the caller's plumbing, not with the
+ * edition. Turning it into a non-zero exit would fail a job that had just
+ * published a perfectly good day — and, worse, would do so *after* the write,
+ * which is the one shape of failure this pipeline is built never to have.
+ */
+async function writeSummary(path: string, summary: RunSummary): Promise<void> {
+  try {
+    await writeFile(path, `${JSON.stringify(summary, null, 2)}\n`, 'utf8')
+  } catch (error) {
+    process.stderr.write(
+      `Could not write the run summary to ${path}: ${
+        error instanceof Error ? error.message : String(error)
+      }\nThe run itself is unaffected; its exit code stands.\n`,
+    )
+  }
+}
+
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2))
 
@@ -140,6 +222,8 @@ async function main(): Promise<void> {
   )
 
   report(result, args)
+
+  if (args.summaryJson) await writeSummary(args.summaryJson, toSummary(result, args))
 
   // Set rather than `process.exit`, so buffered stdout is flushed before the
   // process ends. `runIngest` never throws, so this is the only exit status the
