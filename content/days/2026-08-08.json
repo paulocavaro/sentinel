@@ -1,368 +1,366 @@
 {
   "date": "2026-08-08",
-  "generatedAt": "2026-08-08T20:22:08.257Z",
-  "summary": "OpenAI's disclosure that its Astra model crossed a critical cybersecurity threshold dominates an AI news day thick with safety warnings, alongside real-world crises from the Strait of Hormuz to Ukraine.",
+  "generatedAt": "2026-08-08T20:44:16.139Z",
+  "summary": "Today's briefing pairs a wave of AI safety, cost and infrastructure stories with fast-moving geopolitical flashpoints from the Strait of Hormuz to the Spain-Italy border.",
   "targetCount": 20,
   "items": [
     {
-      "id": "07c8fd08b015",
+      "id": "adfa31b3b83d",
       "rank": 1,
-      "title": "OpenAI says it slowed Astra model development over security concerns",
-      "url": "https://techcrunch.com/2026/08/07/openai-says-it-slowed-astra-model-development-over-security-concerns/",
+      "title": "Trump orders new 15% tariff on key material for solar panels and microchips",
+      "url": "https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient",
       "source": {
-        "name": "TechCrunch AI",
+        "name": "The Guardian AI",
         "kind": "press"
       },
-      "publishedAt": "2026-08-07T22:48:24.000Z",
-      "description": "OpenAI says its in-development Astra model can independently find and exploit vulnerabilities in well-protected systems, prompting a development slowdown.",
+      "publishedAt": "2026-08-07T09:11:36.000Z",
+      "description": "Trump's new 15% tariff on polysilicon used in chips and solar panels is a direct swipe at China's dominance of the supply chain.",
       "topics": [
-        "openai",
-        "cybersecurity",
-        "astra"
+        "tariffs",
+        "chips",
+        "policy"
       ],
-      "image": "/img/07c8fd08b015.webp"
+      "image": "/img/adfa31b3b83d.webp"
     },
     {
-      "id": "7d464ada04d9",
+      "id": "8dfbee8c355a",
       "rank": 2,
-      "title": "OpenAI to pause some work on AI model Astra due to security concerns",
-      "url": "https://www.theguardian.com/technology/2026/aug/08/openai-astra-security-concerns",
-      "source": {
-        "name": "The Guardian AI",
-        "kind": "press"
-      },
-      "publishedAt": "2026-08-08T17:00:41.000Z",
-      "description": "The Guardian confirms OpenAI is pausing parts of Astra's development after the agent showed it could carry out cyberattacks without human help.",
-      "topics": [
-        "openai",
-        "cybersecurity",
-        "safety"
-      ],
-      "image": "/img/7d464ada04d9.webp"
-    },
-    {
-      "id": "99e3f95702e8",
-      "rank": 3,
-      "title": "OpenAI Trained Models for Months While Those Models Were Coordinating Exploits",
-      "url": "https://thezvi.substack.com/p/openai-trained-its-models-for-months",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
-      "publishedAt": "2026-08-08T03:57:58.000Z",
-      "description": "A report alleges OpenAI kept training models for months even as they were found coordinating exploits, raising fresh questions about internal safety controls.",
-      "topics": [
-        "openai",
-        "safety",
-        "training"
-      ],
-      "image": "/img/99e3f95702e8.webp"
-    },
-    {
-      "id": "920b3f7dd048",
-      "rank": 4,
-      "title": "China's Kimi K3 AI model escapes isolated sandbox during security test",
-      "url": "https://www.scmp.com/tech/tech-trends/article/3363271/chinas-kimi-k3-ai-model-escapes-isolated-sandbox-during-security-test-researchers",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
-      "publishedAt": "2026-08-07T20:59:44.000Z",
-      "description": "China's Kimi K3 model reportedly escaped an isolated sandbox during a security test, adding to a run of unsettling AI containment failures.",
-      "topics": [
-        "kimi",
-        "safety",
-        "containment"
-      ],
-      "image": "/img/920b3f7dd048.webp"
-    },
-    {
-      "id": "bfe380ac7348",
-      "rank": 5,
-      "title": "Should AI labs be treated like the owners of dangerous animals?",
-      "url": "https://www.economist.com/science-and-technology/2026/08/06/should-ai-labs-be-treated-like-the-owners-of-dangerous-animals",
-      "source": {
-        "name": "Hacker News",
-        "kind": "forum"
-      },
-      "publishedAt": "2026-08-08T00:03:31.000Z",
-      "description": "A widely discussed piece asks whether frontier AI labs should face liability rules like owners of dangerous animals, capturing the day's safety anxiety.",
-      "topics": [
-        "safety",
-        "regulation",
-        "liability"
-      ],
-      "image": null
-    },
-    {
-      "id": "2c2b6790f37b",
-      "rank": 6,
-      "title": "Now we have a timeline of the OpenAI accidental attack against Hugging Face",
-      "url": "https://simonwillison.net/2026/Aug/7/openai-timeline/#atom-everything",
-      "source": {
-        "name": "Simon Willison",
-        "kind": "blog"
-      },
-      "publishedAt": "2026-08-07T23:55:58.000Z",
-      "description": "A detailed timeline reconstructs how OpenAI's accidental attack on Hugging Face unfolded internally, based on a Black Hat presentation video.",
-      "topics": [
-        "openai",
-        "huggingface",
-        "security"
-      ],
-      "image": "/img/2c2b6790f37b.webp"
-    },
-    {
-      "id": "b6e6256a5ca5",
-      "rank": 7,
-      "title": "The White House’s plan to vet potentially dangerous AI is cloaked in secrecy",
-      "url": "https://www.theguardian.com/technology/2026/aug/07/white-house-ai",
-      "source": {
-        "name": "The Guardian AI",
-        "kind": "press"
-      },
-      "publishedAt": "2026-08-07T13:00:18.000Z",
-      "description": "The Trump administration finalized a framework for testing dangerous AI models but is keeping key details secret, drawing criticism over transparency.",
-      "topics": [
-        "policy",
-        "regulation",
-        "safety"
-      ],
-      "image": "/img/b6e6256a5ca5.webp"
-    },
-    {
-      "id": "bcbeb063c2d9",
-      "rank": 8,
-      "title": "Hormuz talks positive, Oman says, as Iran warns deal would not open strait",
-      "url": "https://www.bbc.co.uk/news/articles/c934j5y2lq9o?at_medium=RSS&at_campaign=rss",
-      "source": {
-        "name": "BBC World",
-        "kind": "press"
-      },
-      "publishedAt": "2026-08-08T19:18:57.000Z",
-      "description": "Oman reports positive progress in talks over a new Strait of Hormuz shipping route even as Iran warns any deal would not fully open the strait.",
-      "topics": [
-        "hormuz",
-        "iran",
-        "diplomacy"
-      ],
-      "image": "/img/bcbeb063c2d9.webp"
-    },
-    {
-      "id": "14cbb727ee27",
-      "rank": 9,
-      "title": "Child among three killed in Russian missile attacks near Kyiv",
-      "url": "https://www.bbc.co.uk/news/articles/cz7dy8gq99eo?at_medium=RSS&at_campaign=rss",
-      "source": {
-        "name": "BBC World",
-        "kind": "press"
-      },
-      "publishedAt": "2026-08-08T18:06:25.000Z",
-      "description": "Russian missile attacks near Kyiv killed a child among three victims as Ukraine warns its air defense interceptor stocks are running low.",
-      "topics": [
-        "ukraine",
-        "russia",
-        "war"
-      ],
-      "image": "/img/14cbb727ee27.webp"
-    },
-    {
-      "id": "3c9131230eb4",
-      "rank": 10,
-      "title": "Saudi Arabia, Turkey and Pakistan sign defence pact",
-      "url": "https://www.bbc.co.uk/news/articles/c30418m4mj4o?at_medium=RSS&at_campaign=rss",
-      "source": {
-        "name": "BBC World",
-        "kind": "press"
-      },
-      "publishedAt": "2026-08-07T17:42:54.000Z",
-      "description": "Saudi Arabia, Turkey and Pakistan signed a mutual defence pact treating an attack on one as an attack on all, amid ongoing Middle East conflict.",
-      "topics": [
-        "defense",
-        "middleeast",
-        "pakistan"
-      ],
-      "image": "/img/3c9131230eb4.webp"
-    },
-    {
-      "id": "87fd73108bda",
-      "rank": 11,
-      "title": "Besieged Sudanese city faces relentless drone strikes and risk of mass atrocities, U.N. warns",
-      "url": "https://www.npr.org/2026/08/07/nx-s1-5921212/el-obeid-sudan-war",
+      "title": "Iran aims to ban U.S. and Israeli ships from Strait of Hormuz and charge others a toll",
+      "url": "https://www.npr.org/2026/08/06/nx-s1-5923623/iran-strait-hormuz-us-israel-ban",
       "source": {
         "name": "NPR World",
         "kind": "press"
       },
-      "publishedAt": "2026-08-07T09:00:00.000Z",
-      "description": "The UN warns that Sudan's besieged city of el-Obeid faces relentless drone strikes, water shortages and rising sexual violence against civilians.",
+      "publishedAt": "2026-08-06T20:58:56.000Z",
+      "description": "Iran's push to bar US and Israeli ships from the Strait of Hormuz and toll others raises the stakes in a critical global shipping lane.",
       "topics": [
-        "sudan",
-        "humanitarian",
-        "war"
+        "iran",
+        "geopolitics",
+        "shipping"
       ],
-      "image": "/img/87fd73108bda.webp"
+      "image": "/img/8dfbee8c355a.webp"
     },
     {
-      "id": "5076e79dc792",
-      "rank": 12,
-      "title": "US offers $1bn to Colombia on new right-wing president's first day of office",
-      "url": "https://www.bbc.co.uk/news/articles/cy9wy3y0e5wo?at_medium=RSS&at_campaign=rss",
+      "id": "e66cc71d0943",
+      "rank": 3,
+      "title": "Responding to the next frontier of critical cyber capabilities",
+      "url": "https://openai.com/index/responding-next-frontier-critical-cyber-capabilities",
       "source": {
-        "name": "BBC World",
+        "name": "OpenAI",
         "kind": "press"
       },
-      "publishedAt": "2026-08-08T17:58:42.000Z",
-      "description": "The US offered Colombia $1bn as its new right-wing president opened his term promising an all-out war on narco-terrorism.",
+      "publishedAt": "2026-08-07T15:20:00.000Z",
+      "description": "OpenAI is publishing early cybersecurity evaluations of its Astra system as it moves to shore up safeguards against critical cyber misuse.",
       "topics": [
-        "colombia",
-        "politics",
-        "diplomacy"
+        "openai",
+        "cybersecurity",
+        "safety"
       ],
-      "image": "/img/5076e79dc792.webp"
+      "image": "/img/e66cc71d0943.webp"
     },
     {
-      "id": "7b1fdc1b9514",
-      "rank": 13,
-      "title": "Google DeepMind enters a new era as co-founder Demis Hassabis shifts AI role",
-      "url": "https://www.theguardian.com/technology/2026/aug/08/google-demis-hassabis-deepmind-shifts-role",
+      "id": "889cc093dfad",
+      "rank": 4,
+      "title": "Rising number of UK children report seeing explicit deepfakes of themselves",
+      "url": "https://www.theguardian.com/technology/2026/aug/08/uk-children-explicit-deepfake-images-ai",
       "source": {
         "name": "The Guardian AI",
         "kind": "press"
       },
-      "publishedAt": "2026-08-08T12:00:45.000Z",
-      "description": "Demis Hassabis is stepping back from day-to-day leadership at Google DeepMind, prompting concern the unit is losing independence to commercial pressure.",
+      "publishedAt": "2026-08-08T07:00:39.000Z",
+      "description": "A surge in UK children reporting explicit deepfakes of themselves shows how AI tools are making abusive content easier to produce.",
       "topics": [
-        "deepmind",
-        "google",
-        "leadership"
+        "deepfakes",
+        "children",
+        "safety"
       ],
-      "image": "/img/7b1fdc1b9514.webp"
+      "image": "/img/889cc093dfad.webp"
     },
     {
-      "id": "8415d3b25b0c",
-      "rank": 14,
-      "title": "DeepMind’s hurricane breakthrough has surprised weather scientists",
-      "url": "https://arstechnica.com/science/2026/08/deepminds-hurricane-model-bought-forecasters-an-extra-day/",
+      "id": "ce39f576b0ee",
+      "rank": 5,
+      "title": "Trump's ex-lawyer Todd Blanche narrowly confirmed as US attorney general",
+      "url": "https://www.bbc.co.uk/news/articles/cewr898jy8go?at_medium=RSS&at_campaign=rss",
       "source": {
-        "name": "Ars Technica AI",
+        "name": "BBC World",
         "kind": "press"
       },
-      "publishedAt": "2026-08-08T11:05:50.000Z",
-      "description": "DeepMind's open-source WeatherNext model is surprising scientists with accurate hurricane predictions using lower-resolution data than usual.",
+      "publishedAt": "2026-08-08T15:56:39.000Z",
+      "description": "Todd Blanche's narrow Senate confirmation as attorney general, despite Republican pushback, cements Trump's former lawyer atop US law enforcement.",
+      "topics": [
+        "politics",
+        "justice"
+      ],
+      "image": "/img/ce39f576b0ee.webp"
+    },
+    {
+      "id": "9a01a61fdcc7",
+      "rank": 6,
+      "title": "Alibaba plans to charge big users of its next open-source AI model",
+      "url": "https://www.reuters.com/business/retail-consumer/alibaba-plans-charge-big-users-its-next-open-source-ai-model-sources-say-2026-08-07/",
+      "source": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-07T14:00:39.000Z",
+      "description": "Alibaba's plan to charge heavy users of its next open-source model signals a shift away from free access as compute costs bite.",
+      "topics": [
+        "alibaba",
+        "open source",
+        "business"
+      ],
+      "image": null
+    },
+    {
+      "id": "556b7069c413",
+      "rank": 7,
+      "title": "Spain imposes border controls against Italy as row over Ceuta migrant influx intensifies",
+      "url": "https://www.bbc.co.uk/news/articles/c5yv5l6yr5ko?at_medium=RSS&at_campaign=rss",
+      "source": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T14:25:19.000Z",
+      "description": "Spain has imposed border controls against Italy as a row over migrant flows through Ceuta escalates within the EU.",
+      "topics": [
+        "migration",
+        "europe",
+        "borders"
+      ],
+      "image": "/img/556b7069c413.webp"
+    },
+    {
+      "id": "ebc5821a44c4",
+      "rank": 8,
+      "title": "DeepMind's WeatherNext model achieves breakthrough forecasting cyclones",
+      "url": "https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones/",
+      "source": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-08T09:18:50.000Z",
+      "description": "DeepMind says its WeatherNext model has achieved a breakthrough in forecasting cyclones, a high-stakes test for AI in climate prediction.",
       "topics": [
         "deepmind",
         "weather",
         "forecasting"
       ],
-      "image": "/img/8415d3b25b0c.webp"
+      "image": "/img/ebc5821a44c4.webp"
     },
     {
-      "id": "50d8c339199a",
-      "rank": 15,
-      "title": "ByteDance trains massive AI model in bid to rival Anthropic",
-      "url": "https://arstechnica.com/ai/2026/08/bytedance-trains-massive-ai-model-in-bid-to-rival-anthropic/",
+      "id": "0e977493df32",
+      "rank": 9,
+      "title": "German airport drone-bomb: Could Russia be involved?",
+      "url": "https://www.bbc.co.uk/news/articles/ckgdmrxxkdxo?at_medium=RSS&at_campaign=rss",
       "source": {
-        "name": "Ars Technica AI",
+        "name": "BBC World",
         "kind": "press"
       },
-      "publishedAt": "2026-08-07T13:29:22.000Z",
-      "description": "ByteDance is reportedly training a 10 trillion parameter model as it seeks to compete directly with Anthropic in frontier AI.",
+      "publishedAt": "2026-08-07T08:48:16.000Z",
+      "description": "Evidence suggests Russian-linked proxies have handled and delivered drones and explosives used in a German airport bomb plot.",
       "topics": [
-        "bytedance",
-        "china",
-        "models"
+        "russia",
+        "security",
+        "drones"
       ],
-      "image": "/img/50d8c339199a.webp"
+      "image": "/img/0e977493df32.webp"
     },
     {
-      "id": "a73be5838e2d",
-      "rank": 16,
-      "title": "New Mexico court orders Meta to pay additional $567M in child safety case",
-      "url": "https://techcrunch.com/2026/08/07/new-mexico-court-orders-meta-to-pay-additional-567m-in-child-safety-case/",
+      "id": "5c970cc4af2c",
+      "rank": 10,
+      "title": "Oracle bans AI-generated code from OpenJDK",
+      "url": "https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code",
+      "source": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-07T17:36:30.000Z",
+      "description": "Oracle's ban on AI-generated code in OpenJDK highlights growing institutional wariness about licensing and quality of machine-written contributions.",
+      "topics": [
+        "oracle",
+        "opensource",
+        "coding"
+      ],
+      "image": null
+    },
+    {
+      "id": "7f641d68cfef",
+      "rank": 11,
+      "title": "Colombia's new president vows to remake the country — and challenge rebel groups",
+      "url": "https://www.npr.org/2026/08/07/nx-s1-5924775/colombias-new-president-vows-to-remake-the-country-and-challenge-its-fragile-peace",
+      "source": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T15:41:45.000Z",
+      "description": "Colombia's new hard-right president is promising order and confrontation with rebel groups, marking a sharp political shift.",
+      "topics": [
+        "colombia",
+        "politics"
+      ],
+      "image": "/img/7f641d68cfef.webp"
+    },
+    {
+      "id": "73ecb6809121",
+      "rank": 12,
+      "title": "AI agents fake identities, target real people in new security incident",
+      "url": "https://www.cnn.com/2026/08/04/tech/ai-anthropic-openai-security-breach-intl-hnk",
+      "source": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-07T16:04:35.000Z",
+      "description": "A new security incident in which AI agents faked identities to target real people underscores emerging risks from autonomous systems.",
+      "topics": [
+        "security",
+        "agents",
+        "fraud"
+      ],
+      "image": null
+    },
+    {
+      "id": "2c3cf1fb6602",
+      "rank": 13,
+      "title": "'I ran because I knew I would die': Russian drones target medics in Ukraine",
+      "url": "https://www.bbc.co.uk/news/articles/c3r073eqvrjo?at_medium=RSS&at_campaign=rss",
+      "source": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T00:02:49.000Z",
+      "description": "Ukrainian medics describe escalating Russian drone attacks on hospitals and ambulances, a grim shift in wartime targeting.",
+      "topics": [
+        "ukraine",
+        "war",
+        "medics"
+      ],
+      "image": "/img/2c3cf1fb6602.webp"
+    },
+    {
+      "id": "780caa8efe66",
+      "rank": 14,
+      "title": "Cloudflare launches Kitesurf, a browser built for AI agents",
+      "url": "https://techcrunch.com/2026/08/07/cloudflare-launches-kitesurf-a-browser-built-for-ai-agents/",
       "source": {
         "name": "TechCrunch AI",
         "kind": "press"
       },
-      "publishedAt": "2026-08-07T11:40:37.000Z",
-      "description": "A New Mexico court ordered Meta to pay an additional $567 million in a child safety case, pushing its total fine there past $942 million.",
+      "publishedAt": "2026-08-07T16:16:09.000Z",
+      "description": "Cloudflare's Kitesurf is a cloud browser built specifically for AI agents, promising lighter, more efficient automation than Chromium.",
       "topics": [
-        "meta",
-        "legal",
-        "childsafety"
+        "cloudflare",
+        "browser",
+        "agents"
       ],
-      "image": "/img/a73be5838e2d.webp"
+      "image": "/img/780caa8efe66.webp"
     },
     {
-      "id": "4fad8f89db5e",
+      "id": "0412904b23c2",
+      "rank": 15,
+      "title": "OpenAI's latest math breakthroughs commit research misconduct, experts say",
+      "url": "https://www.scientificamerican.com/article/openais-latest-math-breakthroughs-commit-research-misconduct-experts-say/",
+      "source": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-06T21:40:55.000Z",
+      "description": "Experts are accusing OpenAI's touted math breakthroughs of research misconduct, a credibility challenge for the company's science claims.",
+      "topics": [
+        "openai",
+        "research",
+        "integrity"
+      ],
+      "image": "/img/0412904b23c2.webp"
+    },
+    {
+      "id": "a28e6f212164",
+      "rank": 16,
+      "title": "Anthropic CEO reportedly worried new hires only care about money",
+      "url": "https://finance.yahoo.com/technology/ai/articles/anthropic-ceo-reportedly-worried-hires-160000647.html",
+      "source": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-07T05:15:27.000Z",
+      "description": "Anthropic's CEO is reportedly worried that new hires are drawn mainly by money rather than mission, a telling sign of AI industry culture.",
+      "topics": [
+        "anthropic",
+        "culture",
+        "hiring"
+      ],
+      "image": null
+    },
+    {
+      "id": "57cc8718f944",
       "rank": 17,
-      "title": "AI chatbots have failed people in crisis. Can that be fixed?",
-      "url": "https://arstechnica.com/ai/2026/08/ai-chatbots-have-failed-people-in-crisis-can-that-be-fixed/",
+      "title": "The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on AI",
+      "url": "https://simonwillison.net/2026/Aug/7/pdfs-are-terrible/#atom-everything",
       "source": {
-        "name": "Ars Technica AI",
-        "kind": "press"
+        "name": "Simon Willison",
+        "kind": "blog"
       },
-      "publishedAt": "2026-08-07T13:49:37.000Z",
-      "description": "Clinicians say AI companies must open up safety data after chatbots repeatedly failed to properly support people in mental health crises.",
+      "publishedAt": "2026-08-07T16:18:51.000Z",
+      "description": "Companies are scrambling to rein in runaway AI token spending, with reports suggesting non-engineers are driving much of the cost surge.",
       "topics": [
-        "safety",
-        "mentalhealth",
-        "chatbots"
+        "costs",
+        "enterprise",
+        "spending"
       ],
-      "image": "/img/4fad8f89db5e.webp"
+      "image": null
     },
     {
-      "id": "5373adb312ba",
+      "id": "5bb1d2f28822",
       "rank": 18,
-      "title": "OpenAI’s expensive smart speaker will use moving parts to seem “more alive”",
-      "url": "https://arstechnica.com/gadgets/2026/08/openais-expensive-smart-speaker-will-use-moving-parts-to-seem-more-alive/",
+      "title": "OpenAI’s new AI smart speaker will reportedly sell for between $300 and $400",
+      "url": "https://techcrunch.com/2026/08/06/openais-new-ai-smart-speaker-will-reportedly-sell-for-between-300-and-400/",
       "source": {
-        "name": "Ars Technica AI",
+        "name": "TechCrunch AI",
         "kind": "press"
       },
-      "publishedAt": "2026-08-07T17:36:22.000Z",
-      "description": "OpenAI's rumored smart speaker will reportedly use moving parts to feel more alive and is said not to be an Apple imitation, per new reporting.",
+      "publishedAt": "2026-08-06T22:43:53.000Z",
+      "description": "New details suggest OpenAI's mysterious hardware device will be a hockey-puck-sized smart speaker priced between $300 and $400.",
       "topics": [
         "openai",
         "hardware",
         "device"
       ],
-      "image": "/img/5373adb312ba.webp"
+      "image": "/img/5bb1d2f28822.webp"
     },
     {
-      "id": "39b28d95fcba",
+      "id": "b4c9a080cd2e",
       "rank": 19,
-      "title": "OpenAI acquires presentation startup NextSlide",
-      "url": "https://techcrunch.com/2026/08/08/openai-acquires-presentation-startup-nextslide/",
-      "source": {
-        "name": "TechCrunch AI",
-        "kind": "press"
-      },
-      "publishedAt": "2026-08-08T19:41:13.000Z",
-      "description": "OpenAI acquired presentation startup NextSlide, folding its team into work on ChatGPT as the company keeps expanding through acquisitions.",
-      "topics": [
-        "openai",
-        "acquisition",
-        "chatgpt"
-      ],
-      "image": "/img/39b28d95fcba.webp"
-    },
-    {
-      "id": "015e99c3a0b3",
-      "rank": 20,
-      "title": "OpenAI and four rivals just agreed on one standard for AI agents",
-      "url": "https://thenextweb.com/news/openai-agent-plugins-open-standard-skills-mcp",
+      "title": "Denmark Requires Oral Defenses for Students' Written Work to Counter AI Cheating",
+      "url": "https://mezha.net/eng/bukvy/ca117584_denmark_requires_oral/",
       "source": {
         "name": "Hacker News",
         "kind": "forum"
       },
-      "publishedAt": "2026-08-06T22:21:32.000Z",
-      "description": "OpenAI and four rival AI companies agreed on a shared standard for AI agents, a rare moment of industry cooperation on interoperability.",
+      "publishedAt": "2026-08-08T18:09:31.000Z",
+      "description": "Denmark is requiring oral defenses of written student work to counter AI-assisted cheating in schools.",
       "topics": [
-        "agents",
-        "standards",
-        "industry"
+        "education",
+        "cheating",
+        "policy"
       ],
-      "image": "/img/015e99c3a0b3.webp"
+      "image": null
+    },
+    {
+      "id": "5d37332c48d8",
+      "rank": 20,
+      "title": "‘This is very real redlining’: outrage in Little Rock as two datacenters loom",
+      "url": "https://www.theguardian.com/us-news/2026/aug/07/datacenters-little-rock-arkansas",
+      "source": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T10:00:15.000Z",
+      "description": "Residents in Little Rock are protesting two proposed hyperscale datacenters over water use, power strain and land rights concerns.",
+      "topics": [
+        "datacenters",
+        "community",
+        "infrastructure"
+      ],
+      "image": "/img/5d37332c48d8.webp"
     }
   ]
 }
