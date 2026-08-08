@@ -708,27 +708,30 @@ describe('collect', () => {
 - Consumes: `RawItem`, `fetchBounded`, `mapWithConcurrency`
 - Produces: `extractOgImage(html, baseUrl): string | null`,
   `resolveImages(items, fetchHtml): Promise<RawItem[]>`,
-  `downloadImage(url, destPath, fetchBytes): Promise<string | null>`
+  `downloadImage(url, destPath, fetchBytes): Promise<string | null>`,
+  `downloadImages(items, destDir, fetchBytes): Promise<Map<string, string>>`
+  (id → public path, absent on miss — this is what Task 12 batches and what
+  Task 11's `buildEdition` reads as `undefined` → `null`)
 
 **Re-encoding through `sharp` to webp is a security property, not an
 optimization.** It discards any payload embedded in the original file. Do not
 later "optimize" it into a passthrough copy.
 
-- [ ] **Step 1 — Failing test:** `lib/ingest/images.test.ts` — `extractOgImage`
+- [x] **Step 1 — Failing test:** `lib/ingest/images.test.ts` — `extractOgImage`
   reads `og:image` in either attribute order, falls back to `twitter:image`,
   resolves a relative value against the base URL, returns null when absent.
   `resolveImages` leaves an item that already has an image untouched and never
   fetches for it, fetches only when the image is missing, and leaves `imageUrl`
   null when the fetch fails. `downloadImage` returns null when `fetchBytes`
   rejects (the SSRF guard firing), and writes a `.webp` on success.
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** both network paths go through
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** both network paths go through
   `fetchBounded` (HTML capped at 2 MB and `text/html`; images at 10 MB and
   `image/*` minus svg) and through `mapWithConcurrency(…, 6, …)`.
   `sharp(buf, { limitInputPixels: 25e6 })`, resize width 800, webp quality 80.
   Any failure resolves to null — a missing image is a designed state, not an error.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest package.json pnpm-lock.yaml && git commit -m "feat(01): bounded image resolution and local re-encoding"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest package.json pnpm-lock.yaml && git commit -m "feat(01): bounded image resolution and local re-encoding"`
 
 ---
 
