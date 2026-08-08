@@ -680,20 +680,20 @@ describe('collect', () => {
 > `http://169.254.169.254/`, `http://localhost:8080/` and a 2 GB "image" are all
 > reachable. Hacker News submissions make the URLs attacker-chosen by design.
 
-- [ ] **Step 1 — Failing test:** `lib/ingest/safeFetch.test.ts` — `assertSafeUrl`
+- [x] **Step 1 — Failing test:** `lib/ingest/safeFetch.test.ts` — `assertSafeUrl`
   rejects non-https, rejects a hostname resolving to loopback, link-local
   (`169.254.0.0/16`), or RFC1918, and accepts an ordinary public address (DNS
   resolution is injected). `fetchBounded` rejects when `content-length` exceeds
   the cap, rejects when the streamed body exceeds the cap even with no
   `content-length` header, rejects a `content-type` outside `accept`, rejects
   `image/svg+xml`, and caps redirects at three with **every hop re-validated**.
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** as specified above.
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** as specified above.
   `redirect: 'manual'`, following at most three hops and calling `assertSafeUrl`
   on each `Location`. Body read through the stream with a running byte counter so
   a missing or lying `content-length` cannot bypass the cap.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): SSRF guard and bounded remote fetch"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): SSRF guard and bounded remote fetch"`
 
 ---
 
