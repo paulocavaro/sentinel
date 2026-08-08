@@ -2,7 +2,7 @@
 
 A daily edition of AI and world news.
 
-Every morning a pipeline reads thirteen sources, a model picks the twenty items
+Every morning a pipeline reads eleven sources, a model picks the twenty items
 that matter and ranks them, and the result is committed to this repository as a
 dated JSON file. The site is static and serves the day.
 

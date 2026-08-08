@@ -1,6 +1,6 @@
 # Sentinel — Product Spec
 
-A daily edition of AI and world news. Every morning a pipeline reads thirteen
+A daily edition of AI and world news. Every morning a pipeline reads eleven
 sources, a model picks the twenty items that matter and ranks them, and the
 result is committed to this repository as a dated JSON file. The site is static
 and serves the day.
@@ -56,7 +56,8 @@ type Edition = {
   date: string          // YYYY-MM-DD
   generatedAt: string   // ISO 8601
   summary: string       // the day in one or two sentences, written by the model
-  items: Item[]         // exactly 20, ordered by rank
+  targetCount: number   // always 20 — a shorter edition is legible, not inferred
+  items: Item[]         // up to targetCount, ordered by rank
 }
 
 type Item = {
@@ -91,13 +92,16 @@ All free, none requiring an API key. Verified reachable on 2026-08-08.
 | The Guardian AI | `theguardian.com/technology/artificialintelligenceai/rss` | press |
 | BBC World | `feeds.bbci.co.uk/news/world/rss.xml` | press |
 | NPR World | `feeds.npr.org/1004/rss.xml` | press |
-| arXiv cs.AI | `export.arxiv.org/api/query?search_query=cat:cs.AI` | paper |
 | Hacker News | `hn.algolia.com/api/v1/search?tags=story` | forum |
-| YouTube | `youtube.com/feeds/videos.xml?channel_id=…` | video |
 
 Anthropic publishes no RSS feed; its announcements arrive through Hacker News
 and Simon Willison, both of which cover them closely. Reuters returns 401 to
 automated clients and is not used.
+
+arXiv and YouTube are deliberately absent. arXiv publishes hundreds of cs.AI
+papers a day — high volume, low interest for a daily reader, and enough text to
+swamp the curation call. YouTube needs a chosen set of channels. Both are
+candidates for their own source lane later.
 
 ## Pipeline
 
@@ -105,18 +109,28 @@ Runs daily at 09:00 via GitHub Actions.
 
 1. **Fetch** all sources in parallel. Three parsers total — RSS 2.0, Atom, and
    JSON — not one per source.
-2. **Deduplicate.** The same story appears in several outlets. Canonical URL
+2. **Window and exclude.** Everything published in the last 48 hours, minus
+   everything already published in a previous edition. A 24-hour window yields
+   about fifty items, which is too thin to curate twenty from honestly; 48 hours
+   roughly doubles it, and the archive supplies the exclusion list, so no item
+   ever runs twice.
+3. **Deduplicate.** The same story appears in several outlets. Canonical URL
    first, then title similarity.
-3. **Resolve images.** `media:content` → `media:thumbnail` → `enclosure` →
+4. **Resolve images.** `media:content` → `media:thumbnail` → `enclosure` →
    `og:image` from the article page → `null`. Downloaded, resized, written to
    `public/img/`.
-4. **Curate.** One model call over the normalized set (typically 60–120 items).
-   Structured output: twenty ids ranked, one editorial line each, topics, and the
-   day's summary line.
-5. **Validate.** Every returned id exists in the input. Exactly twenty. No empty
-   fields. No URL absent from the fetched set. Failure aborts the run without
-   writing.
-6. **Commit and push.** Vercel builds from the push.
+5. **Curate.** One model call over the surviving set. Structured output: up to
+   twenty ids ranked, one editorial line each, topics, and the day's summary
+   line. World-kind items are floored at three and capped at six — BBC World
+   alone publishes around nineteen items a day, and without a band it dominates
+   the selection.
+6. **Validate.** Every returned id exists in the input. No more than twenty, none
+   below the floor. No empty fields. No URL absent from the fetched set. Failure
+   aborts the run without writing.
+7. **Commit and push.** Vercel builds from the push.
+
+If fewer than twenty candidates survive, the edition publishes with what it has
+and records the shortfall. A thin news day is not a failure.
 
 If the model call cannot run — quota exhausted, provider down — the job fails
 without writing, and the last successful edition remains live.
