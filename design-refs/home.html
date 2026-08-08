@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentinel, Saturday 8 August</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ─── Sentinel · design reference ───────────────────────────────────────────
+   Direction: "the record". The edition closes at 09:23, carries a date, and is
+   never rewritten.
+
+   The edition is bracketed by two large numerals: the date opens it, -20- closes
+   it, same face, same margin. Everything between them stays quiet. The loudest
+   thing on the page is therefore the one element guaranteed to differ every
+   morning — a big wordmark goes stale by the fifth visit; a date cannot.
+
+   Every rule below is class-based. The previous draft lost its signature to a
+   descendant-selector collision that silently dropped three of four declarations
+   on the mark, so no element selectors are used for anything carrying a value
+   worth keeping.
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --paper:   #F5F7FA;
+  --ink:     #151A21;  /* 16.28:1 */
+  --prose:   #39424F;  /*  9.47:1 */
+  --machine: #5C6675;  /*  5.42:1 */
+  --rule:    #D7DDE5;
+  --accent:  #8A5D0F;  /*  5.36:1 — isoluminant with --machine */
+  --read:    #6E7885;  /*  4.62:1 — a dimmed byline grey, not a browser purple */
+
+  --measure: 34rem;
+  --gutter:  2.25rem;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:   #0F1319;
+    --ink:     #E7ECF3;  /* 15.69:1 */
+    --prose:   #B4BECC;  /*  9.91:1 */
+    --machine: #828E9E;  /*  5.60:1 */
+    --rule:    #28313E;
+    --accent:  #BA8228;  /*  5.60:1 */
+    --read:    #6C7787;  /*  4.55:1 */
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper:   #0F1319;
+  --ink:     #E7ECF3;
+  --prose:   #B4BECC;
+  --machine: #828E9E;
+  --rule:    #28313E;
+  --accent:  #BA8228;
+  --read:    #6C7787;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Spectral, Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+.page {
+  max-width: calc(var(--measure) + var(--gutter) + 2.5rem);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* ─── Masthead ───────────────────────────────────────────────────────────── */
+
+.masthead {
+  padding: 3.25rem 0 2.25rem;
+  border-bottom: 1px solid var(--rule);   /* the only structural rule: the record begins */
+}
+
+.wordmark {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--machine);
+  margin: 0 0 0 var(--gutter);
+}
+
+/* The date is the h1, not the name. The name is the same every day; this is not. */
+.editiondate {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2.5rem, 11vw, 3.5rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin: 1rem 0 0 calc(var(--gutter) - 0.055em);  /* optical hang */
+}
+
+.editiondate .weekday { display: block; color: var(--machine); }
+
+.promise {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--machine);
+  margin: 1.125rem 0 0 var(--gutter);
+}
+
+/* ─── The edition ────────────────────────────────────────────────────────── */
+
+.edition { list-style: none; margin: 0; padding: 0; }
+
+/* Equal padding above and below the rule: unequal reads as a card border —
+   twenty boxes, a list. Equal reads as a measure rule — one continuous column. */
+.edition > li + li { border-top: 1px solid var(--rule); }
+
+.item {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--gutter) 1fr;
+  grid-template-areas: "art art" "rank body";
+  padding: 1.75rem 0;
+}
+
+.item.is-lead { padding: 2.75rem 0 3rem; }
+
+.art {
+  grid-area: art;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  margin: 0 0 1.5rem;
+  border: 1px solid var(--rule);
+}
+
+/* Rank is an index, not a rating: nobody reading item 14 cares that it beat 15,
+   they care that six remain. It matches the byline's size and leading exactly so
+   the two baselines land on the same line — the previous draft's 13px/1.55
+   against 12px/1.4 is what made it look almost-but-not-quite aligned. */
+.rank {
+  grid-area: rank;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--accent);
+}
+
+.body { grid-area: body; min-width: 0; }
+
+.byline {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.06em;                  /* tracking is free: same ink, calmer texture */
+  text-transform: uppercase;
+  color: var(--machine);
+  margin: 0 0 0.375rem;
+}
+
+.head {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.item.is-lead .head { font-size: 1.75rem; line-height: 1.18; text-wrap: balance; }
+.item.is-lead .desc { font-size: 1.0625rem; }
+
+.link { color: inherit; text-decoration: none; }
+
+/* Block link: the whole row is the target, but the accessible name is the title
+   alone. Without this a screen reader announces about forty words per card,
+   beginning with a number. */
+.link::after { content: ""; position: absolute; inset: 0; }
+.link:visited { color: var(--read); }
+
+.desc {
+  font-size: 1rem;                         /* 16 of 20 descriptions set to exactly 3 lines */
+  line-height: 1.6;
+  color: var(--prose);
+  margin: 0.5rem 0 0;
+  text-wrap: pretty;
+}
+
+.item:hover { background: color-mix(in oklab, var(--ink) 3%, transparent); }
+.item:active { background: color-mix(in oklab, var(--ink) 6%, transparent); }
+@media (hover: hover) {
+  .item { transition: background-color 120ms ease-out; }
+  .item:active { transition: none; }       /* instant down, eased up */
+}
+
+.item:has(.link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ─── The end ────────────────────────────────────────────────────────────── */
+
+/* The mark comes first and is the largest object in the edition. It starts in
+   the rank column, so it reads as the terminal member of the sequence the
+   numerals just marched down, rather than an ornament under a footer rule.
+   There is no border here: the ending is not another item boundary. */
+.close {
+  display: grid;
+  grid-template-columns: var(--gutter) 1fr;
+  padding: 9rem 0 7rem;
+}
+
+.close-mark {
+  grid-column: 1 / -1;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(3.25rem, 15vw, 4.5rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin: 0 0 1.75rem -0.11em;             /* optical: the hyphen's sidebearing at this size */
+}
+
+.close-sentence {
+  grid-column: 2;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0;
+}
+
+.close-next {
+  grid-column: 2;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--machine);
+  margin: 0.75rem 0 0;
+}
+
+/* Fires when the mark enters the viewport. The previous draft animated on load,
+   six thousand pixels from the reader, so the only motion on the page played to
+   nobody every single time. Visible by default; the animation is additive. */
+@media (prefers-reduced-motion: no-preference) {
+  .close-mark {
+    animation: settle 1ms linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+}
+@keyframes settle { from { opacity: 0; } to { opacity: 1; } }
+
+/* ─── Wider screens ──────────────────────────────────────────────────────── */
+
+@media (min-width: 56rem) {
+  :root { --measure: 38rem; --gutter: 3rem; }
+  .head { font-size: 1.1875rem; }
+  .item.is-lead .head { font-size: 2.125rem; }
+}
+
+@media (max-width: 25rem) {
+  :root { --gutter: 1.875rem; }
+  .head { font-size: 1.0625rem; }
+  .item.is-lead .head { font-size: 1.5rem; }
+  .desc { font-size: 0.9375rem; line-height: 1.55; }
+}
+
+/* The whole hierarchy rides on three greys, which collapse to one tone here. */
+@media (forced-colors: active) {
+  .edition > li + li { border-top: 1px solid CanvasText; }
+  .byline, .rank { color: GrayText; }
+}
+
+/* ─── Review affordance only, not part of the system ─────────────────────── */
+.toggle {
+  position: fixed; top: 1rem; right: 1rem; z-index: 10;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--paper); color: var(--machine);
+  border: 1px solid var(--rule); border-radius: 0;
+  padding: 0.6rem 0.75rem; cursor: pointer; min-height: 44px;
+}
+</style>
+</head>
+<body>
+<button class="toggle" onclick="const r=document.documentElement;const d=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',d?'light':'dark')">Light / Dark</button>
+
+<div class="page">
+  <header class="masthead">
+    <p class="wordmark">Sentinel</p>
+    <h1 class="editiondate"><span class="weekday">Saturday</span>8 August</h1>
+    <p class="promise">20 items · closed 09:23</p>
+  </header>
+
+  <ol class="edition">
+      <li>
+      <article class="item is-lead">
+        <span class="rank" aria-hidden="true">01</span>
+        <div class="body">
+          <p class="byline">The Guardian</p>
+          <h2 class="head"><a class="link" href="https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient" target="_blank" rel="noopener noreferrer">Trump orders new 15% tariff on key material for solar panels and microchips<span class="sr-only"> (opens at theguardian.com)</span></a></h2>
+          <p class="desc">Trump's new 15% tariff on polysilicon used in chips and solar panels is a direct swipe at China's dominance of the supply chain.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">02</span>
+        <div class="body">
+          <p class="byline">NPR</p>
+          <h2 class="head"><a class="link" href="https://www.npr.org/2026/08/06/nx-s1-5923623/iran-strait-hormuz-us-israel-ban" target="_blank" rel="noopener noreferrer">Iran aims to ban U.S. and Israeli ships from Strait of Hormuz and charge others a toll<span class="sr-only"> (opens at npr.org)</span></a></h2>
+          <p class="desc">Iran's push to bar US and Israeli ships from the Strait of Hormuz and toll others raises the stakes in a critical global shipping lane.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">03</span>
+        <div class="body">
+          <p class="byline">OpenAI</p>
+          <h2 class="head"><a class="link" href="https://openai.com/index/responding-next-frontier-critical-cyber-capabilities" target="_blank" rel="noopener noreferrer">Responding to the next frontier of critical cyber capabilities<span class="sr-only"> (opens at openai.com)</span></a></h2>
+          <p class="desc">OpenAI is publishing early cybersecurity evaluations of its Astra system as it moves to shore up safeguards against critical cyber misuse.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">04</span>
+        <div class="body">
+          <p class="byline">The Guardian</p>
+          <h2 class="head"><a class="link" href="https://www.theguardian.com/technology/2026/aug/08/uk-children-explicit-deepfake-images-ai" target="_blank" rel="noopener noreferrer">Rising number of UK children report seeing explicit deepfakes of themselves<span class="sr-only"> (opens at theguardian.com)</span></a></h2>
+          <p class="desc">A surge in UK children reporting explicit deepfakes of themselves shows how AI tools are making abusive content easier to produce.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">05</span>
+        <div class="body">
+          <p class="byline">BBC</p>
+          <h2 class="head"><a class="link" href="https://www.bbc.co.uk/news/articles/cewr898jy8go?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Trump's ex-lawyer Todd Blanche narrowly confirmed as US attorney general<span class="sr-only"> (opens at bbc.co.uk)</span></a></h2>
+          <p class="desc">Todd Blanche's narrow Senate confirmation as attorney general, despite Republican pushback, cements Trump's former lawyer atop US law enforcement.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">06</span>
+        <div class="body">
+          <p class="byline">Reuters</p>
+          <h2 class="head"><a class="link" href="https://www.reuters.com/business/retail-consumer/alibaba-plans-charge-big-users-its-next-open-source-ai-model-sources-say-2026-08-07/" target="_blank" rel="noopener noreferrer">Alibaba plans to charge big users of its next open-source AI model<span class="sr-only"> (opens at reuters.com)</span></a></h2>
+          <p class="desc">Alibaba's plan to charge heavy users of its next open-source model signals a shift away from free access as compute costs bite.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">07</span>
+        <div class="body">
+          <p class="byline">BBC</p>
+          <h2 class="head"><a class="link" href="https://www.bbc.co.uk/news/articles/c5yv5l6yr5ko?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Spain imposes border controls against Italy as row over Ceuta migrant influx intensifies<span class="sr-only"> (opens at bbc.co.uk)</span></a></h2>
+          <p class="desc">Spain has imposed border controls against Italy as a row over migrant flows through Ceuta escalates within the EU.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">08</span>
+        <div class="body">
+          <p class="byline">Google DeepMind</p>
+          <h2 class="head"><a class="link" href="https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones/" target="_blank" rel="noopener noreferrer">DeepMind's WeatherNext model achieves breakthrough forecasting cyclones<span class="sr-only"> (opens at deepmind.google)</span></a></h2>
+          <p class="desc">DeepMind says its WeatherNext model has achieved a breakthrough in forecasting cyclones, a high-stakes test for AI in climate prediction.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">09</span>
+        <div class="body">
+          <p class="byline">BBC</p>
+          <h2 class="head"><a class="link" href="https://www.bbc.co.uk/news/articles/ckgdmrxxkdxo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">German airport drone-bomb: Could Russia be involved?<span class="sr-only"> (opens at bbc.co.uk)</span></a></h2>
+          <p class="desc">Evidence suggests Russian-linked proxies have handled and delivered drones and explosives used in a German airport bomb plot.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">10</span>
+        <div class="body">
+          <p class="byline">Dealroom</p>
+          <h2 class="head"><a class="link" href="https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code" target="_blank" rel="noopener noreferrer">Oracle bans AI-generated code from OpenJDK<span class="sr-only"> (opens at app.dealroom.co)</span></a></h2>
+          <p class="desc">Oracle's ban on AI-generated code in OpenJDK highlights growing institutional wariness about licensing and quality of machine-written contributions.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">11</span>
+        <div class="body">
+          <p class="byline">NPR</p>
+          <h2 class="head"><a class="link" href="https://www.npr.org/2026/08/07/nx-s1-5924775/colombias-new-president-vows-to-remake-the-country-and-challenge-its-fragile-peace" target="_blank" rel="noopener noreferrer">Colombia's new president vows to remake the country — and challenge rebel groups<span class="sr-only"> (opens at npr.org)</span></a></h2>
+          <p class="desc">Colombia's new hard-right president is promising order and confrontation with rebel groups, marking a sharp political shift.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">12</span>
+        <div class="body">
+          <p class="byline">CNN</p>
+          <h2 class="head"><a class="link" href="https://www.cnn.com/2026/08/04/tech/ai-anthropic-openai-security-breach-intl-hnk" target="_blank" rel="noopener noreferrer">AI agents fake identities, target real people in new security incident<span class="sr-only"> (opens at cnn.com)</span></a></h2>
+          <p class="desc">A new security incident in which AI agents faked identities to target real people underscores emerging risks from autonomous systems.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">13</span>
+        <div class="body">
+          <p class="byline">BBC</p>
+          <h2 class="head"><a class="link" href="https://www.bbc.co.uk/news/articles/c3r073eqvrjo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">'I ran because I knew I would die': Russian drones target medics in Ukraine<span class="sr-only"> (opens at bbc.co.uk)</span></a></h2>
+          <p class="desc">Ukrainian medics describe escalating Russian drone attacks on hospitals and ambulances, a grim shift in wartime targeting.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">14</span>
+        <div class="body">
+          <p class="byline">TechCrunch</p>
+          <h2 class="head"><a class="link" href="https://techcrunch.com/2026/08/07/cloudflare-launches-kitesurf-a-browser-built-for-ai-agents/" target="_blank" rel="noopener noreferrer">Cloudflare launches Kitesurf, a browser built for AI agents<span class="sr-only"> (opens at techcrunch.com)</span></a></h2>
+          <p class="desc">Cloudflare's Kitesurf is a cloud browser built specifically for AI agents, promising lighter, more efficient automation than Chromium.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">15</span>
+        <div class="body">
+          <p class="byline">Scientific American</p>
+          <h2 class="head"><a class="link" href="https://www.scientificamerican.com/article/openais-latest-math-breakthroughs-commit-research-misconduct-experts-say/" target="_blank" rel="noopener noreferrer">OpenAI's latest math breakthroughs commit research misconduct, experts say<span class="sr-only"> (opens at scientificamerican.com)</span></a></h2>
+          <p class="desc">Experts are accusing OpenAI's touted math breakthroughs of research misconduct, a credibility challenge for the company's science claims.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">16</span>
+        <div class="body">
+          <p class="byline">Yahoo Finance</p>
+          <h2 class="head"><a class="link" href="https://finance.yahoo.com/technology/ai/articles/anthropic-ceo-reportedly-worried-hires-160000647.html" target="_blank" rel="noopener noreferrer">Anthropic CEO reportedly worried new hires only care about money<span class="sr-only"> (opens at finance.yahoo.com)</span></a></h2>
+          <p class="desc">Anthropic's CEO is reportedly worried that new hires are drawn mainly by money rather than mission, a telling sign of AI industry culture.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">17</span>
+        <div class="body">
+          <p class="byline">Simon Willison</p>
+          <h2 class="head"><a class="link" href="https://simonwillison.net/2026/Aug/7/pdfs-are-terrible/#atom-everything" target="_blank" rel="noopener noreferrer">The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on AI<span class="sr-only"> (opens at simonwillison.net)</span></a></h2>
+          <p class="desc">Companies are scrambling to rein in runaway AI token spending, with reports suggesting non-engineers are driving much of the cost surge.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">18</span>
+        <div class="body">
+          <p class="byline">TechCrunch</p>
+          <h2 class="head"><a class="link" href="https://techcrunch.com/2026/08/06/openais-new-ai-smart-speaker-will-reportedly-sell-for-between-300-and-400/" target="_blank" rel="noopener noreferrer">OpenAI’s new AI smart speaker will reportedly sell for between $300 and $400<span class="sr-only"> (opens at techcrunch.com)</span></a></h2>
+          <p class="desc">New details suggest OpenAI's mysterious hardware device will be a hockey-puck-sized smart speaker priced between $300 and $400.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">19</span>
+        <div class="body">
+          <p class="byline">Mezha</p>
+          <h2 class="head"><a class="link" href="https://mezha.net/eng/bukvy/ca117584_denmark_requires_oral/" target="_blank" rel="noopener noreferrer">Denmark Requires Oral Defenses for Students' Written Work to Counter AI Cheating<span class="sr-only"> (opens at mezha.net)</span></a></h2>
+          <p class="desc">Denmark is requiring oral defenses of written student work to counter AI-assisted cheating in schools.</p>
+        </div>
+      </article>
+    </li>
+      <li>
+      <article class="item">
+        <span class="rank" aria-hidden="true">20</span>
+        <div class="body">
+          <p class="byline">The Guardian</p>
+          <h2 class="head"><a class="link" href="https://www.theguardian.com/us-news/2026/aug/07/datacenters-little-rock-arkansas" target="_blank" rel="noopener noreferrer">‘This is very real redlining’: outrage in Little Rock as two datacenters loom<span class="sr-only"> (opens at theguardian.com)</span></a></h2>
+          <p class="desc">Residents in Little Rock are protesting two proposed hyperscale datacenters over water use, power strain and land rights concerns.</p>
+        </div>
+      </article>
+    </li>
+  </ol>
+
+  <footer class="close">
+    <p class="close-mark" aria-hidden="true">-20-</p>
+    <p class="close-sentence">That was Saturday 8 August.</p>
+    <p class="close-next">Next edition 09:23 tomorrow</p>
+    <span class="sr-only">End of edition. Twenty items.</span>
+  </footer>
+</div>
+</body>
+</html>
