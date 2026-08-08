@@ -92,7 +92,7 @@ All free, none requiring an API key. Verified reachable on 2026-08-08.
 | The Guardian AI | `theguardian.com/technology/artificialintelligenceai/rss` | press |
 | BBC World | `feeds.bbci.co.uk/news/world/rss.xml` | press |
 | NPR World | `feeds.npr.org/1004/rss.xml` | press |
-| Hacker News | `hn.algolia.com/api/v1/search?tags=story` | forum |
+| Hacker News | `hn.algolia.com/api/v1/search_by_date` | forum |
 
 Anthropic publishes no RSS feed; its announcements arrive through Hacker News
 and Simon Willison, both of which cover them closely. Reuters returns 401 to

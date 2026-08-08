@@ -338,7 +338,7 @@ describe('hasMarkupOrUrl', () => {
 > filtering client-side would routinely yield nothing. The score and time filters
 > have to be server-side, in the request URL.
 
-- [ ] **Step 1 — Failing test:** `lib/ingest/sources.test.ts`
+- [x] **Step 1 — Failing test:** `lib/ingest/sources.test.ts`
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -395,16 +395,16 @@ describe('buildRequestUrls', () => {
 })
 ```
 
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** the eleven sources as in the design,
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** the eleven sources as in the design,
   each with a `priority` (established outlets 1–3, aggregators higher, `hn` the
   highest number so it never wins a dedupe tie and the edition never attributes a
   TechCrunch story to Hacker News). `HN_QUERIES = ['AI', 'LLM', 'OpenAI',
   'Anthropic']`. `buildRequestUrls` returns `[source.url]` for rss/atom, and for
   `hn` one `search_by_date` URL per query carrying
   `tags=story`, `numericFilters=points>=10,created_at_i>{unix}`, `hitsPerPage=50`.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): source registry with server-side Hacker News filters"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): source registry with server-side Hacker News filters"`
 
 ---
 
