@@ -532,7 +532,7 @@ describe('parseFeed', () => {
 > simultaneous requests. Hosts 429 or block the runner, and slow hosts all hit the
 > timeout at once. Cap it at six.
 
-- [ ] **Step 1 — Failing test:** both files.
+- [x] **Step 1 — Failing test:** both files.
 
 ```ts
 // lib/ingest/concurrency.test.ts
@@ -612,15 +612,15 @@ describe('collect', () => {
 })
 ```
 
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** `mapWithConcurrency` is a simple worker
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** `mapWithConcurrency` is a simple worker
   pool preserving input order. `collect` expands each source through
   `buildRequestUrls`, fetches through the pool, parses, and records the source id
   in `failures` when every one of its requests rejected or produced no items.
   `httpFetcher` uses `fetch` with a browser `User-Agent` and
   `AbortSignal.timeout(20_000)`; tests never touch it.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): concurrency-limited fetch with per-source failure isolation"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): concurrency-limited fetch with per-source failure isolation"`
 
 ---
 
