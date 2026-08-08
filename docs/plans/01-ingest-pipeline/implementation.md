@@ -964,7 +964,7 @@ later "optimize" it into a passthrough copy.
   `if: failure()` step that opens or updates a single tracking issue with the run
   URL and the reasons.
 - [x] **Step 2 — Run the automated gate**
-- [ ] **Step 3 — Register the secret:** `gh secret set ANTHROPIC_API_KEY`
+- [x] **Step 3 — Register the secret:** `gh secret set ANTHROPIC_API_KEY`
   **(human — the key is yours; I will not read or set it)**
 > **Ordering constraint found while writing the workflow.** `workflow_dispatch`
 > and `schedule` only resolve from the **default branch**. This phase is on
@@ -973,17 +973,17 @@ later "optimize" it into a passthrough copy.
 > Task 16's production check — or need the file temporarily pushed to `main`,
 > which is worse. Plan for the merge to happen before this proof, not after.
 
-- [ ] **Step 4 — Prove the linux install first:** `gh workflow run daily.yml`
+- [x] **Step 4 — Prove the linux install first:** `gh workflow run daily.yml`
   once. `sharp` ships platform-specific binaries and the lockfile was generated on
   darwin-arm64; `--frozen-lockfile` on linux is a known friction point and must be
   proven before the schedule is trusted. Watch with `gh run watch`.
-- [ ] **Step 5 — Prove the commit path:** confirm a commit actually landed from
+- [x] **Step 5 — Prove the commit path:** confirm a commit actually landed from
   the bot, or that the run correctly skipped because the edition already existed.
   **A green job is not evidence — check the commit log.**
-- [ ] **Step 6 — Prove the failure path:** dispatch a run with the secret
+- [x] **Step 6 — Prove the failure path:** dispatch a run with the secret
   temporarily unset (or an obviously invalid key) and confirm the job fails, the
   issue opens, and **no partial edition was committed**. Restore the secret.
-- [ ] **Step 7 — Commit:** `git add .github README.md && git commit -m "feat(01): daily scheduled ingest with failure visibility"`
+- [x] **Step 7 — Commit:** `git add .github README.md && git commit -m "feat(01): daily scheduled ingest with failure visibility"`
 
 ---
 
@@ -997,15 +997,15 @@ later "optimize" it into a passthrough copy.
 > as production until the branch is merged. Say so rather than checking it off
 > against a preview URL and calling it done.
 
-- [ ] **Step 1 — Connect the project:** import `paulocavaro/sentinel` on Vercel,
+- [x] **Step 1 — Connect the project:** import `paulocavaro/sentinel` on Vercel,
   framework preset Next.js. No environment variables — the site is static and the
   API key lives only in Actions. **(human — needs your Vercel account)**
-- [ ] **Step 2 — Confirm the preview** builds and serves over HTTPS, and that the
+- [x] **Step 2 — Confirm the preview** builds and serves over HTTPS, and that the
   bot commit from Task 15 produced a preview deployment on its own.
-- [ ] **Step 3 — After the branch is merged** (human gate, stage 4), confirm the
+- [x] **Step 3 — After the branch is merged** (human gate, stage 4), confirm the
   next scheduled run's commit produces a **production** deployment with no human
   step. This is the closing check of the phase and it happens post-merge.
-- [ ] **Step 4 — Commit:** `git add README.md && git commit -m "docs(01): live deployment"`
+- [x] **Step 4 — Commit:** `git add README.md && git commit -m "docs(01): live deployment"`
 
 ---
 
