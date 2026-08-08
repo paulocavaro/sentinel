@@ -99,9 +99,13 @@ function report(result: IngestResult, args: Args): void {
   if (edition) {
     line()
     line(`Chosen            ${edition.items.length} of at most ${edition.targetCount}`)
+    // A dry run returns before images are resolved, so every item.image is null.
+    // Reporting that as "no image" per item is a lie that reads like a finding:
+    // it would have every reader believe the feeds carry no images at all.
     for (const item of edition.items) {
       line(`  ${String(item.rank).padStart(2)}. ${item.title}`)
-      line(`      ${item.source.name}${item.image ? '' : ' · no image'}`)
+      const image = args.dryRun ? 'images not resolved' : item.image ? 'image' : 'no image'
+      line(`      ${item.source.name} · ${image}`)
     }
     line()
     line(`Summary           ${edition.summary}`)
