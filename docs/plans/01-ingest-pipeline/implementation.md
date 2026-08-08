@@ -793,18 +793,18 @@ later "optimize" it into a passthrough copy.
 > `summary` and `topics` are model-authored free text going straight onto a public
 > site with no human review. Validate the text too.
 
-- [ ] **Step 1 — Failing test:** an empty array for a well-formed curation, and a
+- [x] **Step 1 — Failing test:** an empty array for a well-formed curation, and a
   distinct reason for each of: an id absent from the candidates; a duplicate id;
   more items than the target; fewer than the floor; a duplicate rank; a blank
   description; a description over the length cap; **a description or summary
   containing a URL or markup**; a topic containing markup; too few world items;
   too many world items. Plus: every problem is reported, not just the first.
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** accumulate reasons and return them. The
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** accumulate reasons and return them. The
   world count is derived from the **candidates**, never from anything the model
   claimed. Text checks use `hasMarkupOrUrl` from Task 2.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): validation that aborts a bad run"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): validation that aborts a bad run"`
 
 ---
 
@@ -874,11 +874,14 @@ later "optimize" it into a passthrough copy.
   `TARGET_COUNT = 20`, `MIN_ITEMS = 8`, `WORLD_MIN = 3`, `WORLD_MAX = 6`,
   `MAX_SOURCE_FAILURES = 2`, `CONCURRENCY = 6`, `CONTENT_DIR = 'content/days'`,
   `IMAGE_DIR = 'public/img'`.
-  **`runIngest` must pass the world band into `buildPrompt` rather than letting
-  it keep its own copy.** Task 9 had to hard-code 3–6 because `config.ts` did not
-  exist yet; leaving both is a silent divergence, where changing the band in
-  config would still ask the model for the old one. Change `buildPrompt`'s
-  signature here and delete the duplicate constants.
+  **`runIngest` must pass the world band and the description cap into
+  `buildPrompt` rather than letting it keep its own copies.** Tasks 9 and 10 both
+  had to hard-code 3–6 and 200 because `config.ts` did not exist yet, so the same
+  numbers now live in three files. Changing the band in config would still ask
+  the model for the old one while validating against the new one — a mismatch
+  that surfaces as unexplained aborts. Add `DESCRIPTION_MAX = 200` to config,
+  change `buildPrompt`'s signature here, and delete the duplicates in
+  `curate.ts` and `validate.ts`.
   `runIngest` runs: resolve today's UTC date → exists
   and not forced → return early → collect → fail if `failures.length >
   MAX_SOURCE_FAILURES` → select → curate → validate → **resolve and download
