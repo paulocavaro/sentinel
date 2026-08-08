@@ -819,7 +819,7 @@ later "optimize" it into a passthrough copy.
   `editionExists(dir, date)`, `buildEdition(curation, candidates, opts)`,
   `writeEdition(dir, edition)`
 
-- [ ] **Step 1 — Failing test:** tests use a temp dir from
+- [x] **Step 1 — Failing test:** tests use a temp dir from
   `mkdtemp(join(tmpdir(), 'sentinel-'))`, never the repo. Covering: an empty
   result when the directory is missing; ids **and normalized titles** collected
   across every edition file; a corrupt edition file skipped instead of thrown;
@@ -829,14 +829,14 @@ later "optimize" it into a passthrough copy.
   source and publishedAt taken from the candidate, never from the model**;
   `buildEdition` throwing when a curated id has no candidate, rather than
   producing `undefined.title`; `writeEdition` round-tripping.
-- [ ] **Step 2 — Run it, confirm it fails:** `pnpm test`
-- [ ] **Step 3 — Minimal implementation:** as specified. `readPublished` tolerates
+- [x] **Step 2 — Run it, confirm it fails:** `pnpm test`
+- [x] **Step 3 — Minimal implementation:** as specified. `readPublished` tolerates
   a missing directory and unparseable files. It re-reads the whole archive on
   every run — fine for decades at twenty a day; leave a comment so it is not
   mistaken for an oversight. `writeEdition` creates the directory and writes
   two-space JSON with a trailing newline.
-- [ ] **Step 4 — Run tests, confirm green:** the full gate
-- [ ] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): archive reads and edition assembly"`
+- [x] **Step 4 — Run tests, confirm green:** the full gate
+- [x] **Step 5 — Commit:** `git add lib/ingest && git commit -m "feat(01): archive reads and edition assembly"`
 
 ---
 
