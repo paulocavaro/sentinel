@@ -84,6 +84,32 @@ function closingSentence(edition: EditionModel): string {
 }
 
 /**
+ * The end of the edition.
+ *
+ * Its own export because `/states` frames it on its own — the thin day is
+ * `states.html` 02, which is a masthead and a closing block and nothing in
+ * between, and the sentence it turns on is `closingSentence` above. A second
+ * copy of that footer in the catalogue would be a copy of the one piece of
+ * markup on the page whose text is conditional, i.e. the one most worth
+ * checking and the one most likely to drift.
+ */
+export function CloseBlock({ edition }: { edition: EditionModel }) {
+  return (
+    <footer className="close">
+      {/* The mark is `items.length`, never `TARGET_COUNT`: a thin day that
+          printed thirty over seventeen items would be the page contradicting
+          itself in its largest type. `aria-hidden` because it is a printer's
+          mark — "-30-" read aloud is noise, and the sentence under it already
+          says the edition has ended. */}
+      <p className="close-mark" aria-hidden="true">{`-${edition.items.length}-`}</p>
+      <p className="close-sentence">{closingSentence(edition)}</p>
+      <p className="close-next">{`Next edition ${CLOSING_TIME} tomorrow`}</p>
+      <span className="sr-only">End of edition.</span>
+    </footer>
+  )
+}
+
+/**
  * @param edition  the edition on screen.
  * @param dates    every date the archive can render, for the edition bar's
  *   neighbours. `listEditionDates()`.
@@ -130,17 +156,7 @@ export function EditionPage({
 
       <Edition edition={edition} />
 
-      <footer className="close">
-        {/* The mark is `items.length`, never `TARGET_COUNT`: a thin day that
-            printed thirty over seventeen items would be the page contradicting
-            itself in its largest type. `aria-hidden` because it is a printer's
-            mark — "-30-" read aloud is noise, and the sentence under it already
-            says the edition has ended. */}
-        <p className="close-mark" aria-hidden="true">{`-${edition.items.length}-`}</p>
-        <p className="close-sentence">{closingSentence(edition)}</p>
-        <p className="close-next">{`Next edition ${CLOSING_TIME} tomorrow`}</p>
-        <span className="sr-only">End of edition.</span>
-      </footer>
+      <CloseBlock edition={edition} />
 
       <AskButton />
     </div>

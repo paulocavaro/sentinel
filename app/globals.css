@@ -513,3 +513,13 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
 .state-title { font-size: 1.25rem; font-weight: 600; margin: 0; }
 .state-why { font-size: 0.9375rem; line-height: 1.55; color: var(--prose); margin: 0.5rem 0 0; max-width: 46em; }
 .state-frame { border: 1px solid var(--rule-hair); padding: 1.75rem; }
+/* A framed sample is the real component, and the real components carry the
+   page's own opening and closing space: .masthead opens at 3rem, .close closes
+   at 6rem/5rem. Inside a frame that space belongs to the frame's padding. It is
+   removed here rather than by an inline style on the sample, because a
+   component cannot carry one — the catalogue is what wants the change, so the
+   catalogue's own stylesheet is where it goes.
+   :first-child, so state 01 — where the masthead follows the stale banner and
+   opens at the 1.5rem that alert costs it — is untouched. */
+.state-frame .masthead:first-child { padding-top: 0; }
+.state-frame > .close { padding: 3rem 0 0; }

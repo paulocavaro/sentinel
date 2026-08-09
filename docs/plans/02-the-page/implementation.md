@@ -392,7 +392,7 @@ modify `lib/ingest/config.ts`
 
 **Screens:** states (web)
 
-- [ ] **Step 1 — Implement.** `/states` renders the six conditions from the real
+- [x] **Step 1 — Implement.** `/states` renders the six conditions from the real
   components, matching `design-refs/states.html` — including its catalogue
   chrome (`.cat`, `.state`, `.state-head`, `.state-n`, `.state-title`,
   `.state-why`, `.state-frame`) and the exact prose of the six `state-why`
@@ -402,8 +402,8 @@ modify `lib/ingest/config.ts`
     static markup the reference shows, labelled as belonging to the next phase.
   - **Neither committed edition is thin**, so that fixture is necessarily
     synthetic — derived by truncating a real edition, not invented from nothing.
-- [ ] **Step 2 — Gate**
-- [ ] **Step 3 — Commit:** `feat(02): the states page`
+- [x] **Step 2 — Gate**
+- [x] **Step 3 — Commit:** `feat(02): the states page`
 
 ---
 
