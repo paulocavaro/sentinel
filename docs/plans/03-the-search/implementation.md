@@ -82,18 +82,18 @@ mechanisms in one request. If that does not work, the answer is two calls —
 retrieve, then `generateObject` — and Tasks 3 and 5 change. Finding out here
 costs twenty lines; finding out at Task 3 step 5 costs two rewritten tasks.
 
-- [ ] **Step 1 — Write the smallest thing that could fail.** One `generateText`
+- [x] **Step 1 — Write the smallest thing that could fail.** One `generateText`
   with a trivial two-item tool, `Output.object` over a two-field schema, and
   `stopWhen: stepCountIs(3)`. Real key, real call, `console.log` the result.
-- [ ] **Step 2 — Run it:** `pnpm tsx scripts/spike-output.ts`
-- [ ] **Step 3 — Record the answer in the run log**: whether the object came
+- [x] **Step 2 — Run it:** `pnpm tsx scripts/spike-output.ts`
+- [x] **Step 3 — Record the answer in the run log**: whether the object came
   back, whether the tool was called first, and what the result object's shape
   actually is (`.output`? `.experimental_output`? something else).
-- [ ] **Step 4 — If it did not work, STOP and tell the human.** The fallback is
+- [x] **Step 4 — If it did not work, STOP and tell the human.** The fallback is
   two calls and it is a plan change, not a maker decision.
-- [ ] **Step 5 — Delete the spike.** It has served its purpose and a spike left
+- [x] **Step 5 — Delete the spike.** It has served its purpose and a spike left
   in the tree becomes a file nobody dares remove.
-- [ ] **Step 6 — Commit:** `docs(03): what the tool loop actually returns`
+- [x] **Step 6 — Commit:** `docs(03): what the tool loop actually returns`
 
 ---
 
@@ -122,7 +122,7 @@ when `source` had to become `feed`.
   import { describe, expect, it } from 'vitest'
 
   import { edition } from '@/app/__fixtures__/archive'
-  import { buildIndex, searchNews, MAX_HITS } from './index'
+  import { buildIndex, searchNews, MAX_HITS } from './corpus'
 
   const ARCHIVE = [
     { ...edition('2026-08-09', 3), items: [ /* titles set per case */ ] },
@@ -382,7 +382,7 @@ code path production runs.
       system,
       prompt,
       tools,
-      stopWhen: stepCountIs(3),
+      stopWhen: stepCountIs(4),
       output: Output.object({ schema: AnswerSchema }),
       maxOutputTokens: 8_000,
     })
@@ -398,8 +398,12 @@ code path production runs.
   Verified in the installed package before writing: `ai` v7 exports
   `generateText`, `tool`, `Output`, `stepCountIs`; `@ai-sdk/anthropic` v4
   accepts `effort: low | medium | high | xhigh | max` through `providerOptions`.
-  `stopWhen: stepCountIs(3)` bounds the loop at one search plus a retry plus the
-  answer.
+  `stopWhen` is **4**, not the 3 this plan first said, and the change is
+  evidence rather than caution: in Task 0's very first trial — a two-item corpus
+  and an unambiguous question — the model searched **twice** before answering,
+  spending all three steps. Two searches is the normal case, so 3 leaves no room
+  for a third, and being cut off mid-loop costs a *failed* answer rather than a
+  slow one. The spike's transcript is in `.loop/runs/03-the-search.md`.
 
   `maxOutputTokens` is 8000 rather than a snug 4000 for the reason `curate.ts`
   records in as many words: adaptive thinking is on by default on Sonnet 5 and
