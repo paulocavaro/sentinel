@@ -217,6 +217,36 @@ jobs:
             git push origin "HEAD:$GITHUB_REF_NAME"
           fi
 
+      - name: Rebuild the site
+        # `always()`, and that is the whole point of the step. The site says
+        # "you are reading yesterday's edition" by comparing the edition's date
+        # to today's — and on a prerendered route today is frozen at build time.
+        # The only other thing that triggers a build is the push above, which
+        # only happens when the run succeeded. So without this, in the exact
+        # scenario the stale banner exists for, nothing is pushed, nothing is
+        # rebuilt, and the page still believes it was built today. The banner
+        # would be unreachable in production, permanently.
+        if: always()
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          set -uo pipefail
+
+          if [ -z "${HOOK:-}" ]; then
+            echo '::warning::VERCEL_DEPLOY_HOOK is not set. The site will not rebuild, so a stale edition cannot say it is stale.'
+            exit 0
+          fi
+
+          # Deliberately not fatal. A failed deploy hook means the site is a day
+          # behind; failing the job over it would turn a good edition into a red
+          # run and open an issue about the wrong thing. It is loud instead.
+          CODE="$(curl -sS -X POST -o /dev/null -w '%{http_code}' --max-time 30 "$HOOK" || echo 000)"
+          if [ "$CODE" = "200" ] || [ "$CODE" = "201" ]; then
+            echo "Rebuild requested (HTTP $CODE)."
+          else
+            echo "::warning::Deploy hook returned HTTP $CODE. The site did not rebuild."
+          fi
+
       - name: Report the failure
         if: failure()
         env:

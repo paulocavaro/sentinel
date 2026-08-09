@@ -204,6 +204,14 @@ with nothing to say about one theme.
 If the model call cannot run — quota exhausted, provider down — the job fails
 without writing, and the last successful edition remains live.
 
+**The site rebuilds every morning whether or not an edition was written.** That
+sounds redundant and is not: the page marks a stale edition by comparing its date
+to today's, and on a prerendered route today is frozen at build time. If the only
+trigger for a build were the commit above, then in the exact case the stale
+notice exists for — the run failed, nothing was written — nothing would rebuild,
+and the page would still believe it was built today. The notice would be
+unreachable in production, permanently.
+
 ## AI
 
 Two jobs, deliberately narrow.
