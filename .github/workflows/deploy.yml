@@ -1,0 +1,75 @@
+# Promote main to production.
+#
+# **Why this exists at all.** Merging a pull request into `main` did not deploy
+# anything — not a preview, not production, nothing. The phase 03 merge sat live
+# in the repository and absent from the site until somebody noticed. Whether the
+# cause is a branch setting, an ignored build step, or Vercel deduplicating a
+# build whose tree it had already built as a preview minutes earlier, the fix is
+# the same and it does not depend on knowing which: ask for the deployment
+# explicitly, from the one place that always knows a merge happened.
+#
+# The hook is the same one `daily.yml` calls, pointed at `main`. This file adds
+# no new secret and no new mechanism — it just stops production from depending
+# on the ingest having run.
+#
+# **This job fails loudly, and that is the difference from `daily.yml`.** There
+# the hook is a safety net around the edition, so a failed hook must not turn a
+# good edition into a red run. Here the hook *is* the job: a green run that
+# deployed nothing would be exactly the failure this workflow was written to
+# prevent — the same shape as the `git diff` bug in phase 01, where every signal
+# said healthy and the site never updated.
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+# One deployment at a time, and never cancel one in flight: a cancelled deploy
+# can be the one that would have gone live. A queued run costs one build.
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    # The daily ingest pushes the edition to `main` and then calls this same hook
+    # itself, under `if: always()`. Without this condition every published
+    # edition would deploy twice — once from that step and once from this
+    # workflow reacting to its push. Skipping the bot leaves each path with
+    # exactly one caller: the ingest promotes its own edition, and this workflow
+    # promotes everything a human merges.
+    if: github.actor != 'github-actions[bot]'
+
+    steps:
+      - name: Ask Vercel for a production deployment
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          set -uo pipefail
+
+          if [ -z "${HOOK:-}" ]; then
+            echo '::error::VERCEL_DEPLOY_HOOK is not set, so this merge will not reach the site.'
+            exit 1
+          fi
+
+          # `-w` for the status rather than `-f`, so a 4xx is reported with its
+          # code instead of curl exiting on it silently.
+          CODE="$(curl -sS -X POST -o /dev/null -w '%{http_code}' --max-time 30 "$HOOK" || echo 000)"
+
+          case "$CODE" in
+            200|201)
+              echo "Deployment requested (HTTP $CODE). Vercel builds ${GITHUB_SHA:0:7} from main."
+              ;;
+            000)
+              echo '::error::The deploy hook could not be reached. main is merged and not deployed.'
+              exit 1
+              ;;
+            *)
+              echo "::error::The deploy hook answered HTTP $CODE. main is merged and not deployed."
+              exit 1
+              ;;
+          esac
