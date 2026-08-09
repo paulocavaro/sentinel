@@ -76,6 +76,34 @@ async function write(at: string, value: unknown): Promise<void> {
 // listEditionDates
 // ---------------------------------------------------------------------------
 
+// A filename that names no day.
+//
+// This is the defect the calendar rule closes, kept where it was reachable.
+// `2026-02-29` matches the shape of a date and is not a day; `new Date` rolls it
+// to 1 March rather than answering NaN. With a shape-only check the reader
+// accepted the file, and the masthead then printed the rolled day in the largest
+// type on the page while /archive published a link the route answered with 404.
+describe('a name that is not a calendar day', () => {
+  it('is not listed, even beside a good edition', async () => {
+    await writeFile(join(dir, '2026-08-09.json'), JSON.stringify(edition({ date: '2026-08-09' })))
+    await writeFile(join(dir, '2026-02-29.json'), JSON.stringify(edition({ date: '2026-02-29' })))
+
+    expect(await listEditionDates(dir)).toEqual(['2026-08-09'])
+  })
+
+  it('cannot be read by name either, so no route can render it', async () => {
+    await writeFile(join(dir, '2026-02-29.json'), JSON.stringify(edition({ date: '2026-02-29' })))
+
+    expect(await readEdition('2026-02-29', dir)).toBeNull()
+  })
+
+  it('does not take the listing down when the month itself is impossible', async () => {
+    await writeFile(join(dir, '2026-13-01.json'), JSON.stringify(edition({ date: '2026-13-01' })))
+
+    await expect(listEditionDates(dir)).resolves.toEqual([])
+  })
+})
+
 describe('listEditionDates', () => {
   it('returns the dates newest first', async () => {
     await write('2026-08-06', edition({ date: '2026-08-06' }))

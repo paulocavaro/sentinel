@@ -28,7 +28,7 @@
   --prose:   light-dark(#3D3B36, #B8B4AC);  /*  9.82 /  8.67 */
   --machine: light-dark(#6B6862, #8A867E);  /*  4.88 /  4.94 */
   --accent:  light-dark(#8A5D0F, #B07E28);  /*  5.05 /  5.00 — isoluminant with --machine */
-  --read:    light-dark(#7C786F, #7B776F);
+  --read:    light-dark(#6E6A61, #87837B);  /*  4.73 /  4.75 */
 
   --rule-hair:   light-dark(#DAD7D0, #2E2F33);
   --rule-strong: light-dark(#17171A, #ECEAE4);

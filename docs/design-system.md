@@ -48,7 +48,7 @@ number.
 | `--prose` | `#3D3B36` | `#B8B4AC` | 9.82 / 8.67 | The model's editorial line |
 | `--machine` | `#6B6862` | `#8A867E` | 4.88 / 4.94 | Anything the machine stamped: byline, promise, labels |
 | `--accent` | `#8A5D0F` | `#B07E28` | 5.05 / 5.00 | The end mark, the stale banner, focus rings. Nothing else. |
-| `--read` | `#7C786F` | `#7B776F` | 4.62 / 4.55 | A visited headline. Never a browser purple. |
+| `--read` | `#6E6A61` | `#87837B` | 4.73 / 4.75 | A visited headline. Never a browser purple. |
 | `--rule-hair` | `#DAD7D0` | `#2E2F33` | 1.26 / 1.34 | Between items |
 | `--rule-strong` | `#17171A` | `#ECEAE4` | 15.71 / 14.90 | Opens a section |
 | `--edge` | `#C9C5BC` | `#3B3D42` | — | Around a photograph |
@@ -218,24 +218,15 @@ Not a checklist; a foundation, in the way the Guardian ships `accessibility`
 alongside `palette` and the BBC ships `Focus` as a foundation.
 
 - Every text pair clears WCAG AA and most clear AAA. Ratios are in the colour
-  table and in the CSS beside each token.
-- **The machine layer recedes by size, tracking and case — never by contrast,
-  never by opacity.** It is 9% of a card's ink; it is already quiet by structure,
-  and buying more quiet with grey is how a layer falls below AA for nothing.
-- The measure is ~68 characters, inside the BBC's *"between 60 and 70 is better
-  still"*. Body leading is 1.6 against their floor of 1.5. The lead headline is
-  1.12 against their 1.125 for large headings.
-- `forced-colors: active` is handled: the whole hierarchy rides on three greys
-  and collapses to one tone there, so rules get `CanvasText` and the machine
-  layer `GrayText`.
-- The ask panel is a `<dialog>` opened with `showModal()`, which supplies
-  Escape, a focus trap, an inert background and a real backdrop with no script.
-  **Its `display` must stay scoped to `[open]`** — a bare `display: flex`
-  overrides the browser's `display: none` for the closed state and the panel can
-  never close.
-- Images are `alt=""`. They are decorative relative to a headline and a summary
-  that carry the whole meaning, and inventing alt text for a photograph nobody
-  here has seen is exactly what the honesty principle forbids.
+table and in the CSS beside each token.
+
+**`--read` was the exception, and it was the exception for a reason worth
+keeping.** It shipped claiming 4.62 / 4.55 and measured **3.86 / 4.02** — below
+AA for a visited brief headline, which at 17px is not large text. It was the one
+token whose number nobody recomputed, and it was the one token that failed. Two
+independent audits found it on the same afternoon. The values above are measured,
+not asserted, and the ratio comment now sits beside it in the CSS like every
+other token's — its absence there is what let the claim go unchecked.
 
 ## Do not build
 

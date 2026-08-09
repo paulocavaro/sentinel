@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 
-import { dayMonth, editionDate, monthYear, shiftDays, weekdayOf } from './date'
+import { dayMonth, editionDate, isCalendarDate, monthYear, shiftDays, weekdayOf } from './date'
 
 // An edition date is a calendar day the pipeline wrote, not an instant. Every
 // bug this file exists to catch comes from treating it as an instant: the page
@@ -70,6 +70,56 @@ describe('the test harness itself', () => {
     expect(naive('Asia/Tokyo')).toBe('Sunday 9 August')
     expect(naive('America/Los_Angeles')).toBe('Saturday 8 August')
   })
+})
+
+// The bug this closes, kept as a case rather than a comment.
+//
+// `2026-02-29` matches the shape of a date and is not a day. `new Date` does not
+// answer NaN for it — it rolls forward — so a shape-only check let a filename
+// that names no day reach the masthead, which then printed the rolled day in the
+// largest type on the page while /archive linked to a 404.
+describe('isCalendarDate', () => {
+  it('accepts a day that exists', () => {
+    for (const day of ['2026-08-09', '2024-02-29', '2026-01-01', '2026-12-31']) {
+      expect(isCalendarDate(day)).toBe(true)
+    }
+  })
+
+  it('rejects a date that rolls forward rather than failing', () => {
+    // The whole finding: none of these is NaN, and every one of them is a lie.
+    expect(new Date('2026-02-29T12:00:00Z').toISOString().slice(0, 10)).toBe('2026-03-01')
+    expect(isCalendarDate('2026-02-29')).toBe(false)
+    expect(isCalendarDate('2026-04-31')).toBe(false)
+    expect(isCalendarDate('2026-06-31')).toBe(false)
+  })
+
+  it('rejects a month or day outside the calendar', () => {
+    for (const value of ['2026-13-01', '2026-00-05', '2026-08-00', '2026-08-32']) {
+      expect(isCalendarDate(value)).toBe(false)
+    }
+  })
+
+  it('rejects anything that is not the shape', () => {
+    for (const value of ['banana', '2026-8-9', '', '2026-08-09T00:00:00Z', '26-08-09']) {
+      expect(isCalendarDate(value)).toBe(false)
+    }
+  })
+
+  it('never throws, whatever it is handed', () => {
+    for (const value of ['', '\u0000', 'x'.repeat(5000)]) {
+      expect(() => isCalendarDate(value)).not.toThrow()
+    }
+  })
+})
+
+// Every formatter goes through `atNoonUTC`, so the rule reaches all of them.
+describe('the formatters refuse a date that is not a day', () => {
+  it.each([['editionDate', editionDate], ['dayMonth', dayMonth], ['monthYear', monthYear], ['weekdayOf', weekdayOf]])(
+    '%s throws for 2026-02-29 rather than printing 1 March',
+    (_, fn) => {
+      expect(() => fn('2026-02-29')).toThrow(/not a calendar date/)
+    },
+  )
 })
 
 describe('editionDate', () => {

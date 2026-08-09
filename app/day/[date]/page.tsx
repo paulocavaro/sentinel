@@ -44,25 +44,8 @@ import { notFound } from 'next/navigation'
 
 import { EditionPage } from '@/app/components/EditionPage'
 import { NoEdition } from '@/app/components/NoEdition'
-import { editionDate, shiftDays } from '@/lib/date'
+import { editionDate, isCalendarDate, shiftDays } from '@/lib/date'
 import { listEditionDates, readEdition } from '@/lib/edition'
-
-const CALENDAR_DATE = /^\d{4}-\d{2}-\d{2}$/
-
-/**
- * Whether the segment is a real day on the calendar.
- *
- * The shape test alone accepts `2026-02-30` and `2026-13-01`, which are not
- * days; the round trip through UTC is what rejects them, and it rejects them
- * whether the engine returns an invalid Date or rolls the overflow forward into
- * March. Nothing here can throw — this runs on a value that arrives from a URL.
- */
-function isCalendarDate(value: string): boolean {
-  if (!CALENDAR_DATE.test(value)) return false
-
-  const parsed = new Date(`${value}T12:00:00Z`)
-  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value
-}
 
 /**
  * Every calendar date the archive spans, oldest first — the real editions and

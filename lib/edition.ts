@@ -27,6 +27,7 @@ import { readdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { cache } from 'react'
 
+import { isCalendarDate } from './date'
 import { CONTENT_DIR } from './ingest/config'
 import { THEMES } from './ingest/types'
 import type { Edition as PublishedEdition, Item as PublishedItem, Theme } from './ingest/types'
@@ -39,7 +40,6 @@ export type Edition = Omit<PublishedEdition, 'items'> & { items: EditionItem[] }
 
 /** Editions are named by the UTC date they cover. `archive.ts` writes the name. */
 const EDITION_FILE = /^(\d{4}-\d{2}-\d{2})\.json$/
-const CALENDAR_DATE = /^\d{4}-\d{2}-\d{2}$/
 
 /**
  * Resolved per call rather than at import, because `process.cwd()` at module
@@ -141,7 +141,7 @@ function toEdition(value: unknown, date: string): Edition | null {
 }
 
 async function loadEdition(dir: string, date: string): Promise<Edition | null> {
-  if (!CALENDAR_DATE.test(date)) return null
+  if (!isCalendarDate(date)) return null
 
   let raw: string
   try {

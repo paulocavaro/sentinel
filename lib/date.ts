@@ -22,15 +22,37 @@
 
 const CALENDAR_DATE = /^\d{4}-\d{2}-\d{2}$/
 
+/**
+ * Whether the string names a day that exists.
+ *
+ * **The shape test is not the calendar test, and the difference had teeth.**
+ * `2026-02-29` matches the regex, and `new Date('2026-02-29T12:00:00Z')` does
+ * not return NaN — it rolls forward to 1 March. So a shape-only check let a
+ * filename that names no day through, and every date function then printed the
+ * rolled day: an edition committed as `2026-02-29.json` put "Sunday 1 March" in
+ * the masthead, in the largest type on the page, while `/archive` published a
+ * link to `/day/2026-02-29` that the route answered with a 404.
+ *
+ * It survived because the predicate existed twice — the shape here and in
+ * `lib/edition.ts`, the round trip in `app/day/[date]/page.tsx` forty lines from
+ * a comment explaining why the round trip is needed. One rule, written once, is
+ * the whole fix.
+ *
+ * Exported because two callers need an answer rather than a throw: the archive
+ * reader skips an unreadable name, and the route 404s it.
+ */
+export function isCalendarDate(value: string): boolean {
+  if (!CALENDAR_DATE.test(value)) return false
+
+  const parsed = new Date(`${value}T12:00:00Z`)
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value
+}
+
 function atNoonUTC(date: string): Date {
-  if (!CALENDAR_DATE.test(date)) {
+  if (!isCalendarDate(date)) {
     throw new TypeError(`not a calendar date: ${date}`)
   }
-  const d = new Date(`${date}T12:00:00Z`)
-  if (Number.isNaN(d.getTime())) {
-    throw new TypeError(`not a calendar date: ${date}`)
-  }
-  return d
+  return new Date(`${date}T12:00:00Z`)
 }
 
 // Not cached in module scope: a formatter built once would freeze whatever
