@@ -202,7 +202,7 @@ modify `lib/ingest/config.ts`
 
 **Files:** create `app/components/Masthead.tsx`, `EditionBar.tsx`, `StaleBanner.tsx`
 
-- [ ] **Step 1 — Implement.** `Masthead`: wordmark, `h1.editiondate` with the
+- [x] **Step 1 — Implement.** `Masthead`: wordmark, `h1.editiondate` with the
   weekday in its own span, `p.manifest`, and `p.promise` with the count, the
   closing time, and `· a thin day` when thin.
   - The thin-day closing sentence spells its count in words — *"Seventeen items
@@ -216,8 +216,8 @@ modify `lib/ingest/config.ts`
     renders without its arrow and underline, `aria-disabled` on an anchor with no
     `href` — `aria-disabled` on a `<span>` announces nothing.
   - `StaleBanner` renders when the latest edition is not today's.
-- [ ] **Step 2 — Gate**
-- [ ] **Step 3 — Commit:** `feat(02): the masthead`
+- [x] **Step 2 — Gate**
+- [x] **Step 3 — Commit:** `feat(02): the masthead`
 
 ---
 
