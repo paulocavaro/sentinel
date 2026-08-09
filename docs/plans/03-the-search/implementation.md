@@ -217,7 +217,7 @@ when `source` had to become `feed`.
 **This is the phase's load-bearing task.** Everything else is plumbing around
 the guarantee it makes.
 
-- [ ] **Step 1 — Failing test:** `lib/search/answer.test.ts`.
+- [x] **Step 1 — Failing test:** `lib/search/answer.test.ts`.
 
   ```ts
   describe('validateAnswer', () => {
@@ -240,8 +240,8 @@ the guarantee it makes.
     it('rejects a sentence whose text is only whitespace', () => {})
   })
   ```
-- [ ] **Step 2 — Run, confirm failure:** `pnpm vitest run lib/search`
-- [ ] **Step 3 — Implement.** Two shapes, discriminated, so a refusal is a
+- [x] **Step 2 — Run, confirm failure:** `pnpm vitest run lib/search`
+- [x] **Step 3 — Implement.** Two shapes, discriminated, so a refusal is a
   first-class answer and not an empty one:
 
   ```ts
@@ -265,8 +265,8 @@ the guarantee it makes.
   generation, so a narrow schema turns one bad id into a thrown error and loses
   the whole call. The membership test belongs here, where it can answer `null`
   and let the caller say something honest.
-- [ ] **Step 4 — Run tests, confirm green:** `pnpm vitest run lib/search`
-- [ ] **Step 5 — Commit:** `feat(03): the answer, and the ids it must earn`
+- [x] **Step 4 — Run tests, confirm green:** `pnpm vitest run lib/search`
+- [x] **Step 5 — Commit:** `feat(03): the answer, and the ids it must earn`
 
 ---
 
