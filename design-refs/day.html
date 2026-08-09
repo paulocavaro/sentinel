@@ -1,160 +1,9 @@
-// Builds an edition reference: the whole page, rendered from a real edition in
-// content/days.
-//
-//   node design-refs/build-home.mjs              → the latest edition → home.html
-//   node design-refs/build-home.mjs 2026-08-08   → that edition       → day.html
-//
-// One script, two outputs, because the screens map in .loop/config.md has two
-// edition screens: `home` is whatever the pipeline published last, and `day` is
-// an archive date asked for by name. The output is named after the screen and
-// not after the date — a 2026-08-08.html would not be in the map, and refs_dir
-// is one file per screen, so dated filenames would either need a config edit
-// every time the pinned day moves or leave orphans accumulating beside it.
-//
-// The two are the same script rather than two, so the day page cannot drift
-// from the home page; the differences between them are entirely in the data.
-
-import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const DAYS = `${ROOT}/content/days`
-
-const dates = readdirSync(DAYS)
-  .filter((f) => f.endsWith('.json'))
-  .map((f) => f.slice(0, -5))
-  .sort()
-
-const arg = process.argv[2]
-if (arg && !dates.includes(arg)) {
-  throw new Error(`no edition for ${arg}. Have: ${dates.join(', ')}`)
-}
-const editionDate = arg ?? dates[dates.length - 1]
-const outfile = arg ? 'day.html' : 'home.html'
-
-const ed = JSON.parse(readFileSync(`${DAYS}/${editionDate}.json`, 'utf8'))
-
-const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-const host = (u) => new URL(u).hostname.replace(/^www\./, '')
-const smallCaps = (s) => s.replace(/\b([A-Z]{2,4})\b/g, '<span class="acr">$1</span>')
-const leadIn = (s) => {
-  const m = s.match(/^(\S+\s+\S+)(\s+)([\s\S]*)$/)
-  return m ? `<b class="entry">${smallCaps(esc(m[1]))}</b>${m[2]}${smallCaps(esc(m[3]))}` : smallCaps(esc(s))
-}
-
-const THEMES = [
-  ['ai', 'Artificial intelligence'],
-  ['world', 'The world'],
-  ['games', 'Games'],
-  ['science', 'Science'],
-  ['culture', 'Culture'],
-]
-
-const atNoon = (d) => new Date(`${d}T12:00:00Z`)
-const fmt = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
-const shift = (d, n) => {
-  const x = atNoon(d)
-  x.setUTCDate(x.getUTCDate() + n)
-  return x
-}
-
-const date = atNoon(ed.date)
-const weekday = date.toLocaleDateString('en-GB', { weekday: 'long' })
-const dayMonth = fmt(date)
-
-// Prev and next are the nearest editions that exist, not the calendar
-// neighbours. On a pipeline designed to miss days, ±1 unconditionally sends
-// half the links at a day the archive never wrote. When a direction has no
-// edition at all the slot still shows the calendar neighbour's date — present,
-// not offered — and it is the absent arrow, not a dimmer grey, that says so.
-const idx = dates.indexOf(ed.date)
-const prevDate = idx > 0 ? dates[idx - 1] : null
-const nextDate = idx < dates.length - 1 ? dates[idx + 1] : null
-
-const prevSlot = prevDate
-  ? `<a class="day" href="/day/${prevDate}" rel="prev">← ${fmt(atNoon(prevDate))}</a>`
-  : `<a class="day is-off" aria-disabled="true">${fmt(shift(ed.date, -1))}</a>`
-const nextSlot = nextDate
-  ? `<a class="day" href="/day/${nextDate}" rel="next">${fmt(atNoon(nextDate))} →</a>`
-  : `<a class="day is-off" aria-disabled="true">${fmt(shift(ed.date, 1))}</a>`
-
-const link = (i, cls = '') =>
-  `<a class="link ${cls}" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">${smallCaps(esc(i.title))}<span class="sr-only"> (opens at ${esc(host(i.url))})</span></a>`
-
-const byline = (i) => `<p class="byline">${esc(i.publisher)}</p>`
-const plate = (i, cls) =>
-  i.image ? `<span class="plate ${cls}"><img class="art" src="../public${i.image}" alt="" loading="lazy" decoding="async"></span>` : ''
-
-const leadCard = (i) => `      <article class="item lead">
-        ${plate(i, 'plate-lead')}
-        <div class="body">${byline(i)}
-          <h2 class="head">${link(i)}</h2>
-          <p class="dek">${leadIn(i.description)}</p>
-        </div>
-      </article>`
-
-const feature = (i) => `        <article class="item feature">
-          ${plate(i, 'plate-feature')}
-          <div class="body">${byline(i)}
-            <h3 class="head">${link(i)}</h3>
-            <p class="dek">${leadIn(i.description)}</p>
-          </div>
-        </article>`
-
-// The summary runs on after an em dash rather than opening a new block, which
-// is how Techmeme fits thirty attributed items on a screen without a card.
-const brief = (i) => `        <article class="item brief">
-          <div class="body">${byline(i)}
-            <h3 class="head">${link(i)}</h3><span class="dash" aria-hidden="true"> — </span><span class="run">${smallCaps(esc(i.description))}</span>
-          </div>
-        </article>`
-
-// key and label are null for an edition whose items carry no theme — the
-// archive holds one, from before the field existed. That edition is not
-// mis-grouped into five empty sections and it is not dropped: it is one
-// unlabelled group, which is a section with no name and therefore no
-// --rule-strong opening it.
-const section = (key, label, items) => {
-  const features = items.slice(0, 4).map(feature).join('\n')
-  const briefs = items.slice(4).map(brief).join('\n')
-  const open = key
-    ? `<section class="section" id="${key}" aria-labelledby="${key}-name">
-      <h2 class="section-name" id="${key}-name">${label}</h2>`
-    : `<section class="section">`
-  return `    ${open}
-      <div class="features">
-${features}
-      </div>${briefs ? `\n      <div class="briefs">\n${briefs}\n      </div>` : ''}
-    </section>`
-}
-
-const lead = ed.items.find((i) => i.rank === 1)
-const rest = ed.items.filter((i) => i.rank !== 1)
-const present = THEMES.filter(([k]) => rest.some((i) => i.theme === k))
-
-// The theme row is derived from the items present. An edition with no themes
-// produces no row at all rather than five chips that filter to nothing — a dead
-// control is worse than an absent one.
-const themeNav = present.length
-  ? `
-    <nav aria-label="Themes">
-      <ul class="themes">
-        ${present.map(([k, label]) => `<li><a class="chip" href="#${k}">${label}</a></li>`).join('\n        ')}
-      </ul>
-    </nav>`
-  : ''
-
-const sections = present.length
-  ? present.map(([k, label]) => section(k, label, rest.filter((i) => i.theme === k))).join('\n')
-  : section(null, null, rest)
-
-const html = `<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sentinel, ${weekday} ${dayMonth}</title>
+<title>Sentinel, Saturday 8 August</title>
 <meta name="theme-color" content="#F2F0EB" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#16171A" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -566,22 +415,136 @@ body {
 <div class="page">
   <header class="masthead">
     <p class="wordmark">Sentinel</p>
-    <h1 class="editiondate"><span class="weekday">${weekday}</span> ${dayMonth}</h1>
-    <p class="manifest">${esc(ed.summary)}</p>
-    <p class="promise">${ed.items.length} items · closed 09:23</p>
+    <h1 class="editiondate"><span class="weekday">Saturday</span> 8 August</h1>
+    <p class="manifest">Today's briefing pairs a wave of AI safety, cost and infrastructure stories with fast-moving geopolitical flashpoints from the Strait of Hormuz to the Spain-Italy border.</p>
+    <p class="promise">20 items · closed 09:23</p>
     <div class="editionbar">
       <nav class="days" aria-label="Editions">
-        ${prevSlot}
-        <span class="day is-current" aria-current="date">${dayMonth}</span>
-        ${nextSlot}
+        <a class="day is-off" aria-disabled="true">7 August</a>
+        <span class="day is-current" aria-current="date">8 August</span>
+        <a class="day" href="/day/2026-08-09" rel="next">9 August →</a>
         <a class="day day-all" href="/archive">All editions</a>
       </nav>
-    </div>${themeNav}
+    </div>
   </header>
 
   <main>
-${leadCard(lead)}
-${sections}
+      <article class="item lead">
+        <span class="plate plate-lead"><img class="art" src="../public/img/adfa31b3b83d.webp" alt="" loading="lazy" decoding="async"></span>
+        <div class="body"><p class="byline">The Guardian</p>
+          <h2 class="head"><a class="link " href="https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient" target="_blank" rel="noopener noreferrer">Trump orders new 15% tariff on key material for solar panels and microchips<span class="sr-only"> (opens at theguardian.com)</span></a></h2>
+          <p class="dek"><b class="entry">Trump's new</b> 15% tariff on polysilicon used in chips and solar panels is a direct swipe at China's dominance of the supply chain.</p>
+        </div>
+      </article>
+    <section class="section">
+      <div class="features">
+        <article class="item feature">
+          <span class="plate plate-feature"><img class="art" src="../public/img/8dfbee8c355a.webp" alt="" loading="lazy" decoding="async"></span>
+          <div class="body"><p class="byline">NPR</p>
+            <h3 class="head"><a class="link " href="https://www.npr.org/2026/08/06/nx-s1-5923623/iran-strait-hormuz-us-israel-ban" target="_blank" rel="noopener noreferrer">Iran aims to ban U.S. and Israeli ships from Strait of Hormuz and charge others a toll<span class="sr-only"> (opens at npr.org)</span></a></h3>
+            <p class="dek"><b class="entry">Iran's push</b> to bar <span class="acr">US</span> and Israeli ships from the Strait of Hormuz and toll others raises the stakes in a critical global shipping lane.</p>
+          </div>
+        </article>
+        <article class="item feature">
+          <span class="plate plate-feature"><img class="art" src="../public/img/e66cc71d0943.webp" alt="" loading="lazy" decoding="async"></span>
+          <div class="body"><p class="byline">OpenAI</p>
+            <h3 class="head"><a class="link " href="https://openai.com/index/responding-next-frontier-critical-cyber-capabilities" target="_blank" rel="noopener noreferrer">Responding to the next frontier of critical cyber capabilities<span class="sr-only"> (opens at openai.com)</span></a></h3>
+            <p class="dek"><b class="entry">OpenAI is</b> publishing early cybersecurity evaluations of its Astra system as it moves to shore up safeguards against critical cyber misuse.</p>
+          </div>
+        </article>
+        <article class="item feature">
+          <span class="plate plate-feature"><img class="art" src="../public/img/889cc093dfad.webp" alt="" loading="lazy" decoding="async"></span>
+          <div class="body"><p class="byline">The Guardian</p>
+            <h3 class="head"><a class="link " href="https://www.theguardian.com/technology/2026/aug/08/uk-children-explicit-deepfake-images-ai" target="_blank" rel="noopener noreferrer">Rising number of <span class="acr">UK</span> children report seeing explicit deepfakes of themselves<span class="sr-only"> (opens at theguardian.com)</span></a></h3>
+            <p class="dek"><b class="entry">A surge</b> in <span class="acr">UK</span> children reporting explicit deepfakes of themselves shows how <span class="acr">AI</span> tools are making abusive content easier to produce.</p>
+          </div>
+        </article>
+        <article class="item feature">
+          <span class="plate plate-feature"><img class="art" src="../public/img/ce39f576b0ee.webp" alt="" loading="lazy" decoding="async"></span>
+          <div class="body"><p class="byline">BBC</p>
+            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/cewr898jy8go?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Trump's ex-lawyer Todd Blanche narrowly confirmed as <span class="acr">US</span> attorney general<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
+            <p class="dek"><b class="entry">Todd Blanche's</b> narrow Senate confirmation as attorney general, despite Republican pushback, cements Trump's former lawyer atop <span class="acr">US</span> law enforcement.</p>
+          </div>
+        </article>
+      </div>
+      <div class="briefs">
+        <article class="item brief">
+          <div class="body"><p class="byline">Reuters</p>
+            <h3 class="head"><a class="link " href="https://www.reuters.com/business/retail-consumer/alibaba-plans-charge-big-users-its-next-open-source-ai-model-sources-say-2026-08-07/" target="_blank" rel="noopener noreferrer">Alibaba plans to charge big users of its next open-source <span class="acr">AI</span> model<span class="sr-only"> (opens at reuters.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Alibaba's plan to charge heavy users of its next open-source model signals a shift away from free access as compute costs bite.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">BBC</p>
+            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/c5yv5l6yr5ko?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Spain imposes border controls against Italy as row over Ceuta migrant influx intensifies<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Spain has imposed border controls against Italy as a row over migrant flows through Ceuta escalates within the <span class="acr">EU</span>.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Google DeepMind</p>
+            <h3 class="head"><a class="link " href="https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones/" target="_blank" rel="noopener noreferrer">DeepMind's WeatherNext model achieves breakthrough forecasting cyclones<span class="sr-only"> (opens at deepmind.google)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">DeepMind says its WeatherNext model has achieved a breakthrough in forecasting cyclones, a high-stakes test for <span class="acr">AI</span> in climate prediction.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">BBC</p>
+            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/ckgdmrxxkdxo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">German airport drone-bomb: Could Russia be involved?<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Evidence suggests Russian-linked proxies have handled and delivered drones and explosives used in a German airport bomb plot.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Dealroom</p>
+            <h3 class="head"><a class="link " href="https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code" target="_blank" rel="noopener noreferrer">Oracle bans <span class="acr">AI</span>-generated code from OpenJDK<span class="sr-only"> (opens at app.dealroom.co)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Oracle's ban on <span class="acr">AI</span>-generated code in OpenJDK highlights growing institutional wariness about licensing and quality of machine-written contributions.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">NPR</p>
+            <h3 class="head"><a class="link " href="https://www.npr.org/2026/08/07/nx-s1-5924775/colombias-new-president-vows-to-remake-the-country-and-challenge-its-fragile-peace" target="_blank" rel="noopener noreferrer">Colombia's new president vows to remake the country — and challenge rebel groups<span class="sr-only"> (opens at npr.org)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Colombia's new hard-right president is promising order and confrontation with rebel groups, marking a sharp political shift.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">CNN</p>
+            <h3 class="head"><a class="link " href="https://www.cnn.com/2026/08/04/tech/ai-anthropic-openai-security-breach-intl-hnk" target="_blank" rel="noopener noreferrer"><span class="acr">AI</span> agents fake identities, target real people in new security incident<span class="sr-only"> (opens at cnn.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">A new security incident in which <span class="acr">AI</span> agents faked identities to target real people underscores emerging risks from autonomous systems.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">BBC</p>
+            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/c3r073eqvrjo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">'I ran because I knew I would die': Russian drones target medics in Ukraine<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Ukrainian medics describe escalating Russian drone attacks on hospitals and ambulances, a grim shift in wartime targeting.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">TechCrunch</p>
+            <h3 class="head"><a class="link " href="https://techcrunch.com/2026/08/07/cloudflare-launches-kitesurf-a-browser-built-for-ai-agents/" target="_blank" rel="noopener noreferrer">Cloudflare launches Kitesurf, a browser built for <span class="acr">AI</span> agents<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Cloudflare's Kitesurf is a cloud browser built specifically for <span class="acr">AI</span> agents, promising lighter, more efficient automation than Chromium.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Scientific American</p>
+            <h3 class="head"><a class="link " href="https://www.scientificamerican.com/article/openais-latest-math-breakthroughs-commit-research-misconduct-experts-say/" target="_blank" rel="noopener noreferrer">OpenAI's latest math breakthroughs commit research misconduct, experts say<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Experts are accusing OpenAI's touted math breakthroughs of research misconduct, a credibility challenge for the company's science claims.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Yahoo Finance</p>
+            <h3 class="head"><a class="link " href="https://finance.yahoo.com/technology/ai/articles/anthropic-ceo-reportedly-worried-hires-160000647.html" target="_blank" rel="noopener noreferrer">Anthropic <span class="acr">CEO</span> reportedly worried new hires only care about money<span class="sr-only"> (opens at finance.yahoo.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Anthropic's <span class="acr">CEO</span> is reportedly worried that new hires are drawn mainly by money rather than mission, a telling sign of <span class="acr">AI</span> industry culture.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Simon Willison</p>
+            <h3 class="head"><a class="link " href="https://simonwillison.net/2026/Aug/7/pdfs-are-terrible/#atom-everything" target="_blank" rel="noopener noreferrer">The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on <span class="acr">AI</span><span class="sr-only"> (opens at simonwillison.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Companies are scrambling to rein in runaway <span class="acr">AI</span> token spending, with reports suggesting non-engineers are driving much of the cost surge.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">TechCrunch</p>
+            <h3 class="head"><a class="link " href="https://techcrunch.com/2026/08/06/openais-new-ai-smart-speaker-will-reportedly-sell-for-between-300-and-400/" target="_blank" rel="noopener noreferrer">OpenAI’s new <span class="acr">AI</span> smart speaker will reportedly sell for between $300 and $400<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">New details suggest OpenAI's mysterious hardware device will be a hockey-puck-sized smart speaker priced between $300 and $400.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Mezha</p>
+            <h3 class="head"><a class="link " href="https://mezha.net/eng/bukvy/ca117584_denmark_requires_oral/" target="_blank" rel="noopener noreferrer">Denmark Requires Oral Defenses for Students' Written Work to Counter <span class="acr">AI</span> Cheating<span class="sr-only"> (opens at mezha.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Denmark is requiring oral defenses of written student work to counter <span class="acr">AI</span>-assisted cheating in schools.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">The Guardian</p>
+            <h3 class="head"><a class="link " href="https://www.theguardian.com/us-news/2026/aug/07/datacenters-little-rock-arkansas" target="_blank" rel="noopener noreferrer">‘This is very real redlining’: outrage in Little Rock as two datacenters loom<span class="sr-only"> (opens at theguardian.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Residents in Little Rock are protesting two proposed hyperscale datacenters over water use, power strain and land rights concerns.</span>
+          </div>
+        </article>
+      </div>
+    </section>
   </main>
 
   <dialog class="panel" id="ask" aria-label="Ask this archive">
@@ -602,25 +565,11 @@ ${sections}
   </dialog>
 
   <footer class="close">
-    <p class="close-mark" aria-hidden="true">-${ed.items.length}-</p>
-    <p class="close-sentence">That was ${weekday} ${dayMonth}.</p>
+    <p class="close-mark" aria-hidden="true">-20-</p>
+    <p class="close-sentence">That was Saturday 8 August.</p>
     <p class="close-next">Next edition 09:23 tomorrow</p>
     <span class="sr-only">End of edition.</span>
   </footer>
 </div>
 </body>
 </html>
-`
-
-writeFileSync(`${ROOT}/design-refs/${outfile}`, html)
-console.log(`escrito: design-refs/${outfile} — ${ed.date}, ${ed.items.length} itens`)
-console.log('lead:', lead.publisher)
-if (present.length) {
-  for (const [k, label] of present) {
-    const n = rest.filter((i) => i.theme === k).length
-    console.log(`  ${label.padEnd(24)} ${n} itens — ${Math.min(4, n)} destaque, ${Math.max(0, n - 4)} compacto`)
-  }
-} else {
-  console.log(`  sem temas — um grupo sem rótulo: ${Math.min(4, rest.length)} destaque, ${Math.max(0, rest.length - 4)} compacto`)
-}
-console.log(`  sem foto: ${ed.items.filter((i) => !i.image).length} de ${ed.items.length}`)

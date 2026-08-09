@@ -4,8 +4,10 @@
 // from the page it describes.
 
 import { readFileSync, writeFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const ROOT = '/Users/pauloluiz/dev/sentinel'
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const home = readFileSync(`${ROOT}/design-refs/home.html`, 'utf8')
 const css = home.match(/<style>([\s\S]*?)<\/style>/)[1]
 const fonts = home.match(/<link href="https:\/\/fonts[^>]*>/)[0]
@@ -110,6 +112,10 @@ ${state(
   '04',
   'An item with no photograph',
   'Roughly a third of items arrive without a usable image. The card is not a card with a hole in it — it is a card whose headline takes the space the picture would have had. The rhythm that produces is different every day and derived entirely from the day’s real data.',
+  // The right-hand card carries no .plate, so the promotion comes from
+  // `.feature:not(:has(.plate)) .head` in the stylesheet. It used to be an
+  // inline font-size here, which meant the reference showed a rule the
+  // stylesheet did not contain and what shipped was the card with the hole.
   `<div class="features" style="grid-template-columns:repeat(2,minmax(0,1fr))">
       <article class="item feature">
         <span class="plate plate-feature"><img class="art" src="../public${ed.items[3].image}" alt=""></span>
@@ -122,7 +128,7 @@ ${state(
       <article class="item feature">
         <div class="body">
           <p class="byline">${esc(sample.publisher)}</p>
-          <h3 class="head" style="font-size:1.625rem;line-height:1.16"><a class="link" href="#">${esc(sample.title)}</a></h3>
+          <h3 class="head"><a class="link" href="#">${esc(sample.title)}</a></h3>
           <p class="dek">${esc(sample.description)}</p>
         </div>
       </article>

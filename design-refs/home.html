@@ -127,6 +127,20 @@ body {
   padding-bottom: 0.25rem; border-bottom: 2px solid transparent;
 }
 .chip:hover { color: var(--ink); border-bottom-color: var(--accent); }
+/* Selected, and the two channels the comment above promises. One: the label
+   goes from --machine to full ink. Two: the 2px rule the chip has been
+   reserving all along turns on, in --rule-strong — the same weight that opens
+   a section, because a selected chip *is* an opened section. Ink rather than
+   the accent keeps selected legible against hover and keeps the accent scarce.
+   The rule is also the channel that survives forced-colors, where every
+   anchor's colour is forced to LinkText and channel one disappears.
+   Written as [aria-current]:not([aria-current="false"]) rather than the bare
+   attribute: React renders aria-current={false} as the string "false", which
+   is the ARIA value for *not* current, and the bare selector would paint every
+   unselected chip as the selected one. */
+.chip[aria-current]:not([aria-current="false"]) {
+  color: var(--ink); border-bottom-color: var(--rule-strong);
+}
 
 /* The edition bar: which day you are reading, and the one control the product
    has. World in Brief puts its date and pager in a full-width bar above the
@@ -139,11 +153,23 @@ body {
   font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
   text-transform: uppercase; color: var(--machine); text-decoration: none;
+  border-bottom: 1px solid var(--rule-hair); padding-bottom: 1px;
 }
-.day:hover { color: var(--ink); }
-.day.is-current { color: var(--ink); }
-.day.is-off { opacity: 0.45; }              /* present, not offered — never removed */
-.day-all { border-bottom: 1px solid var(--rule-hair); padding-bottom: 1px; }
+.day:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.day.is-current { color: var(--ink); border-bottom-color: transparent; }
+/* Present, not offered — never removed. This was opacity: 0.45, which
+   composites --machine to #B5B3AD on light paper and #4A4947 on dark: 1.84:1
+   and 1.99:1, nowhere near AA, and bought by the one mechanism the system
+   forbids — the machine layer recedes by size, tracking and case and never by
+   opacity, because it is already 9% of a card's ink and quiet by structure.
+   So the unavailable direction keeps the full --machine tone, 4.88:1 and
+   4.94:1, the same as every other label on the page, and recedes by losing the
+   two marks that say a date can be reached: its arrow, which is markup, and
+   its hairline, which is here. Its hover goes nowhere for the same reason. */
+.day.is-off { border-bottom-color: transparent; }
+.day.is-off:hover { color: var(--machine); border-bottom-color: transparent; }
+/* .day-all needs no declaration of its own now that the hairline lives on
+   .day. The class stays: it is the hook the all-editions link is named by. */
 
 /* The one round thing in a system whose form language is pinned at zero radius.
    A newspaper has no rounded corners, so this reads as arriving from somewhere
@@ -228,6 +254,17 @@ body {
 }
 .plate-lead { grid-column: span 10; }
 .lead .body { grid-column: span 6; }
+/* A lead with no photograph. There is no ten-column plate to sit beside, so
+   the text takes the whole measure instead of keeping six of sixteen tracks
+   and leaving ten empty columns to its right — which is what the page did
+   before this line existed. The lead headline is not promoted to compensate:
+   it is already at 2.125rem against the brief's 1.0625, exactly the 2.0
+   lead-to-tail ratio the system caps itself at, so width is the only channel
+   left. It has not happened yet — every lead in the archive carries an image —
+   which is precisely why it is written before it does.
+   Specificity is (0,3,0) against the media queries' (0,2,0), so it holds at
+   every width without being repeated in each one. */
+.lead:not(:has(.plate)) .body { grid-column: 1 / -1; }
 /* The one place the ratio breaks. The Economist does this exactly once, for its
    cover, which is what makes the break read as a signal rather than an accident:
    at 3/2 the lead plate stands taller than the column beside it and leaves the
@@ -278,6 +315,23 @@ body {
 .head { margin: 0; font-weight: 600; }
 .feature .head { font-size: 1.3125rem; line-height: 1.2; letter-spacing: -0.012em; }
 .brief .head   { font-size: 1.0625rem; line-height: 1.4; display: inline; }
+
+/* A feature with no photograph. About a third of items arrive without a usable
+   image, so this is an ordinary day rather than an exception, and the card is
+   not a card with a hole in it: the headline takes the space the picture would
+   have had. One step up the same ladder, not a fourth size invented for the
+   occasion — 1.3125 → 1.625rem, leading 1.2 → 1.16, tracking −0.012 → −0.016em
+   is the feature tier interpolated toward the lead's 2.125 / 1.12 / −0.02, so
+   leading still moves with size instead of becoming a third free variable. It
+   stops well short of the lead: 1.625 over the tail's 1.0625 is 1.53 against
+   the ceiling of 2.0.
+   Only the feature tier gets a rule. A brief never carries a plate at all, so
+   the general .item:not(:has(.plate)) rule would promote all fifteen of them and
+   the compact tier would stop existing; and a lead cannot be promoted because
+   it is already at the ceiling — it takes the full measure instead, above. */
+.feature:not(:has(.plate)) .head {
+  font-size: 1.625rem; line-height: 1.16; letter-spacing: -0.016em;
+}
 
 .link { color: inherit; text-decoration: none; }
 .link::after { content: ""; position: absolute; inset: 0; }
@@ -343,6 +397,8 @@ body {
   .briefs { grid-template-columns: 1fr; }
   .briefs .brief:nth-child(2) { border-top: 1px solid var(--rule-hair); }
   .feature .head { font-size: 1.1875rem; }
+  /* the promotion holds the same ~1.24 step over the tier it belongs to */
+  .feature:not(:has(.plate)) .head { font-size: 1.4375rem; }
   .dek { max-width: none; }
 }
 
@@ -351,20 +407,10 @@ body {
   .section-name, .lead { border-top: 2px solid CanvasText; }
   .byline { color: GrayText; }
 }
-
-.toggle {
-  position: fixed; top: 1rem; right: 1rem; z-index: 10;
-  font-family: var(--face-machine);
-  font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase;
-  background: var(--paper); color: var(--machine);
-  border: 1px solid var(--rule-hair); border-radius: 0;
-  padding: 0.6rem 0.75rem; cursor: pointer; min-height: 44px;
-}
 </style>
 </head>
 <body>
 <button class="ask-fab" type="button" aria-haspopup="dialog" aria-controls="ask" onclick="document.getElementById('ask').showModal()"><span class="ask-fab-word">Ask</span><span class="sr-only"> this archive</span></button>
-<button class="toggle" onclick="const r=document.documentElement;const d=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',d?'light':'dark')">Light / Dark</button>
 
 <div class="page">
   <header class="masthead">
@@ -374,10 +420,10 @@ body {
     <p class="promise">30 items · closed 09:23</p>
     <div class="editionbar">
       <nav class="days" aria-label="Editions">
-        <a class="day" href="#" rel="prev">← 8 August</a>
+        <a class="day" href="/day/2026-08-08" rel="prev">← 8 August</a>
         <span class="day is-current" aria-current="date">9 August</span>
-        <span class="day is-off" aria-disabled="true">10 August →</span>
-        <a class="day day-all" href="#">All editions</a>
+        <a class="day is-off" aria-disabled="true">10 August</a>
+        <a class="day day-all" href="/archive">All editions</a>
       </nav>
     </div>
     <nav aria-label="Themes">

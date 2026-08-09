@@ -5,12 +5,15 @@
 > that opens is a change to the product, not to the design system, and goes back
 > to [`spec.md`](./spec.md) first.
 
-The visual source of truth is [`design-refs/home.html`](../design-refs/home.html)
-and [`design-refs/states.html`](../design-refs/states.html). Both are generated
+The visual source of truth is [`design-refs/home.html`](../design-refs/home.html),
+[`design-refs/day.html`](../design-refs/day.html) and
+[`design-refs/states.html`](../design-refs/states.html). All three are generated
 from a real edition by `design-refs/build-home.mjs` and `build-states.mjs`, so
 every screen in this document is the product rendering actual news rather than
 placeholder text. Where a value below is traceable, it is traceable to those
-files.
+files. `home.html` is the latest edition, thirty items across five themes;
+`day.html` is 8 August, twenty items from before the `theme` field existed and
+six of them with no photograph, which is what makes it worth keeping.
 
 ## Overview
 
@@ -187,7 +190,7 @@ Three rules, more important than the tokens.
 |---|---|---|
 | `Masthead` | today, archive, no-edition | — |
 | `EditionDate` | today, archive with year | — |
-| `EditionBar` | dates, all-editions | next date present but dimmed |
+| `EditionBar` | dates, all-editions | a direction with no edition keeps its tone and loses its arrow and hairline |
 | `ThemeNav` | — | derived from the items present, never hardcoded |
 | `Item` | lead, feature, brief | rest, hover, active, focus-visible, **visited**, no-image, forced-colors |
 | `Plate` | lead 16:9, feature 3:2 | image errored → typographic fallback |
