@@ -265,6 +265,22 @@ describe('askArchive', () => {
       })
     })
 
+    it('does not make the confirming search citable', async () => {
+      // The confirming search exists to check a claim, and its hits were shown
+      // to nobody. If they landed in `seen`, a model that never called the tool
+      // could cite an item it never received — the exact failure this module
+      // exists to prevent, reintroduced by the code that protects against it.
+      // "Anthropic" is in the corpus, so the confirming search finds something.
+      const citesWithoutSearching: Generator = async () => ({
+        kind: 'answer',
+        sentences: [{ text: 'Anthropic shipped something.', ids: [OPUS] }],
+      })
+
+      expect(await askArchive(deps(citesWithoutSearching), { question: 'Anthropic' })).toEqual({
+        kind: 'failed',
+      })
+    })
+
     it('still fails when it cited ids it was never given', async () => {
       // The confirming search fills `seen` with real items; the model's ids came
       // from nowhere, so validation refuses them exactly as it would any other

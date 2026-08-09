@@ -378,9 +378,16 @@ export async function askArchive(
   // non-empty one means there was material and the model declined to look at
   // it — there is no answer to give, and inventing a refusal over items that
   // exist is exactly the failure this module exists to prevent.
+  // **It does not write into `seen`**, and that is the whole care in these three
+  // lines. `seen` means one thing — *the items the model was shown* — and every
+  // citation in the answer is checked against it. These hits were shown to
+  // nobody. Putting them there would be safe only for as long as the `return`
+  // below stays the very next statement, and the day someone adds a line after
+  // it the model would be able to cite items it never received. The invariant is
+  // kept by construction rather than by the order of two statements.
   if (tally.searches === 0) {
-    for (const hit of searchNews(index, asked)) seen.set(hit.id, hit)
-    if (seen.size > 0) return { kind: 'failed' }
+    const confirming = searchNews(index, asked)
+    if (confirming.length > 0) return { kind: 'failed' }
   }
 
   if (seen.size === 0) return refusal()
