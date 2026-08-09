@@ -632,17 +632,17 @@ paid for: nothing is implemented before its reference exists.
 **Files:**
 - Modify: `docs/spec.md`
 
-- [ ] **Step 1 — Correct the search section.** It says *"No conversation history
+- [x] **Step 1 — Correct the search section.** It says *"No conversation history
   — each question starts clean"*, and after this phase that is false. Replace
   with the rule as built: a series of at most three questions, only the questions
   travel, every answer grounded in a fresh search. Add the rate limit, which the
   spec's cost paragraph does not mention.
-- [ ] **Step 2 — Correct the screens table.** `/ask` is listed as a route; it is
+- [x] **Step 2 — Correct the screens table.** `/ask` is listed as a route; it is
   a panel, resolved in phase 02 and now built.
-- [ ] **Step 3 — Add `minisearch`** to the stack paragraph's dependency list if
+- [x] **Step 3 — Add `minisearch`** to the stack paragraph's dependency list if
   it is not already named there.
-- [ ] **Step 4 — Gate**
-- [ ] **Step 5 — Commit:** `docs(03): the spec, after the search`
+- [x] **Step 4 — Gate**
+- [x] **Step 5 — Commit:** `docs(03): the spec, after the search`
 
 ---
 
