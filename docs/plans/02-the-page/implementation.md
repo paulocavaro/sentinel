@@ -300,7 +300,7 @@ modify `lib/ingest/config.ts`
 
 **Files:** create `app/components/AskPanel.tsx`, `app/components/AskButton.tsx`
 
-- [ ] **Step 1 — Implement.** A `<dialog>` opened with `showModal()` from the
+- [x] **Step 1 — Implement.** A `<dialog>` opened with `showModal()` from the
   round floating button, which carries `aria-haspopup="dialog"` and
   `aria-controls`.
   - **`display` must stay scoped to `[open]`.** A bare `display: flex` overrides
@@ -309,8 +309,8 @@ modify `lib/ingest/config.ts`
     and the stylesheet already carries the fix.
   - The field is disabled and the panel says the search arrives next phase. It
     must not accept a question it cannot answer.
-- [ ] **Step 2 — Gate**
-- [ ] **Step 3 — Commit:** `feat(02): the ask panel`
+- [x] **Step 2 — Gate**
+- [x] **Step 3 — Commit:** `feat(02): the ask panel`
 
 ---
 
