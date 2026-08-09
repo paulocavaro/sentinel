@@ -24,7 +24,10 @@ const weekday = date.toLocaleDateString('en-GB', { weekday: 'long' })
 const dayMonth = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
 
 const prev = new Date(date); prev.setUTCDate(prev.getUTCDate() - 1)
-const prevLabel = prev.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
+const next = new Date(date); next.setUTCDate(next.getUTCDate() + 1)
+const fmt = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
+const prevLabel = fmt(prev)
+const nextLabel = fmt(next)
 
 const link = (i, cls = '') =>
   `<a class="link ${cls}" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">${smallCaps(esc(i.title))}<span class="sr-only"> (opens at ${esc(host(i.url))})</span></a>`
@@ -207,11 +210,7 @@ body {
    column; this is the same idea with the archive's own vocabulary — dates, not
    Previous and Next, which are ambiguous under a date (later in time, or
    further back into the archive?). */
-.editionbar {
-  display: flex; flex-wrap: wrap; gap: 1rem 1.5rem;
-  align-items: baseline; justify-content: space-between;
-  margin-top: 1.5rem;
-}
+.editionbar { margin-top: 1.5rem; }
 .days { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: baseline; }
 .day {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
@@ -223,14 +222,28 @@ body {
 .day.is-off { opacity: 0.45; }              /* present, not offered — never removed */
 .day-all { border-bottom: 1px solid var(--rule-hair); padding-bottom: 1px; }
 
-.ask-open {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
-  text-transform: uppercase; color: var(--ink);
-  background: transparent; border: 1px solid var(--rule-strong); border-radius: 0;
-  padding: 0.6875rem 1rem; cursor: pointer; min-height: 44px;
+/* The one round thing in a system whose form language is pinned at zero radius.
+   A newspaper has no rounded corners, so this reads as arriving from somewhere
+   else — which is the point: it is the only element on the page that is software
+   rather than paper, and the only one that opens. Its word is set in the machine
+   face for the same reason. */
+.ask-fab {
+  position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 20;
+  width: 3.5rem; height: 3.5rem; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--ink); color: var(--paper);
+  border: 0; cursor: pointer;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.28), 0 8px 24px rgb(0 0 0 / 0.18);
+  transition: transform var(--dur-tap) var(--ease-out), background-color var(--dur-tap) var(--ease-out);
 }
-.ask-open:hover { background: var(--ink); color: var(--paper); }
+.ask-fab-word {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.ask-fab:hover { background: var(--accent); }
+.ask-fab:active { transform: scale(0.96); transition: none; }
+.ask-fab:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .ask-fab { transition: none; } }
 
 /* <dialog> + showModal gives Escape, a focus trap, an inert background and a
    real backdrop for free — the four things that made the FT's drawer the only
@@ -427,6 +440,7 @@ body {
 </style>
 </head>
 <body>
+<button class="ask-fab" type="button" aria-haspopup="dialog" aria-controls="ask" onclick="document.getElementById('ask').showModal()"><span class="ask-fab-word">Ask</span><span class="sr-only"> this archive</span></button>
 <button class="toggle" onclick="const r=document.documentElement;const d=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',d?'light':'dark')">Light / Dark</button>
 
 <div class="page">
@@ -439,10 +453,9 @@ body {
       <nav class="days" aria-label="Editions">
         <a class="day" href="#" rel="prev">← ${prevLabel}</a>
         <span class="day is-current" aria-current="date">${dayMonth}</span>
-        <span class="day is-off" aria-disabled="true">Tomorrow →</span>
+        <span class="day is-off" aria-disabled="true">${nextLabel} →</span>
         <a class="day day-all" href="#">All editions</a>
       </nav>
-      <button class="ask-open" type="button" onclick="document.getElementById('ask').showModal()">Ask this archive</button>
     </div>
     <nav aria-label="Themes">
       <ul class="themes">
