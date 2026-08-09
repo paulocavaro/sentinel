@@ -296,7 +296,7 @@ as the model would, and a test can assert that searching fills `seen`, that an i
 from outside it is refused, and that a second search adds to it — on the same
 code path production runs.
 
-- [ ] **Step 1 — Failing test:** `lib/search/ask.test.ts`. The generator is a
+- [x] **Step 1 — Failing test:** `lib/search/ask.test.ts`. The generator is a
   fake throughout; no network, no key, no model.
 
   ```ts
@@ -327,8 +327,8 @@ code path production runs.
     })
   })
   ```
-- [ ] **Step 2 — Run, confirm failure:** `pnpm vitest run lib/search`
-- [ ] **Step 3 — Implement.** The tool's `execute` is a closure that records
+- [x] **Step 2 — Run, confirm failure:** `pnpm vitest run lib/search`
+- [x] **Step 3 — Implement.** The tool's `execute` is a closure that records
   every hit it returns into `seen`, so validation has exactly the set the model
   was shown and nothing else:
 
@@ -371,8 +371,8 @@ code path production runs.
   space run, hard length cap per field — the same `safe()` shape `daily.yml`
   already applies to model-adjacent text, and the same reason. It runs inside
   `execute`, so nothing reaches the model that did not pass it.
-- [ ] **Step 4 — Run tests, confirm green:** `pnpm vitest run lib/search`
-- [ ] **Step 5 — The real generator**, never imported by a test:
+- [x] **Step 4 — Run tests, confirm green:** `pnpm vitest run lib/search`
+- [x] **Step 5 — The real generator**, never imported by a test:
 
   ```ts
   export const defaultGenerator: Generator = async ({ system, prompt, tools }) => {
@@ -410,8 +410,8 @@ code path production runs.
   its thinking tokens come out of the same output budget as the JSON. Set small,
   the object truncates mid-generation and fails schema validation — which reads
   like a bad model rather than a budget that was too tight.
-- [ ] **Step 6 — Gate**
-- [ ] **Step 7 — Commit:** `feat(03): ask the archive, and only the archive`
+- [x] **Step 6 — Gate**
+- [x] **Step 7 — Commit:** `feat(03): ask the archive, and only the archive`
 
 ---
 
