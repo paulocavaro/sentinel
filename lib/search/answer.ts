@@ -68,13 +68,18 @@ export type RawAnswer = z.infer<typeof AnswerSchema>
 /**
  * One citation, resolved.
  *
- * **The date is read from `seen`, never from the model.** It is a fact about
- * the archive — which edition the item ran in — and the one thing the reader is
- * asked to take on trust when they follow the link to `/day/2026-08-09`. A
- * model that volunteered a date would be volunteering the part of the answer
- * that is checkable, and the check would pass against its own claim.
+ * **Every field here is read from `seen`, never from the model.** They are facts
+ * about the archive — which edition the item ran in, who published it, where it
+ * lives — and they are the whole of what makes a claim checkable. A model that
+ * volunteered any of them would be volunteering its own proof, and the check
+ * would pass against its own claim.
+ *
+ * `url` and `publisher` are here because a citation that reached only the
+ * edition page made the reader hunt for the story among thirty. Naming the
+ * outlet and going to the article is the difference between a citation that can
+ * be verified and one that can only be believed.
  */
-export type Citation = { id: string; date: string }
+export type Citation = { id: string; date: string; url: string; publisher: string }
 
 /** A sentence of the answer, and the items it rests on. */
 export type Sentence = { text: string; cites: Citation[] }
@@ -113,7 +118,7 @@ export function validateAnswer(raw: unknown, seen: Map<string, Hit>): Answer | n
       // The return is from the whole function, not from this loop. It is the
       // one line of this module worth reading twice.
       if (!hit) return null
-      cites.push({ id, date: hit.date })
+      cites.push({ id, date: hit.date, url: hit.url, publisher: hit.publisher })
     }
 
     sentences.push({ text: sentence.text, cites })

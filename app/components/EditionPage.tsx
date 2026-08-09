@@ -150,7 +150,7 @@ export function EditionPage({
           component and the filter is a client one, and neither is the
           masthead's business. */}
       <Masthead edition={edition}>
-        <EditionBar date={edition.date} dates={dates} />
+        <EditionBar date={edition.date} dates={dates} home={today !== null} />
         <ThemeFilter themes={chipsOf(edition)} />
       </Masthead>
 

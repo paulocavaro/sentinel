@@ -54,11 +54,16 @@ function day(date: string, items: EditionItem[]): Edition {
   return { ...edition(date, items.length), items }
 }
 
+// One url per item, and no two alike. A citation now carries the article's
+// address out to the reader, so a route that handed back the right day with the
+// wrong link would be indistinguishable from a correct one on the fixture
+// default every item shares.
 const NEWEST = day('2026-08-09', [
   item({
     id: OPUS,
     title: 'Anthropic ships Claude Opus 5',
     description: 'A wider context window, and a lower price for every token in it.',
+    url: 'https://www.anthropic.com/news/claude-opus-5',
     publisher: 'Anthropic',
     topics: ['models'],
   }),
@@ -69,6 +74,7 @@ const OLDER = day('2026-08-08', [
     id: CABLE,
     title: 'An undersea cable is cut in the Red Sea',
     description: 'Three carriers reroute their traffic through Marseille.',
+    url: 'https://www.reuters.com/world/red-sea-cable-cut/',
     publisher: 'Reuters',
     topics: ['infrastructure'],
   }),
@@ -179,9 +185,18 @@ describe('POST /api/ask', () => {
       sentences: [
         {
           text: 'Anthropic shipped Claude Opus 5.',
-          // The date is the edition the item ran in, resolved out of the search
-          // results — it is what makes the citation a link to a day.
-          cites: [{ id: OPUS, date: '2026-08-09' }],
+          // Every field but the id is resolved out of the search results: the
+          // edition the item ran in, the outlet that published it, and the
+          // article itself. The model supplied the id and nothing else, which is
+          // what makes the citation checkable rather than merely stated.
+          cites: [
+            {
+              id: OPUS,
+              date: '2026-08-09',
+              url: 'https://www.anthropic.com/news/claude-opus-5',
+              publisher: 'Anthropic',
+            },
+          ],
         },
       ],
     })

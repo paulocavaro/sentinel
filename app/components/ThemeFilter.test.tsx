@@ -68,8 +68,19 @@ describe('ThemeFilter', () => {
 
     // Passing `false` would render the string "false", which is ARIA's value
     // for *not* current. Passing nothing is the version that needs no guard.
-    it('marks nothing current when nothing is filtered', () => {
-      expect(unfiltered).not.toContain('aria-current')
+    //
+    // The unfiltered page used to have no current chip at all, which left a
+    // screen reader with nothing to anchor on and left a sighted reader with no
+    // way to see that "no filter" is itself a state. `Everything` is that state.
+    it('marks Everything current when nothing is filtered, and only Everything', () => {
+      expect(unfiltered).toContain('<a class="chip" aria-current="true" href="?#results">Everything</a>')
+      expect((unfiltered.match(/aria-current/g) ?? []).length).toBe(1)
+    })
+
+    it('always has exactly one current chip, whatever the URL says', () => {
+      for (const query of ['', '?theme=ai', '?theme=sports', '?theme=ai&theme=world']) {
+        expect((rowFor(query).match(/aria-current/g) ?? []).length).toBe(1)
+      }
     })
   })
 
@@ -108,7 +119,7 @@ describe('ThemeFilter', () => {
     ])('shows the whole edition for %s', (_, query) => {
       const row = rowFor(query)
 
-      expect(row).not.toContain('aria-current')
+      expect(row).toContain('aria-current="true" href="?#results">Everything')
       expect(row).toContain('Showing the whole edition.')
     })
 
@@ -118,7 +129,7 @@ describe('ThemeFilter', () => {
     it('refuses a repeated parameter rather than picking one', () => {
       const row = rowFor('?theme=ai&theme=world')
 
-      expect(row).not.toContain('aria-current')
+      expect(row).toContain('aria-current="true" href="?#results">Everything')
       expect(row).toContain('Showing the whole edition.')
     })
   })

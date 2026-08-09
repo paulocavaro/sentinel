@@ -10,7 +10,8 @@
 // page is a sentence a model actually wrote for a committed edition; what a
 // fixture does is *remove* — items, a photograph — or *relabel* — the date, the
 // dates around it — or *quote*, which is what state 07's answer is: two real
-// descriptions, verbatim, each carrying the day its item ran. A hand-written
+// descriptions, verbatim, each under the outlet that published it and linking at
+// the article, exactly as the panel prints one. A hand-written
 // seventeen-item edition would put copy on the states page that no pipeline
 // ever produced, and the state it demonstrates would stop being a state of this
 // product and start being a mock of one.
@@ -56,6 +57,21 @@ const MISSING_ARCHIVE = ['2026-08-02', '2026-08-04'] as const
 /** The two items state 04 frames — `build-states.mjs`'s `ed.items[3]` and `ed.items[1]`. */
 const WITH_PHOTO = 3
 const WITHOUT_PHOTO = 1
+
+/**
+ * The two items state 05's answer rests on, in the order it names them.
+ *
+ * That frame's two sentences are the one piece of copy on this page that no
+ * pipeline wrote — they predate the search existing, and they stay written until
+ * the frame is redrawn. What they are *about* is not invented, though: both were
+ * paraphrased off the 9 August edition, sentence one from item 0 and sentence
+ * two from item 18, and those are the two items cited here. A citation is a
+ * promise that the claim beside it can be checked, so the one thing it may never
+ * be is decorative — pointing these at a plausible-looking article rather than
+ * at the story the sentence was written from would put the exact failure this
+ * frame exists to rule out into the frame that rules it out.
+ */
+const ANSWERED_ITEMS = [0, 18] as const
 
 /**
  * The two items state 07's earlier answer rests on, in the order it names them.
@@ -145,34 +161,81 @@ export async function photographFixture(): Promise<{
   return { withPhoto, withoutPhoto: { ...withoutPhoto, image: null } }
 }
 
-/** One sentence of an answer: what it says, and the day the item it rests on ran. */
-export type AnsweredSentence = { id: string; text: string; day: string }
+/**
+ * One citation, as the panel prints it: the outlet, the day, and the article it
+ * goes to.
+ *
+ * Three fields off the item and nothing composed. The panel used to print the
+ * day alone and link at the edition, which named a date the reader could read
+ * and a page they then had to search; naming the outlet and going to the article
+ * is what makes the citation checkable. `AskPanel` resolves the same three out
+ * of the search results, and here they come off the item directly because the
+ * catalogue has the item in its hand.
+ */
+export type Cite = { id: string; publisher: string; url: string; day: string }
+
+/** One sentence of an answer, and the item it rests on. */
+export type AnsweredSentence = Cite & { text: string }
+
+/**
+ * The nth item of an edition, or a broken checkout said plainly.
+ *
+ * The indices are pinned to two committed files, so an index past the end is a
+ * repository that is not the one this page was written against — not a state to
+ * render, and nothing to fall back to.
+ */
+function nth(edition: Edition, n: number): EditionItem {
+  const item = edition.items[n]
+
+  if (item === undefined) {
+    throw new Error(
+      `/states quotes item ${n} of content/days/${edition.date}.json, which holds ` +
+        `${edition.items.length}.`,
+    )
+  }
+
+  return item
+}
+
+/** The item's own citation. Nothing here is derived from anything but the item. */
+function cite(item: EditionItem, day: string): Cite {
+  return { id: item.id, publisher: item.publisher, url: item.url, day }
+}
+
+/**
+ * State 05 — the two citations under the answered frame.
+ *
+ * The sentences themselves are written into the page; these are the items they
+ * were written from. See `ANSWERED_ITEMS` for why that pairing is not a detail.
+ */
+export async function answeredFixture(): Promise<{ astra: Cite; nextSlide: Cite }> {
+  const edition = await source(SAMPLE_DATE)
+  const day = dayMonth(edition.date)
+  const [astra, nextSlide] = ANSWERED_ITEMS
+
+  return { astra: cite(nth(edition, astra), day), nextSlide: cite(nth(edition, nextSlide), day) }
+}
 
 /**
  * State 07 — the answer the reader has already been given, before they ask
  * again.
  *
- * A sentence and a date, which is the whole shape of an answer here: the panel
- * may not say anything it cannot hang on an item, and the citation is the item
- * saying it. Both sentences come out of the same edition, so both days are the
- * same day — which is the ordinary case and not a simplification. The date is
- * formatted through `lib/date`, not written, so this frame prints the day the
- * same way every other surface on the site prints it.
+ * A sentence and the item under it, which is the whole shape of an answer here:
+ * the panel may not say anything it cannot hang on an item, and the citation is
+ * the item saying it. Both sentences come out of the same edition, so both days
+ * are the same day — which is the ordinary case and not a simplification, and it
+ * is also the case the panel used to collapse into one citation. The two items
+ * are two sources, so the frame prints two. The date is formatted through
+ * `lib/date`, not written, so this frame prints the day the same way every other
+ * surface on the site prints it.
  */
 export async function followUpFixture(): Promise<AnsweredSentence[]> {
   const edition = await source(SAMPLE_DATE)
   const day = dayMonth(edition.date)
 
   return FOLLOW_UP_ITEMS.map((n) => {
-    const item = edition.items[n]
+    const item = nth(edition, n)
 
-    if (item === undefined) {
-      throw new Error(
-        `/states quotes item ${n} of content/days/${SAMPLE_DATE}.json, which holds ` +
-          `${edition.items.length}.`,
-      )
-    }
-
-    return { id: item.id, text: item.description, day }
+    return { ...cite(item, day), text: item.description }
   })
 }

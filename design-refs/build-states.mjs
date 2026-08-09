@@ -64,16 +64,38 @@ const thin = { ...ed, date: THIN_DATE, items: ed.items.slice(0, 17) }
 const withPhoto = ed.items[3]
 const withoutPhoto = { ...ed.items[1], image: null }
 
+// One citation, exactly as AskPanel prints one: the outlet, the day, and a link
+// to the article. It was a <span> holding a date, and the link under it went to
+// the edition — a whole day's thirty items for a reader who wanted to check one
+// claim. Naming the outlet as well as the day is what keeps the label and its
+// destination in agreement: "9 August" over a click that lands on techcrunch.com
+// is a label disagreeing with where it goes.
+// app/states/page.tsx renders this markup byte for byte, and the two are
+// compared per pixel.
+const cite = (i) =>
+  `<a class="cite" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">${esc(i.publisher)} · ${dayMonth(ed.date)}</a>`
+
+// State 05's two citations. The frame's two sentences are written — they predate
+// the search existing — but what they are about is not invented: both were
+// paraphrased off this edition, the first from item 0 and the second from item
+// 18, and those are the two items cited. A citation aimed at anything other than
+// the story its sentence came from would put the exact failure this frame exists
+// to rule out inside the frame that rules it out.
+const ANSWERED = [0, 18]
+
 // State 07's earlier answer. Two items of the sample edition, their descriptions
-// verbatim, each followed by the day its item ran — which is the whole shape of
-// an answer from this archive. It is derived rather than typed because a
-// sentence invented for the catalogue would be the one place on the site where
-// the panel is shown quoting something no edition ever carried, and the frame
-// exists to show the panel telling the truth twice in a row.
+// verbatim, each followed by the outlet that ran it and the day — which is the
+// whole shape of an answer from this archive. It is derived rather than typed
+// because a sentence invented for the catalogue would be the one place on the
+// site where the panel is shown quoting something no edition ever carried, and
+// the frame exists to show the panel telling the truth twice in a row.
+// Both items ran on the same morning and both are cited: two items are two
+// sources, and the panel stopped collapsing them the day the citation became a
+// story rather than a date.
 // `app/states/fixtures.ts` takes the same two indices out of the same file.
 const FOLLOW_UP = [3, 8]
 const answered = FOLLOW_UP.map(
-  (n) => `${esc(ed.items[n].description)} <span class="cite">${dayMonth(ed.date)}</span>`,
+  (n) => `${esc(ed.items[n].description)} ${cite(ed.items[n])}`,
 ).join('\n      ')
 
 const state = (n, title, why, body) => `
@@ -218,7 +240,7 @@ ${state(
 ${state(
   '05',
   'Asking, and being answered',
-  'The panel’s three live states. Running is a rule that fills, not a spinner: a spinner says the software is busy, a rule says the archive is being read. The answer names the day every item ran, because the whole claim is that this is a dated record.',
+  'The panel’s three live states. Running is a rule that fills, not a spinner: a spinner says the software is busy, a rule says the archive is being read. Each citation names the outlet and the day and goes to the article itself, because the claim is that this is a dated record a reader can check — a link to the edition would leave them hunting for one story among thirty.',
   `<div class="panel-static">
       <p class="panel-label">Running</p>
       <div class="ask-line"><span class="ask-q">What did OpenAI ship this week?</span><span class="ask-bar"></span></div>
@@ -228,8 +250,8 @@ ${state(
       <p class="panel-label">Answered</p>
       <p class="ask-a">OpenAI paused work on its Astra model after finding it could launch cyberattacks
       on its own, and it published early cybersecurity evaluations of the same system.
-      <span class="cite">9 August</span> It also acquired the presentation startup NextSlide.
-      <span class="cite">9 August</span></p>
+      ${cite(ed.items[ANSWERED[0]])} It also acquired the presentation startup NextSlide.
+      ${cite(ed.items[ANSWERED[1]])}</p>
     </div>`,
 )}
 

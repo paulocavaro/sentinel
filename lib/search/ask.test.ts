@@ -34,12 +34,17 @@ function day(date: string, items: EditionItem[]): Edition {
   return { ...edition(date, items.length), items }
 }
 
+// One url per item, and no two alike. The citation carries the article's address
+// now, and the fixture default is the same string for every item — which would
+// let a resolution that read the link off the wrong hit pass every assertion
+// below while pointing the reader at the wrong story.
 const NEWEST = day('2026-08-09', [
   item({
     id: OPUS,
     rank: 1,
     title: 'Anthropic ships Claude Opus 5',
     description: 'A wider context window, and a lower price for every token in it.',
+    url: 'https://www.anthropic.com/news/claude-opus-5',
     publisher: 'Anthropic',
     topics: ['models', 'anthropic'],
   }),
@@ -48,6 +53,7 @@ const NEWEST = day('2026-08-09', [
     rank: 2,
     title: 'A quantum processor holds its state for a full second',
     description: 'Error correction, not qubit count, is what moved.',
+    url: 'https://www.nature.com/articles/quantum-state-one-second',
     publisher: 'Nature',
     topics: ['hardware'],
   }),
@@ -59,10 +65,39 @@ const MIDDLE = day('2026-08-08', [
     rank: 1,
     title: 'An undersea cable is cut in the Red Sea',
     description: 'Three carriers reroute their traffic through Marseille.',
+    url: 'https://www.reuters.com/world/red-sea-cable-cut/',
     publisher: 'Reuters',
     topics: ['infrastructure'],
   }),
 ])
+
+/**
+ * The citation each of the three resolves to, written once.
+ *
+ * Not read out of the fixtures above — that would assert the code against its
+ * own input — but written out beside them, so a field of the wrong item landing
+ * in a citation is a failure here rather than a coincidence that agrees.
+ */
+const CITE = {
+  [OPUS]: {
+    id: OPUS,
+    date: '2026-08-09',
+    url: 'https://www.anthropic.com/news/claude-opus-5',
+    publisher: 'Anthropic',
+  },
+  [QUANTUM]: {
+    id: QUANTUM,
+    date: '2026-08-09',
+    url: 'https://www.nature.com/articles/quantum-state-one-second',
+    publisher: 'Nature',
+  },
+  [CABLE]: {
+    id: CABLE,
+    date: '2026-08-08',
+    url: 'https://www.reuters.com/world/red-sea-cable-cut/',
+    publisher: 'Reuters',
+  },
+} as const
 
 /** Ten placeholders, all answering to `story`. Only the `MAX_HITS` case reads them. */
 const OLDEST = edition('2026-08-07', 10)
@@ -116,9 +151,10 @@ describe('askArchive', () => {
       sentences: [
         {
           text: 'Anthropic shipped Claude Opus 5.',
-          // The date is the edition's, resolved out of `seen` — the model has
-          // no channel through which to supply one.
-          cites: [{ id: OPUS, date: '2026-08-09' }],
+          // The day, the outlet and the article are all the archive's, resolved
+          // out of `seen` — the model has no channel through which to supply any
+          // of the three, and only the id came from it.
+          cites: [CITE[OPUS]],
         },
       ],
     })
@@ -401,9 +437,7 @@ describe('askArchive', () => {
 
       expect(await askArchive(deps(cite(QUANTUM)), { question: 'The quantum one?' })).toEqual({
         kind: 'answer',
-        sentences: [
-          { text: 'It held its state.', cites: [{ id: QUANTUM, date: '2026-08-09' }] },
-        ],
+        sentences: [{ text: 'It held its state.', cites: [CITE[QUANTUM]] }],
       })
 
       expect(await askArchive(deps(cite(OPUS)), { question: 'The quantum one?' })).toEqual({
@@ -433,8 +467,8 @@ describe('askArchive', () => {
       expect(result).toEqual({
         kind: 'answer',
         sentences: [
-          { text: 'Anthropic shipped Claude Opus 5.', cites: [{ id: OPUS, date: '2026-08-09' }] },
-          { text: 'A cable was cut in the Red Sea.', cites: [{ id: CABLE, date: '2026-08-08' }] },
+          { text: 'Anthropic shipped Claude Opus 5.', cites: [CITE[OPUS]] },
+          { text: 'A cable was cut in the Red Sea.', cites: [CITE[CABLE]] },
         ],
       })
     })

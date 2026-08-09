@@ -50,7 +50,23 @@ export function neighbours(
   }
 }
 
-export function EditionBar({ date, dates }: { date: string; dates: readonly string[] }) {
+/**
+ * @param home  whether this bar is on `/`. The home route is already the latest
+ *   edition, so offering "Latest edition" there would be a link to the page the
+ *   reader is on. Everywhere else it is the only way back: the day route
+ *   otherwise reaches `/` through `/archive`, two clicks for the most common
+ *   destination on the site, and the pre-theme edition has no chip row to put a
+ *   control in — which is why this belongs in the bar and not among the chips.
+ */
+export function EditionBar({
+  date,
+  dates,
+  home,
+}: {
+  date: string
+  dates: readonly string[]
+  home: boolean
+}) {
   const { prev, next } = neighbours(date, dates)
 
   return (
@@ -77,6 +93,12 @@ export function EditionBar({ date, dates }: { date: string; dates: readonly stri
           <a className="day is-off" aria-disabled="true">
             {dayMonth(shiftDays(date, 1))}
           </a>
+        )}
+
+        {home ? null : (
+          <Link className="day day-all" href="/">
+            Latest edition
+          </Link>
         )}
 
         <Link className="day day-all" href="/archive">

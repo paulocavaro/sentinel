@@ -31,6 +31,18 @@
 // back with them is the reference's real placeholder, which a field that could
 // do nothing had no right to.
 //
+// **A citation is a story, and it leaves the site.** It reads *outlet · day* and
+// it goes to the article. The first version linked at `/day/YYYY-MM-DD`, the
+// whole edition, which made a reader who wanted to check one claim hunt for it
+// among thirty items — a citation that can only be believed. What is printed
+// beside the link is the outlet and not only the day because a label reading
+// "9 August" over a click that lands on techcrunch.com is a label disagreeing
+// with its own destination, and this repository has already paid for that kind
+// of mislabelling once, on the morning 18 of 20 bylines named the feed instead
+// of the publisher. Both fields come from `seen` in `lib/search/answer.ts` and
+// never from the model; nothing here re-derives either, not even the host out of
+// the url.
+//
 // **Only questions travel, and the series dies with the dialog.** A follow-up
 // posts the earlier *questions* and nothing else; there is no field an answer
 // could arrive in, which removes the forged-assistant-turn surface rather than
@@ -44,14 +56,18 @@
 // that quote titles and descriptions written by other people and have been
 // through a model on the way here. React escapes text nodes by default, and the
 // test suite proves it with a sentence that tries to open a `<script>`.
+//
+// The citation is the same surface: a publisher name comes off a feed, which is
+// to say it is written by whoever runs the feed, and it is now printed inside a
+// link. The escaping test carries a hostile name for that reason as well as a
+// hostile sentence.
 
 'use client'
 
-import Link from 'next/link'
 import { Fragment, useRef, useState } from 'react'
 
 import { dayMonth } from '@/lib/date'
-import type { Sentence } from '@/lib/search/answer'
+import type { Citation, Sentence } from '@/lib/search/answer'
 import type {
   AskResult,
   MAX_QUESTIONS as ServerMaxQuestions,
@@ -143,14 +159,23 @@ function note(live: Live, editions: number): string {
 }
 
 /**
- * The days one sentence rests on.
+ * The items one sentence rests on, one citation each.
  *
- * `.cite` prints a day, so two items from the same edition are one citation.
- * Rendering both would put the identical link twice in a row, which reads as the
- * same claim made twice rather than as two sources.
+ * **De-duplicated by id, not by day.** Collapsing on the date was right while
+ * `.cite` printed nothing but a day: two items from the same edition produced
+ * the identical link twice in a row, which reads as one claim made twice. Now
+ * that a citation is a story — an outlet, and a link to the article — two items
+ * from the same edition are two different sources, and dropping one would hide a
+ * claim's second leg behind the first. The day repeating between them is not a
+ * repetition; it is two things that ran on the same morning.
+ *
+ * The same id twice in one sentence is still one citation. A model that names an
+ * item twice has not found a second source for it, and `seen` resolves both
+ * copies to the same article — so that case is the identical link in a row, and
+ * it is the only one left.
  */
-function days(sentence: Sentence): string[] {
-  return [...new Set(sentence.cites.map((cite) => cite.date))]
+function sources(sentence: Sentence): Citation[] {
+  return [...new Map(sentence.cites.map((cite) => [cite.id, cite])).values()]
 }
 
 /**
@@ -183,13 +208,30 @@ function AnswerText({ of }: { of: Exchange }) {
               HTML, and the space would land on the far side of it. The same
               line is in `EditionBar` and in the states catalogue. */}
           {`${n === 0 ? '' : ' '}${sentence.text} `}
-          {days(sentence).map((date) => (
+          {sources(sentence).map((cite) => (
             // A link, not the reference's `<span>`. `.cite` already has its
             // type and its colour; nothing about it changes to become a link,
             // which is the test that it was designed as one.
-            <Link key={date} className="cite" href={`/day/${date}`}>
-              {dayMonth(date)}
-            </Link>
+            //
+            // `<a>` rather than `next/link`: the destination is the publisher's
+            // own page and there is no route here to prefetch. `target="_blank"`
+            // because leaving the archive to check one claim should not cost the
+            // reader the answer they were reading, and `rel` because a tab
+            // opened this way can otherwise reach back through `window.opener`.
+            //
+            // The label is one template string for the reason the sentence above
+            // it is: adjacent text nodes are separated by a `<!-- -->` marker in
+            // the streamed HTML, and it would land between the outlet and the
+            // day.
+            <a
+              key={cite.id}
+              className="cite"
+              href={cite.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {`${cite.publisher} · ${dayMonth(cite.date)}`}
+            </a>
           ))}
         </Fragment>
       ))}

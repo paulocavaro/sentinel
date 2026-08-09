@@ -70,7 +70,7 @@ describe('neighbours', () => {
 })
 
 describe('EditionBar', () => {
-  const both = html(<EditionBar date="2026-08-09" dates={['2026-08-11', '2026-08-08']} />)
+  const both = html(<EditionBar date="2026-08-09" dates={['2026-08-11', '2026-08-08']} home />)
 
   it('links at the neighbouring editions, and marks the direction', () => {
     expect(both).toContain('<a class="day" rel="prev" href="/day/2026-08-08">')
@@ -93,8 +93,27 @@ describe('EditionBar', () => {
     expect(both).toContain('<a class="day day-all" href="/archive">All editions</a>')
   })
 
+  // The home route is already the latest edition, so the link would point at the
+  // page the reader is on. Everywhere else it is the only way back — `/day/…`
+  // otherwise reaches `/` through `/archive`, two clicks for the most common
+  // destination on the site.
+  describe('the way back to the latest edition', () => {
+    it('is absent on the home route', () => {
+      expect(both).not.toContain('href="/">')
+    })
+
+    it('is offered on an archive day, before the archive link', () => {
+      const day = html(
+        <EditionBar date="2026-08-09" dates={['2026-08-11', '2026-08-08']} home={false} />,
+      )
+
+      expect(day).toContain('<a class="day day-all" href="/">Latest edition</a>')
+      expect(day.indexOf('href="/"')).toBeLessThan(day.indexOf('href="/archive"'))
+    })
+  })
+
   describe('with no edition in a direction', () => {
-    const earliest = html(<EditionBar date="2026-08-08" dates={['2026-08-09', '2026-08-08']} />)
+    const earliest = html(<EditionBar date="2026-08-08" dates={['2026-08-09', '2026-08-08']} home />)
 
     // Present, not offered: the slot still shows the calendar neighbour's date,
     // and it recedes by losing the arrow and the hairline. Never by opacity —

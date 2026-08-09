@@ -31,12 +31,64 @@ function hit(id: string, date: string, over: Partial<Hit> = {}): Hit {
   return { ...item({ id }), date, ...over }
 }
 
-/** What the tool returned on this call, and nothing else. */
+/**
+ * What the tool returned on this call, and nothing else.
+ *
+ * **No two items share a url or a publisher**, and the fixture defaults would
+ * have given all three the same of both. A citation now carries four fields
+ * resolved out of the same `hit`, and with a shared outlet or a shared link the
+ * one bug worth catching — the second citation resolved against the first
+ * item's record — passes every assertion in this file. Distinct hosts as well
+ * as distinct names, so a url crossed with a url is as visible as a name is.
+ */
 const SEEN = new Map<string, Hit>([
-  [OPUS, hit(OPUS, '2026-08-09', { title: 'Anthropic ships Claude Opus 5' })],
-  [QUANTUM, hit(QUANTUM, '2026-08-08', { title: 'A quantum processor holds its state' })],
-  [ANTITRUST, hit(ANTITRUST, '2026-08-07', { title: 'The EU opens an antitrust case' })],
+  [
+    OPUS,
+    hit(OPUS, '2026-08-09', {
+      title: 'Anthropic ships Claude Opus 5',
+      url: 'https://techcrunch.com/2026/08/09/anthropic-ships-claude-opus-5/',
+      publisher: 'TechCrunch',
+    }),
+  ],
+  [
+    QUANTUM,
+    hit(QUANTUM, '2026-08-08', {
+      title: 'A quantum processor holds its state',
+      url: 'https://arstechnica.com/2026/08/08/a-quantum-processor-holds-its-state/',
+      publisher: 'Ars Technica',
+    }),
+  ],
+  [
+    ANTITRUST,
+    hit(ANTITRUST, '2026-08-07', {
+      title: 'The EU opens an antitrust case',
+      url: 'https://www.theguardian.com/technology/2026/aug/07/eu-opens-antitrust-case',
+      publisher: 'The Guardian',
+    }),
+  ],
 ])
+
+/** The citation each seen id must resolve to, written once and asserted many times. */
+const CITE = {
+  [OPUS]: {
+    id: OPUS,
+    date: '2026-08-09',
+    url: 'https://techcrunch.com/2026/08/09/anthropic-ships-claude-opus-5/',
+    publisher: 'TechCrunch',
+  },
+  [QUANTUM]: {
+    id: QUANTUM,
+    date: '2026-08-08',
+    url: 'https://arstechnica.com/2026/08/08/a-quantum-processor-holds-its-state/',
+    publisher: 'Ars Technica',
+  },
+  [ANTITRUST]: {
+    id: ANTITRUST,
+    date: '2026-08-07',
+    url: 'https://www.theguardian.com/technology/2026/aug/07/eu-opens-antitrust-case',
+    publisher: 'The Guardian',
+  },
+} as const
 
 describe('validateAnswer', () => {
   it('accepts an answer whose every id was returned by the search', () => {
@@ -54,10 +106,10 @@ describe('validateAnswer', () => {
     expect(answer).toEqual({
       kind: 'answer',
       sentences: [
-        { text: 'Anthropic released Opus 5.', cites: [{ id: OPUS, date: '2026-08-09' }] },
+        { text: 'Anthropic released Opus 5.', cites: [CITE[OPUS]] },
         {
           text: 'Error correction, not qubit count, is what moved.',
-          cites: [{ id: QUANTUM, date: '2026-08-08' }],
+          cites: [CITE[QUANTUM]],
         },
       ],
     })
@@ -94,13 +146,56 @@ describe('validateAnswer', () => {
       sentences: [
         {
           text: 'Two of them landed the same week.',
-          cites: [
-            { id: OPUS, date: '2026-08-09' },
-            { id: ANTITRUST, date: '2026-08-07' },
-          ],
+          cites: [CITE[OPUS], CITE[ANTITRUST]],
         },
       ],
     })
+  })
+
+  it('resolves each id to the outlet that published it and the article itself', () => {
+    // The outlet and the link below are on no object the model produced: both
+    // are read out of `seen`, which the tool filled. The raw sentence carries a
+    // `url` and a `publisher` of its own — a model handing over its own proof —
+    // and neither survives.
+    //
+    // **What actually protects this is the schema, not this assertion**, in
+    // exactly the way the date case above records: `safeParse` has stripped both
+    // unknown keys before `validateAnswer` could read them, so a rewrite that
+    // preferred a model-supplied url would leave this green. The model has no
+    // channel to supply either field at all, and opening one would take two
+    // deliberate changes — adding them to `AnswerSchema` and then reading them —
+    // the first of which is visible in the schema.
+    //
+    // It earns its place for what it pins instead: the four fields of a citation
+    // all come off the *same* `hit`. Three items with three outlets and three
+    // hosts means a resolution that crossed them — the second sentence's link
+    // taken from the first sentence's item — cannot be green here.
+    const answer = validateAnswer(
+      {
+        kind: 'answer',
+        sentences: [
+          {
+            text: 'Anthropic released Opus 5.',
+            ids: [OPUS],
+            url: 'https://example.invalid/made-up',
+            publisher: 'The Model’s Own Newspaper',
+          },
+          { text: 'Brussels was not impressed.', ids: [ANTITRUST] },
+        ],
+      },
+      SEEN,
+    )
+
+    expect(answer).toEqual({
+      kind: 'answer',
+      sentences: [
+        { text: 'Anthropic released Opus 5.', cites: [CITE[OPUS]] },
+        { text: 'Brussels was not impressed.', cites: [CITE[ANTITRUST]] },
+      ],
+    })
+
+    expect(JSON.stringify(answer)).not.toContain('example.invalid')
+    expect(JSON.stringify(answer)).not.toContain('The Model’s Own Newspaper')
   })
 
   // The whole point of the phase.
@@ -168,7 +263,7 @@ describe('validateAnswer', () => {
     // dropped rather than refused would have returned exactly this.
     expect(validateAnswer({ kind: 'answer', sentences: [sound] }, SEEN)).toEqual({
       kind: 'answer',
-      sentences: [{ text: sound.text, cites: [{ id: OPUS, date: '2026-08-09' }] }],
+      sentences: [{ text: sound.text, cites: [CITE[OPUS]] }],
     })
   })
 

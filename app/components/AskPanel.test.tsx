@@ -28,27 +28,51 @@ import type { Exchange, Live } from './AskPanel'
 const html = renderToStaticMarkup
 const nothing = () => {}
 
+// Two sentences, two outlets, two hosts. Nothing below would notice a citation
+// resolved against the wrong item if both carried the same publisher or the same
+// link, and the fields being crossed is the whole failure this shape can have.
+const GUARDIAN = {
+  id: 'a1',
+  date: '2026-08-09',
+  url: 'https://www.theguardian.com/technology/2026/aug/09/deepmind-weather-model',
+  publisher: 'The Guardian',
+}
+const ARS = {
+  id: 'b2',
+  date: '2026-08-08',
+  url: 'https://arstechnica.com/2026/08/08/deepmind-head-of-research-departs/',
+  publisher: 'Ars Technica',
+}
+
 const DEEPMIND: Exchange = {
   kind: 'answered',
   question: 'What is happening at DeepMind?',
   sentences: [
     {
       text: 'DeepMind published its weather model as a paper rather than a product.',
-      cites: [{ id: 'a1', date: '2026-08-09' }],
+      cites: [GUARDIAN],
     },
     {
       text: 'Its head of research left for a startup the same week.',
-      cites: [{ id: 'b2', date: '2026-08-08' }],
+      cites: [ARS],
     },
   ],
 }
 
-// The day is asserted through `dayMonth` rather than as the literal "9 August".
+// The whole citation, asserted as one string: the outlet, the separator, the
+// day, and the link they hang on. Written out rather than matched loosely
+// because the label and the destination have to agree — a `.cite` reading
+// "9 August" over a link to techcrunch.com is the bug this shape exists to
+// prevent, and two `toContain`s on the parts would pass with them crossed.
+//
+// The day goes through `dayMonth` rather than the literal "9 August".
 // `dayMonth` prints the year outside the current one, so a hard-coded string
 // would turn this suite red on 1 January for a component that had not changed.
 // What is being tested is that the citation goes through the same formatter the
 // edition bar does; `lib/date.test.ts` owns what that formatter prints.
-const day = (date: string) => `<a class="cite" href="/day/${date}">${dayMonth(date)}</a>`
+const cite = (c: { date: string; url: string; publisher: string }) =>
+  `<a class="cite" href="${c.url}" target="_blank" rel="noopener noreferrer">` +
+  `${c.publisher} · ${dayMonth(c.date)}</a>`
 
 describe('AskPanel', () => {
   it('renders the idle field, enabled, with the reference placeholder', () => {
@@ -123,34 +147,59 @@ describe('AskBody', () => {
     expect(running).not.toContain('0 edition')
   })
 
-  it('renders one .cite per sentence, linking at the day it ran', () => {
+  it('renders one .cite per sentence, naming the outlet and linking at the article', () => {
     const answered = html(<AskBody past={[]} live={DEEPMIND} onAsk={nothing} editions={2} />)
 
     expect(answered).toContain('<p class="ask-a">')
-    expect(answered).toContain(day('2026-08-09'))
-    expect(answered).toContain(day('2026-08-08'))
+    expect(answered).toContain(cite(GUARDIAN))
+    expect(answered).toContain(cite(ARS))
     expect(answered).toContain('DeepMind published its weather model')
+    // The edition page is where the citation used to land, and landing there is
+    // what made the reader hunt for the story among thirty items.
+    expect(answered).not.toContain('href="/day/')
   })
 
-  // `.cite` prints a day, and two items from the same edition are one day. Two
-  // identical links side by side would be the same claim made twice.
-  it('prints one citation per day, not one per item', () => {
+  // The citation leaves the site, so it carries the two attributes every
+  // outbound link in this repository carries. `noopener` is the one that
+  // matters: without it the publisher's page can reach back through
+  // `window.opener` and navigate the archive out from under the reader.
+  it('opens the article in a new tab, and severs the opener', () => {
+    const answered = html(<AskBody past={[]} live={DEEPMIND} onAsk={nothing} editions={2} />)
+
+    expect(answered).toContain('target="_blank" rel="noopener noreferrer"')
+  })
+
+  // The rule this replaced collapsed citations by date, which was right while
+  // `.cite` printed a day and nothing else. Now that it prints a story, two
+  // items from one edition are two sources — and dropping the second would take
+  // a claim's second leg off the page while leaving the claim.
+  it('prints one citation per item, even when both ran on the same day', () => {
+    const sameDay = { ...ARS, id: 'a2', date: GUARDIAN.date }
     const twice: Live = {
       kind: 'answered',
-      question: 'What did OpenAI ship?',
-      sentences: [
-        {
-          text: 'It shipped two things.',
-          cites: [
-            { id: 'a1', date: '2026-08-09' },
-            { id: 'a2', date: '2026-08-09' },
-          ],
-        },
-      ],
+      question: 'What did DeepMind do?',
+      sentences: [{ text: 'It did two things.', cites: [GUARDIAN, sameDay] }],
+    }
+
+    const answered = html(<AskBody past={[]} live={twice} onAsk={nothing} editions={2} />)
+
+    expect(answered.split('class="cite"')).toHaveLength(3)
+    expect(answered).toContain(cite(GUARDIAN))
+    expect(answered).toContain(cite(sameDay))
+  })
+
+  // The same item named twice is not a second source, and `seen` resolves both
+  // copies to the same article — so this is the identical-link-in-a-row case,
+  // and the only one the de-duplication is still for.
+  it('prints one citation when a sentence names the same item twice', () => {
+    const doubled: Live = {
+      kind: 'answered',
+      question: 'What did DeepMind do?',
+      sentences: [{ text: 'It did one thing.', cites: [GUARDIAN, { ...GUARDIAN }] }],
     }
 
     expect(
-      html(<AskBody past={[]} live={twice} onAsk={nothing} editions={2} />).split('class="cite"'),
+      html(<AskBody past={[]} live={doubled} onAsk={nothing} editions={2} />).split('class="cite"'),
     ).toHaveLength(2)
   })
 
@@ -296,6 +345,12 @@ describe('AskBody', () => {
   // The answer quotes titles and descriptions written by other people and has
   // been through a model on the way here. React escapes by default; this is the
   // assertion that nothing in this file ever stops it.
+  //
+  // The citation is the same surface and is now two more of it. A publisher name
+  // is whatever the feed says it is, and it is printed inside the link; the url
+  // is whatever the feed says it is, and it is printed into an attribute — where
+  // a single unescaped quote closes the tag and everything after it is markup.
+  // Both carry a payload here.
   it('escapes markup in an answer, because the answer quotes third parties', () => {
     const hostile: Live = {
       kind: 'answered',
@@ -303,7 +358,14 @@ describe('AskBody', () => {
       sentences: [
         {
           text: '<script>alert("x")</script> & <img src=x onerror=alert(1)>',
-          cites: [{ id: 'a1', date: '2026-08-09' }],
+          cites: [
+            {
+              id: 'a1',
+              date: '2026-08-09',
+              url: 'https://example.com/a?q="><script>alert(1)</script>&b=2',
+              publisher: '<img src=x onerror=alert(1)> & "Reuters"',
+            },
+          ],
         },
       ],
     }
@@ -314,6 +376,10 @@ describe('AskBody', () => {
     expect(answered).not.toContain('<img')
     expect(answered).toContain('&lt;script&gt;')
     expect(answered).toContain('&amp;')
+    // The quote that would have ended `href="` had it survived.
+    expect(answered).toContain('&quot;')
+    // And the link is still one tag: the payload did not open a second one.
+    expect(answered.split('<a ')).toHaveLength(2)
   })
 })
 

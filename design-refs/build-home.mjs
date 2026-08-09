@@ -147,6 +147,7 @@ const themeNav = present.length
   ? `
     <nav aria-label="Themes">
       <ul class="themes">
+        <li><a class="chip" href="?#results" aria-current="true">Everything</a></li>
         ${present.map(([k, label]) => `<li><a class="chip" href="?theme=${k}#${k}">${label}</a></li>`).join('\n        ')}
       </ul>
       <p class="sr-only" role="status" aria-live="polite">Showing the whole edition.</p>
@@ -350,7 +351,7 @@ body {
 }
 .ask-fab:hover { background: var(--accent); }
 .ask-fab:active { transform: scale(0.96); transition: none; }
-.ask-fab:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.ask-fab:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) { .ask-fab { transition: none; } }
 
 /* <dialog> + showModal gives Escape, a focus trap, an inert background and a
@@ -390,7 +391,7 @@ body {
   padding: 0.625rem 0; min-height: 44px;
 }
 .panel-input::placeholder { color: var(--machine); }
-.panel-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.panel-input:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 .panel-note { font-size: 0.875rem; line-height: 1.55; color: var(--machine); margin: 1rem 0 0; }
 
 /* ─── The lead ───────────────────────────────────────────────────────────── */
@@ -535,7 +536,7 @@ body {
   .item { transition: background-color var(--dur-tap) var(--ease-out); }
   .item:active { transition: none; }
 }
-.item:has(.link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; }
+.item:has(.link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 4px; }
 
 /* ─── The filtered view ──────────────────────────────────────────────────────
    A selected chip is a filter, and the filter is two classes on <main>:
@@ -641,7 +642,7 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         ${prevSlot}
         <span class="day is-current" aria-current="date">${dayMonth}</span>
         ${nextSlot}
-        <a class="day day-all" href="/archive">All editions</a>
+        ${arg ? '<a class="day day-all" href="/">Latest edition</a>\n        ' : ''}<a class="day day-all" href="/archive">All editions</a>
       </nav>
     </div>${themeNav}
   </header>

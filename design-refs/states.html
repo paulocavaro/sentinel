@@ -188,7 +188,7 @@ body {
 }
 .ask-fab:hover { background: var(--accent); }
 .ask-fab:active { transform: scale(0.96); transition: none; }
-.ask-fab:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.ask-fab:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) { .ask-fab { transition: none; } }
 
 /* <dialog> + showModal gives Escape, a focus trap, an inert background and a
@@ -228,7 +228,7 @@ body {
   padding: 0.625rem 0; min-height: 44px;
 }
 .panel-input::placeholder { color: var(--machine); }
-.panel-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.panel-input:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 .panel-note { font-size: 0.875rem; line-height: 1.55; color: var(--machine); margin: 1rem 0 0; }
 
 /* ─── The lead ───────────────────────────────────────────────────────────── */
@@ -373,7 +373,7 @@ body {
   .item { transition: background-color var(--dur-tap) var(--ease-out); }
   .item:active { transition: none; }
 }
-.item:has(.link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; }
+.item:has(.link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 4px; }
 
 /* ─── The filtered view ──────────────────────────────────────────────────────
    A selected chip is a filter, and the filter is two classes on <main>:
@@ -594,7 +594,7 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
   <div class="state-head">
     <p class="state-n">05</p>
     <h2 class="state-title">Asking, and being answered</h2>
-    <p class="state-why">The panel’s three live states. Running is a rule that fills, not a spinner: a spinner says the software is busy, a rule says the archive is being read. The answer names the day every item ran, because the whole claim is that this is a dated record.</p>
+    <p class="state-why">The panel’s three live states. Running is a rule that fills, not a spinner: a spinner says the software is busy, a rule says the archive is being read. Each citation names the outlet and the day and goes to the article itself, because the claim is that this is a dated record a reader can check — a link to the edition would leave them hunting for one story among thirty.</p>
   </div>
   <div class="state-frame"><div class="panel-static">
       <p class="panel-label">Running</p>
@@ -605,8 +605,8 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
       <p class="panel-label">Answered</p>
       <p class="ask-a">OpenAI paused work on its Astra model after finding it could launch cyberattacks
       on its own, and it published early cybersecurity evaluations of the same system.
-      <span class="cite">9 August</span> It also acquired the presentation startup NextSlide.
-      <span class="cite">9 August</span></p>
+      <a class="cite" href="https://techcrunch.com/2026/08/07/openai-says-it-slowed-astra-model-development-over-security-concerns/" target="_blank" rel="noopener noreferrer">TechCrunch · 9 August</a> It also acquired the presentation startup NextSlide.
+      <a class="cite" href="https://techcrunch.com/2026/08/08/openai-acquires-presentation-startup-nextslide/" target="_blank" rel="noopener noreferrer">TechCrunch · 9 August</a></p>
     </div></div>
 </section>
 
@@ -635,8 +635,8 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
       <p class="panel-label">Follow-up</p>
       <div class="ask-past">
         <p class="ask-q">What is happening at DeepMind?</p>
-        <p class="ask-a">Demis Hassabis is stepping back from Google DeepMind's helm, fueling concern the lab is losing research independence to commercial pressure. <span class="cite">9 August</span>
-      Google DeepMind disbanded its AlphaFold team after largely solving protein structure prediction, handing the torch to outside researchers. <span class="cite">9 August</span></p>
+        <p class="ask-a">Demis Hassabis is stepping back from Google DeepMind's helm, fueling concern the lab is losing research independence to commercial pressure. <a class="cite" href="https://www.theguardian.com/technology/2026/aug/08/google-demis-hassabis-deepmind-shifts-role" target="_blank" rel="noopener noreferrer">The Guardian · 9 August</a>
+      Google DeepMind disbanded its AlphaFold team after largely solving protein structure prediction, handing the torch to outside researchers. <a class="cite" href="https://www.scientificamerican.com/article/why-google-deepmind-broke-up-the-alphafold-team/" target="_blank" rel="noopener noreferrer">Scientific American · 9 August</a></p>
       </div>
       <div class="ask-line"><span class="ask-q">Who is running it now?</span><span class="ask-bar"></span></div>
       <p class="panel-note">Reading 2 editions</p>

@@ -30,12 +30,14 @@ import { NoEdition } from '@/app/components/NoEdition'
 import { StaleBanner } from '@/app/components/StaleBanner'
 
 import {
+  answeredFixture,
   followUpFixture,
   missingFixture,
   photographFixture,
   staleFixture,
   thinFixture,
 } from './fixtures'
+import type { Cite } from './fixtures'
 
 export const metadata: Metadata = {
   title: 'States',
@@ -75,11 +77,34 @@ function State({
   )
 }
 
+/**
+ * One citation, drawn the way `AskPanel` draws it.
+ *
+ * `<a>` and not the `<span>` these frames used to carry: the citation goes to
+ * the publisher's article, which is the whole of what it is for, and a catalogue
+ * that showed it as inert text would be showing something the product does not
+ * do. The label is one template string for the reason every other assembled line
+ * on this site is — two adjacent text nodes are separated by a `<!-- -->` marker
+ * in the streamed HTML, and it would land between the outlet and the day.
+ *
+ * `design-refs/build-states.mjs` writes this markup byte for byte. The visual
+ * gate compares the two per pixel, so the attributes and their order are as much
+ * a contract as the classes are.
+ */
+function Citation({ of }: { of: Cite }) {
+  return (
+    <a className="cite" href={of.url} target="_blank" rel="noopener noreferrer">
+      {`${of.publisher} · ${of.day}`}
+    </a>
+  )
+}
+
 export default async function States() {
-  const [stale, thin, photograph, answered] = await Promise.all([
+  const [stale, thin, photograph, cited, answered] = await Promise.all([
     staleFixture(),
     thinFixture(),
     photographFixture(),
+    answeredFixture(),
     followUpFixture(),
   ])
 
@@ -153,11 +178,15 @@ export default async function States() {
           05 and 06 still carry a mock of an answer, written before the search
           existed. 07 does not, and no frame written from here on will: its
           sentences come out of a committed edition through `followUpFixture`.
+          05's two *citations* are no longer a mock either — they are the two
+          items its sentences were paraphrased from, through `answeredFixture`,
+          because a citation that points anywhere but at the story it sits under
+          is the failure this whole surface exists to prevent.
           ──────────────────────────────────────────────────────────────────── */}
       <State
         n="05"
         title="Asking, and being answered"
-        why="The panel’s three live states. Running is a rule that fills, not a spinner: a spinner says the software is busy, a rule says the archive is being read. The answer names the day every item ran, because the whole claim is that this is a dated record."
+        why="The panel’s three live states. Running is a rule that fills, not a spinner: a spinner says the software is busy, a rule says the archive is being read. Each citation names the outlet and the day and goes to the article itself, because the claim is that this is a dated record a reader can check — a link to the edition would leave them hunting for one story among thirty."
       >
         <div className="panel-static">
           <p className="panel-label">Running</p>
@@ -171,9 +200,9 @@ export default async function States() {
           <p className="panel-label">Answered</p>
           <p className="ask-a">
             {'OpenAI paused work on its Astra model after finding it could launch cyberattacks on its own, and it published early cybersecurity evaluations of the same system. '}
-            <span className="cite">9 August</span>
+            <Citation of={cited.astra} />
             {' It also acquired the presentation startup NextSlide. '}
-            <span className="cite">9 August</span>
+            <Citation of={cited.nextSlide} />
           </p>
         </div>
       </State>
@@ -200,7 +229,10 @@ export default async function States() {
             follow-up has to be a real fragment — *who is running it now* — for
             the frame to show anything at all. The answer between them is not
             written. It is two descriptions out of the 9 August edition, each
-            with the day it ran, exactly as `build-states.mjs` takes them. */}
+            under the outlet that ran it and linking at the article, exactly as
+            `build-states.mjs` takes them. Both ran on the same morning and both
+            are cited: two items are two sources, and the day repeating between
+            them is not a repetition. */}
         <div className="panel-static">
           <p className="panel-label">Follow-up</p>
           <div className="ask-past">
@@ -209,7 +241,7 @@ export default async function States() {
               {answered.map((sentence, n) => (
                 <Fragment key={sentence.id}>
                   {`${n === 0 ? '' : ' '}${sentence.text} `}
-                  <span className="cite">{sentence.day}</span>
+                  <Citation of={sentence} />
                 </Fragment>
               ))}
             </p>

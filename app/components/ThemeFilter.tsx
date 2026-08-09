@@ -117,6 +117,22 @@ function Row({ themes, active }: { themes: ThemeCount[]; active: Theme | null })
   return (
     <nav aria-label="Themes">
       <ul className="themes">
+        {/* First, and a control rather than a theme. Clearing a filter was only
+            possible by clicking the selected chip a second time — true, reversible
+            and undiscoverable, because nothing on screen says so. This says it.
+            It carries `aria-current` when nothing is filtered, so the row always
+            has exactly one current chip and a screen reader always has an anchor;
+            before, the unfiltered page had none. */}
+        <li>
+          <Link
+            className="chip"
+            href="?#results"
+            scroll={false}
+            aria-current={active === null ? 'true' : undefined}
+          >
+            Everything
+          </Link>
+        </li>
         {themes.map(({ theme }) => (
           <li key={theme}>
             <Link
