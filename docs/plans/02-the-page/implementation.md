@@ -377,9 +377,35 @@ modify `lib/ingest/config.ts`
   `if: always()`, so the site rebuilds whether or not an edition was written.
   Store the hook URL as a repository secret. **(human — creating the hook needs
   your Vercel account)**
-- [ ] **Step 2 — Prove it (POST-MERGE).** Dispatch the workflow with an invalid key, confirm
+- [x] **Step 2 — Prove it (POST-MERGE).** Dispatch the workflow with an invalid key, confirm
   no commit lands, confirm a Vercel deployment runs anyway, and confirm the
   stale banner appears on the deployed site.
+
+  Run [31318209446](https://github.com/paulocavaro/sentinel/actions/runs/31318209446),
+  9 August 14:21 UTC. Dispatched from a throwaway branch carrying an invalid key
+  in the workflow file rather than in the repository secret, so the real secret
+  was never touched and there was nothing to restore. The branch is deleted.
+
+  What it showed: 127 candidates fetched, the curation call rejected with
+  `invalid x-api-key`, **nothing written**. Commit and push skipped, so **no
+  commit landed** and the archive still holds exactly the two editions it had.
+  **`Rebuild the site` ran anyway — `Rebuild requested (HTTP 201)`** — and the
+  deployment it produced (14:21:28 UTC) is the one carrying the production
+  aliases. The failure step opened its tracking issue, since closed.
+
+  **The banner itself was not observed, and could not be.** It compares the
+  edition's date to today's, and today's edition had already published at 09:23;
+  the live page correctly shows Sunday 9 August with no banner. What was in
+  question was never whether the banner renders — `/states` frame 01 verifies
+  that at zero differing pixels, and `app/page.test.tsx` asserts it appears once
+  the newest edition is behind today — but whether a failed run reaches a build
+  at all. It does. The remaining gap is one observation on a morning the 09:23
+  run actually fails, which is a matter of waiting rather than of evidence.
+
+  A first dispatch without `--force` proved something worth writing down: the
+  run stopped at the existence check before curating, so the invalid key was
+  never used and the job stayed green. The failure path is only reachable on a
+  day with no edition yet, or with `--force`.
 - [x] **Step 3 — Record it in `docs/spec.md`**: the site rebuilds daily
   regardless of ingest outcome, and why.
 - [x] **Step 4 — Commit:** `feat(02): rebuild daily so a stale edition can say so`
