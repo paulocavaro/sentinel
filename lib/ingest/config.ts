@@ -16,6 +16,22 @@
 
 import type { Theme } from './types'
 
+/**
+ * When the edition closes, as the page prints it.
+ *
+ * A mirror of `.github/workflows/daily.yml`'s `cron: '23 9 * * *'` — 09:23 UTC,
+ * deliberately off the top of the hour — and the only copy of that time the
+ * site has. No field in an edition carries it: `generatedAt` is when the run
+ * happened, which is a minute or two later and drifts with GitHub's scheduler,
+ * so printing it would put a different closing time under every edition.
+ *
+ * It lives here, beside the rest of the pipeline's numbers, rather than in the
+ * component that renders it, because the promise in the masthead and the
+ * schedule that keeps it are one fact. Two copies is how the page ends up
+ * promising a time the job no longer runs at.
+ */
+export const CLOSING_TIME = '09:23'
+
 /** How far back a candidate may have been published. */
 export const WINDOW_HOURS = 48
 

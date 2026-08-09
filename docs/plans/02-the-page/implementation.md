@@ -178,7 +178,7 @@ regenerate both HTML files; create `design-refs/day.html`
 **Files:** create `app/components/Item.tsx`, `app/components/Plate.tsx`;
 modify `lib/ingest/config.ts`
 
-- [ ] **Step 1 — Implement.** The markup from `design-refs/home.html`, verbatim
+- [x] **Step 1 — Implement.** The markup from `design-refs/home.html`, verbatim
   in structure. The brief tier is `h3.head` (inline) + `span.dash` + **`span.run`**
   — the reference class is `run`; `dek-run` does not exist anywhere.
   - Small caps on titles and descriptions. **Never the byline**, which is already
@@ -193,8 +193,8 @@ modify `lib/ingest/config.ts`
   - Add `CLOSING_TIME = '09:23'` to `lib/ingest/config.ts`, beside the cron it
     mirrors. The reference prints it as a constant and no field carries it;
     putting it anywhere else lets the two drift.
-- [ ] **Step 2 — Gate**
-- [ ] **Step 3 — Commit:** `feat(02): the item`
+- [x] **Step 2 — Gate**
+- [x] **Step 3 — Commit:** `feat(02): the item`
 
 ---
 
