@@ -494,6 +494,20 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         letter-spacing: 0.083em; text-transform: uppercase; color: var(--accent);
         white-space: nowrap; margin-left: 0.25rem; }
 
+/* State 07's earlier pair. No new part: the question and the answer are .ask-q
+   and .ask-a exactly as state 05 sets them, and this only says they have been
+   read.
+   The tone step is to --prose, not to --machine. --machine is the layer the
+   machine stamped — a byline, a count — and an answer demoted into it would be
+   claiming to be furniture; --prose is where the model's editorial line already
+   lives, so a past answer stays what it was and only stops being the loud one.
+   The separator is the hairline, which is what this system puts between two
+   things of the same kind. --rule-strong opens a section, and a series of
+   questions is one thing, not a new one each time. */
+.ask-past { border-bottom: 1px solid var(--rule-hair); padding-bottom: 1.25rem; margin-bottom: 1.25rem; }
+.ask-past .ask-q { display: block; margin: 0; color: var(--prose); }
+.ask-past .ask-a { color: var(--prose); }
+
 /* ─── Catalogue chrome. Not part of the system. ──────────────────────────
        This belongs to /states alone — the states page frames each condition
        in a numbered card so it can be read as a catalogue. It is the states

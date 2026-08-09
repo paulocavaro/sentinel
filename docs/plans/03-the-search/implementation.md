@@ -533,23 +533,23 @@ code path production runs.
 The phase's only new visual state, and the rule is the one `/archive` broke and
 paid for: nothing is implemented before its reference exists.
 
-- [ ] **Step 1 — Add frame 07 to `build-states.mjs`**, titled *A question after
+- [x] **Step 1 — Add frame 07 to `build-states.mjs`**, titled *A question after
   a question*, with a one-paragraph note in the catalogue's voice. It is a stack
   of components that already exist: the earlier question and its answer above,
   in `--prose` rather than `--ink` so the live line is the one with weight, a
   hairline between the pairs, then the new `.ask-line`. No new colour, no new
   face, no new component — if it needs one, the design is wrong and stops here
   for a human.
-- [ ] **Step 2 — Regenerate** in the documented order: `node build-home.mjs`,
+- [x] **Step 2 — Regenerate** in the documented order: `node build-home.mjs`,
   `node build-home.mjs 2026-08-08`, then `node build-states.mjs`.
-- [ ] **Step 3 — Mirror it in `app/states/page.tsx`**, deriving its copy from a
+- [x] **Step 3 — Mirror it in `app/states/page.tsx`**, deriving its copy from a
   committed edition the way `fixtures.ts` derives every other frame. Invent no
   sentence a model did not write.
-- [ ] **Step 4 — Gate**
-- [ ] **Step 5 — loop-verify `states`** at both widths, both schemes, under
+- [x] **Step 4 — Gate**
+- [x] **Step 5 — loop-verify `states`** at both widths, both schemes, under
   software raster (`--disable-gpu`; without it the rasteriser paints the same
   WebP differently run to run).
-- [ ] **Step 6 — Commit:** `design(03): a question after a question`
+- [x] **Step 6 — Commit:** `design(03): a question after a question`
 
 ---
 

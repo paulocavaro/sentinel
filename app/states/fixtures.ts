@@ -1,6 +1,6 @@
 // The data behind the catalogue.
 //
-// Four of the six frames on `/states` need an edition, and the archive holds
+// Five of the seven frames on `/states` need an edition, and the archive holds
 // two: a complete twenty-item day and a complete thirty-item day, contiguous,
 // every item photographed. None of the four conditions the catalogue has to
 // show is in there as it stands — there is no thin edition, no gap in the
@@ -9,9 +9,11 @@
 // So the fixtures are **derived, never invented**. Every word of copy on that
 // page is a sentence a model actually wrote for a committed edition; what a
 // fixture does is *remove* — items, a photograph — or *relabel* — the date, the
-// dates around it. A hand-written seventeen-item edition would put copy on the
-// states page that no pipeline ever produced, and the state it demonstrates
-// would stop being a state of this product and start being a mock of one.
+// dates around it — or *quote*, which is what state 07's answer is: two real
+// descriptions, verbatim, each carrying the day its item ran. A hand-written
+// seventeen-item edition would put copy on the states page that no pipeline
+// ever produced, and the state it demonstrates would stop being a state of this
+// product and start being a mock of one.
 // `design-refs/build-states.mjs` derives its frames from the same two files in
 // the same way, which is what lets the two be compared at all.
 //
@@ -21,7 +23,7 @@
 // This is deliberately not `app/page.tsx`'s empty-archive branch: that one is
 // about a repository before its first ingest, which has no dates at all.
 
-import { shiftDays } from '@/lib/date'
+import { dayMonth, shiftDays } from '@/lib/date'
 import { readEdition } from '@/lib/edition'
 import type { Edition, EditionItem } from '@/lib/edition'
 
@@ -54,6 +56,19 @@ const MISSING_ARCHIVE = ['2026-08-02', '2026-08-04'] as const
 /** The two items state 04 frames — `build-states.mjs`'s `ed.items[3]` and `ed.items[1]`. */
 const WITH_PHOTO = 3
 const WITHOUT_PHOTO = 1
+
+/**
+ * The two items state 07's earlier answer rests on, in the order it names them.
+ *
+ * The same indices `build-states.mjs` reads, out of the same file. The two
+ * questions in that frame are the product's own voice and are written into the
+ * page; the answer is not, and could not be. An answer is a claim about what
+ * the archive holds, so a sentence composed for the catalogue would be the one
+ * place on this site where the panel is shown quoting something no edition ever
+ * carried — in the frame whose whole subject is a series of answers being
+ * trustworthy one after another.
+ */
+const FOLLOW_UP_ITEMS = [3, 8] as const
 
 async function source(date: string): Promise<Edition> {
   const edition = await readEdition(date)
@@ -128,4 +143,36 @@ export async function photographFixture(): Promise<{
   }
 
   return { withPhoto, withoutPhoto: { ...withoutPhoto, image: null } }
+}
+
+/** One sentence of an answer: what it says, and the day the item it rests on ran. */
+export type AnsweredSentence = { id: string; text: string; day: string }
+
+/**
+ * State 07 — the answer the reader has already been given, before they ask
+ * again.
+ *
+ * A sentence and a date, which is the whole shape of an answer here: the panel
+ * may not say anything it cannot hang on an item, and the citation is the item
+ * saying it. Both sentences come out of the same edition, so both days are the
+ * same day — which is the ordinary case and not a simplification. The date is
+ * formatted through `lib/date`, not written, so this frame prints the day the
+ * same way every other surface on the site prints it.
+ */
+export async function followUpFixture(): Promise<AnsweredSentence[]> {
+  const edition = await source(SAMPLE_DATE)
+  const day = dayMonth(edition.date)
+
+  return FOLLOW_UP_ITEMS.map((n) => {
+    const item = edition.items[n]
+
+    if (item === undefined) {
+      throw new Error(
+        `/states quotes item ${n} of content/days/${SAMPLE_DATE}.json, which holds ` +
+          `${edition.items.length}.`,
+      )
+    }
+
+    return { id: item.id, text: item.description, day }
+  })
 }

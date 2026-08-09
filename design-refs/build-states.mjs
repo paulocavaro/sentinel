@@ -2,6 +2,11 @@
 // when the day is not normal. The CSS is read out of home.html rather than
 // duplicated, so there is one source of truth and a state screen can never drift
 // from the page it describes.
+//
+// The whole document below is one template literal, so nothing written into it
+// — markup, CSS, or a comment inside either — may contain a backtick. A CSS
+// comment naming a class as `.ask-q` ends the string instead, and the failure
+// arrives as a ReferenceError pointing at the middle of a stylesheet.
 
 import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
@@ -58,6 +63,18 @@ const thin = { ...ed, date: THIN_DATE, items: ed.items.slice(0, 17) }
 // State 04's pair: a real card, and a real card with its photograph removed.
 const withPhoto = ed.items[3]
 const withoutPhoto = { ...ed.items[1], image: null }
+
+// State 07's earlier answer. Two items of the sample edition, their descriptions
+// verbatim, each followed by the day its item ran — which is the whole shape of
+// an answer from this archive. It is derived rather than typed because a
+// sentence invented for the catalogue would be the one place on the site where
+// the panel is shown quoting something no edition ever carried, and the frame
+// exists to show the panel telling the truth twice in a row.
+// `app/states/fixtures.ts` takes the same two indices out of the same file.
+const FOLLOW_UP = [3, 8]
+const answered = FOLLOW_UP.map(
+  (n) => `${esc(ed.items[n].description)} <span class="cite">${dayMonth(ed.date)}</span>`,
+).join('\n      ')
 
 const state = (n, title, why, body) => `
 <section class="state">
@@ -227,6 +244,26 @@ ${state(
     </div>`,
 )}
 
+${state(
+  '07',
+  'A question after a question',
+  'A second question is usually a fragment that means nothing on its own, so the pair it follows stays on the page rather than being cleared. The earlier question and its answer step back a tone and sit above a hairline; the live line keeps the full weight of ink, so reading the panel from the top is reading the series in order. Nothing here is new — it is the parts of 05, stacked.',
+  // The whole frame is 05's components in a different order. `.ask-q` is set as
+  // a block here rather than as the span it is inside `.ask-line`, because the
+  // pair that has been answered has no rule to sit on and no bar to sit beside
+  // — it is two lines of finished text. The hairline and the tone are the only
+  // two things `.ask-past` adds, and both are in the promoted block below.
+  `<div class="panel-static">
+      <p class="panel-label">Follow-up</p>
+      <div class="ask-past">
+        <p class="ask-q">What is happening at DeepMind?</p>
+        <p class="ask-a">${answered}</p>
+      </div>
+      <div class="ask-line"><span class="ask-q">Who is running it now?</span><span class="ask-bar"></span></div>
+      <p class="panel-note">Reading 2 editions</p>
+    </div>`,
+)}
+
 </div>
 
 <style>
@@ -243,10 +280,24 @@ ${state(
 .cite { font-family: var(--face-machine); font-size: 0.6875rem;
         letter-spacing: 0.083em; text-transform: uppercase; color: var(--accent);
         white-space: nowrap; margin-left: 0.25rem; }
+
+/* State 07's earlier pair. No new part: the question and the answer are .ask-q
+   and .ask-a exactly as state 05 sets them, and this only says they have been
+   read.
+   The tone step is to --prose, not to --machine. --machine is the layer the
+   machine stamped — a byline, a count — and an answer demoted into it would be
+   claiming to be furniture; --prose is where the model's editorial line already
+   lives, so a past answer stays what it was and only stops being the loud one.
+   The separator is the hairline, which is what this system puts between two
+   things of the same kind. --rule-strong opens a section, and a series of
+   questions is one thing, not a new one each time. */
+.ask-past { border-bottom: 1px solid var(--rule-hair); padding-bottom: 1.25rem; margin-bottom: 1.25rem; }
+.ask-past .ask-q { display: block; margin: 0; color: var(--prose); }
+.ask-past .ask-a { color: var(--prose); }
 </style>
 </body>
 </html>
 `
 
 writeFileSync(`${ROOT}/design-refs/states.html`, html)
-console.log('escrito: design-refs/states.html — 6 estados')
+console.log('written: design-refs/states.html — 7 states')
