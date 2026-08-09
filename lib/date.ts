@@ -68,6 +68,20 @@ export function editionDate(date: string, now: Date = new Date()): string {
 }
 
 /**
+ * `August 2026`. The archive index's month headings.
+ *
+ * Here rather than in `app/archive/page.tsx` because the noon-UTC parse and the
+ * explicit `timeZone: 'UTC'` are the whole subject of this module: a month
+ * formatted from a bare `new Date('2026-09-01')` reads *August* everywhere west
+ * of Greenwich, which is the same off-by-one as the edition date and one heading
+ * further from anyone noticing. The year is always printed — a month heading in
+ * a list that will eventually span years is not a place to economise.
+ */
+export function monthYear(date: string): string {
+  return format(date, { month: 'long', year: 'numeric' })
+}
+
+/**
  * The calendar neighbour, as a date string. The edition bar prints it when no
  * edition exists in that direction — present, not offered. Done in UTC so a
  * daylight-saving day, which is 23 or 25 hours long locally, is still one day.

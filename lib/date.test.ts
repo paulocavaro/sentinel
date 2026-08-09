@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 
-import { dayMonth, editionDate, shiftDays, weekdayOf } from './date'
+import { dayMonth, editionDate, monthYear, shiftDays, weekdayOf } from './date'
 
 // An edition date is a calendar day the pipeline wrote, not an instant. Every
 // bug this file exists to catch comes from treating it as an instant: the page
@@ -121,6 +121,22 @@ describe('dayMonth', () => {
     const now = new Date('2026-08-09T12:00:00Z')
     expect(dayMonth('2025-12-31', now)).toBe('31 December 2025')
   })
+})
+
+describe('monthYear', () => {
+  it('is the archive index’s month heading, always with the year', () => {
+    expect(monthYear('2026-08-08')).toBe('August 2026')
+    expect(monthYear('2026-08-31')).toBe('August 2026')
+  })
+
+  for (const tz of ZONES) {
+    // The month is the place this bug hides best: a first-of-the-month edition
+    // formatted from a local Date heads the list under the *previous* month
+    // west of Greenwich, one grouping key away from anyone noticing.
+    it(`does not slip a month on the first of the month in ${tz}`, () => {
+      expect(underTZ(tz, () => monthYear('2026-09-01'))).toBe('September 2026')
+    })
+  }
 })
 
 describe('shiftDays', () => {

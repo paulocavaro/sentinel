@@ -340,7 +340,7 @@ modify `lib/ingest/config.ts`
 
 **Screens:** day (web)
 
-- [ ] **Step 1 — Implement.** `generateStaticParams` over the edition dates.
+- [x] **Step 1 — Implement.** `generateStaticParams` over the edition dates.
   - **Validate the segment** — `/^\d{4}-\d{2}-\d{2}$/`, a real calendar date, and
     inside the archive's range. `dynamicParams` defaults to true, so without
     this `/day/banana` renders a server component at request time for an
@@ -352,10 +352,10 @@ modify `lib/ingest/config.ts`
     perfectly green build and dev server.
   - `NoEdition` is **not a 404**: a real day was asked for by name.
   - `/archive` lists every date by month, plain links.
-- [ ] **Step 2 — Gate**
-- [ ] **Step 3 — Look at `/day/2026-08-08`**, the pre-theme shape everything
+- [x] **Step 2 — Gate**
+- [x] **Step 3 — Look at `/day/2026-08-08`**, the pre-theme shape everything
   above was built to tolerate, against `design-refs/day.html`.
-- [ ] **Step 4 — Commit:** `feat(02): the archive`
+- [x] **Step 4 — Commit:** `feat(02): the archive`
 
 ---
 
