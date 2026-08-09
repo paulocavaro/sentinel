@@ -5,9 +5,14 @@ cost an afternoon to establish.
 
 ## The rule
 
-**Only `.github/workflows/deploy.yml` promotes `main`.** Vercel's automatic
-git deployment is turned off for `main` in `vercel.json`; every other branch
-still gets its preview as usual.
+**Nothing promotes `main` except a call to `VERCEL_DEPLOY_HOOK`, and exactly two
+things call it.** Vercel's automatic git deployment is turned off for `main` in
+`vercel.json`, so a push to `main` deploys nothing by itself; every other branch
+still gets its preview as usual. `deploy.yml` fires the hook for everything a
+human merges. `daily.yml` fires the same hook itself, under `if: always()`, after
+the ingest — whether or not it wrote an edition, which is the only way a stale
+edition can ever say it is stale. Two callers, one hook, one production build
+each.
 
 ```
 push / merge to main ──▶ deploy.yml ──▶ VERCEL_DEPLOY_HOOK ──▶ production
@@ -54,11 +59,29 @@ or any status that is not 200 or 201.
 
 ## Why the bot is skipped
 
-The daily ingest pushes its edition to `main` and then calls the hook itself.
-Without `if: github.actor != 'github-actions[bot]'` every published edition would
-deploy twice — once from that step, once from this workflow reacting to its push.
-Each path keeps exactly one caller: the ingest promotes its own edition, the
-workflow promotes everything a human merges.
+The daily ingest pushes its edition to `main` and then calls the hook itself, so
+`deploy.yml` carries `if: github.actor != 'github-actions[bot]'` to keep the
+ingest's edition on one path.
+
+**The guard is belt-and-braces, and the reason first written down here was
+probably wrong.** The claim was that without it every published edition would
+deploy twice. It would not. The ingest pushes with the workflow's own
+`GITHUB_TOKEN` — `actions/checkout` persists it, and `permissions: contents:
+write` is what lets the push through — and GitHub does not start a workflow run
+from an event that a `GITHUB_TOKEN` created. `deploy.yml`'s `on: push` would not
+fire for the bot at all, condition or no condition.
+
+That cannot be settled from this repository's own history yet, which is why it is
+stated as a mechanism rather than as a measurement. `deploy.yml` was added at
+18:57 on 9 August; the one bot commit on `main` predates it, so no bot push has
+landed while the workflow existed, and `gh run list --workflow=deploy.yml` shows
+four runs, every one of them from a human push.
+
+The condition stays. It costs nothing, and it states the rule locally instead of
+leaning on a platform behaviour that a `token:` added to the checkout step — a
+perfectly ordinary change — would silently reverse. Each path keeps exactly one
+caller: the ingest promotes its own edition, the workflow promotes everything a
+human merges.
 
 ## If production stops updating
 

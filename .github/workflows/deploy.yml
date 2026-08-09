@@ -37,11 +37,17 @@ jobs:
     timeout-minutes: 5
 
     # The daily ingest pushes the edition to `main` and then calls this same hook
-    # itself, under `if: always()`. Without this condition every published
-    # edition would deploy twice — once from that step and once from this
-    # workflow reacting to its push. Skipping the bot leaves each path with
-    # exactly one caller: the ingest promotes its own edition, and this workflow
-    # promotes everything a human merges.
+    # itself, under `if: always()`. This condition keeps that edition on one path.
+    #
+    # It is belt-and-braces, not the load-bearing thing it was first written as:
+    # the ingest pushes with the workflow's own GITHUB_TOKEN, and GitHub does not
+    # start a workflow run from an event a GITHUB_TOKEN created, so `on: push`
+    # would not fire for the bot in any case. It stays because it states the rule
+    # here rather than depending on that behaviour — a `token:` on the ingest's
+    # checkout step would reverse it silently. `docs/deploys.md` has the history.
+    #
+    # Either way each path keeps exactly one caller: the ingest promotes its own
+    # edition, and this workflow promotes everything a human merges.
     if: github.actor != 'github-actions[bot]'
 
     steps:

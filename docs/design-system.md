@@ -1,9 +1,9 @@
 # Sentinel — design system
 
-> Sentinel has one plane, two faces, eight colours, one interaction and a bottom.
-> Anything needing a ninth colour, a third face, a second plane, or a component
-> that opens is a change to the product, not to the design system, and goes back
-> to [`spec.md`](./spec.md) first.
+> Sentinel has one plane, two faces, nine colour roles, one interaction and a
+> bottom. Anything needing a tenth role, a third face, a second plane, or a
+> component that opens is a change to the product, not to the design system, and
+> goes back to [`spec.md`](./spec.md) first.
 
 The visual source of truth is [`design-refs/home.html`](../design-refs/home.html),
 [`design-refs/day.html`](../design-refs/day.html) and
@@ -36,10 +36,17 @@ is given.
 
 ## Colour
 
-Eight roles, one layer, no primitive ramp. Every token is a role in the edition
+Nine roles, one layer, no primitive ramp. Every token is a role in the edition
 and every role has exactly one job. There is deliberately no `--gray-500`: a
 scale beneath these would invite a component to reach past the role and pick a
 number.
+
+Nine roles across **eight distinct values**: `--rule-strong` carries `--ink`'s
+hex in both schemes. That is a coincidence of the current palette rather than a
+rule — *headline* and *opens a section* are two jobs that must be able to
+diverge, and the day the section rule wants to be lighter it becomes a ninth
+value without anything else moving. Nothing in the stylesheet or the test suite
+enforces the duplication, and nothing should; count roles, not hexes.
 
 | Token | Light | Dark | Contrast | Job |
 |---|---|---|---|---|
@@ -88,7 +95,17 @@ flip between three and four.
 | `feature` | text 600 | 1.3125rem | 1.2 | −0.012em |
 | `brief` | text 600 | 1.0625rem | 1.4 | — |
 | `dek` | text 400 | 0.9375rem | 1.6 | — |
-| `label` | machine 500 | 0.6875–0.75rem | 1.4 | 0.083em, uppercase |
+| `label` | machine 500 | 0.6875–0.75rem | 1.4 | 0.083em at both sizes, uppercase |
+
+**The label role has one tracking and three departures, each deliberate.**
+0.083em is the value at both sizes and in most places that use it — wordmark,
+byline, chip, day, panel title, skip link, citation, `.cat-title`. The three that
+differ: `.section-name` at 0.12em, because a section heading sits under a
+`--rule-strong` and is meant to read as a rule with words in it rather than as a
+label; `.promise`, `.close-next` and `.state-n` at 0.09em, all at the smaller
+0.6875rem; and `.ask-fab-word` at 0.06em, the one label set on a filled pill
+instead of on paper. Nothing enforces the default, so a fourth departure would
+arrive unnoticed — check this list before adding a machine-set uppercase rule.
 
 **Lead-to-tail ratio is 2.0 and must not exceed it.** Nothing in the measured
 sample does: FT, Economist, Guardian, Bloomberg and Techmeme all sit at or just
@@ -152,8 +169,13 @@ picture editor and these are twenty strangers' choices. The cost of the fix was
 that every photograph stopped being a photograph. The 1px `--edge` is what keeps
 a light image from bleeding into the paper.
 
-**About a third of items arrive with no usable image**, and that is a designed
-state, not a defect. See `states.html` 04.
+**Items arrive with no usable image often enough to design for**, and that is a
+designed state, not a defect. Measured across the committed archive on 9 August
+2026: **6 of the 20** items in the 8 August edition and **0 of the 30** in the 9
+August one — 6 of 50 overall, and the whole of it in one edition. Two editions
+are not a rate, which is the argument for designing the state rather than for
+designing to a number. See `states.html` 04, and `day.html`, which is kept
+precisely because it is the edition carrying the six.
 
 ## Depth
 
@@ -188,17 +210,28 @@ Three rules, more important than the tokens.
 
 | Component | Variants | Notable states |
 |---|---|---|
-| `Masthead` | today, archive, no-edition | — |
-| `EditionDate` | today, archive with year | — |
+| `Masthead` | today, archive, no-edition | carries the date itself, as `h1.editiondate` — there is no separate date component |
 | `EditionBar` | dates, all-editions | a direction with no edition keeps its tone, loses its arrow and hairline, and says so in words |
-| `ThemeNav` | — | derived from the items present, never hardcoded |
+| `ThemeFilter` | — | derived from the items present, never hardcoded |
 | `Item` | lead, feature, brief | rest, hover, active, focus-visible, **visited**, no-image, forced-colors |
-| `Plate` | lead 16:9, feature 3:2 | image errored → typographic fallback |
-| `Section` | — | absent when a theme has no items |
-| `EditionClose` | full, thin | the mark carries the real count |
+| `Plate` | lead 16:9, feature 3:2 | no image → **no element**; the headline takes the space through CSS. There is no fallback and no `onError` |
+| `Section` | — | absent when a theme has no items. A local function inside `Edition.tsx`, not its own module — it is markup for `lib/themes.ts`' grouping and has no life away from it |
+| `NoEdition` | absent, unreadable | two records, two sentences; the caller must say which, and there is no default |
+| `CloseBlock` | full, thin | the mark carries the real count |
 | `StaleBanner` | — | the only non-focus use of the accent |
 | `AskButton` | — | rest, hover, active, focus-visible |
-| `AskPanel` | — | idle, running, answered, **no result**, error |
+| `AskPanel` | — | idle, running, answered, **no result**, failed, **limited** |
+
+Names in this table are the exported names in `app/components/`. Two of them
+read as if they were something else and are not: the closing block is
+`CloseBlock`, exported from `EditionPage.tsx` rather than from a file of its own,
+and `Section` is a private function in `Edition.tsx`.
+
+`AskPanel`'s `limited` is the rate limit, and it has its own written sentence
+rather than borrowing `failed`'s: *"Too many questions from here. Try again in
+about N minutes"*, with the wait rounded up to whole minutes because a reader
+told "43 seconds" watches a clock and one told "shortly" learns nothing. It
+leaves nothing in the series — a question that was refused is not an exchange.
 
 **The block-link pattern is load-bearing and must not be reimplemented.** The
 whole row is the target, but the accessible name is the title plus its

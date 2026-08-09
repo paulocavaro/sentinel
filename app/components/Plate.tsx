@@ -1,7 +1,10 @@
 // The photograph, and the decision to render nothing at all without one.
 //
-// About a third of items arrive with no usable image, so the empty case is an
-// ordinary day rather than an exception. It renders **no element** — not an
+// The empty case is an ordinary day rather than an exception. It was written
+// here as "about a third of items", which was never measured: across the two
+// editions published so far it is six of fifty, and none of the thirty on
+// 9 August. The design does not depend on the rate — it depends on the case
+// existing at all — so the number is stated rather than guessed. It renders **no element** — not an
 // empty span, not a placeholder box — because `.item:not(:has(.plate)) .head`
 // and `.lead:not(:has(.plate)) .body` are what give the headline the space the
 // picture would have had, and `:has(.plate)` matches an empty `<span class=

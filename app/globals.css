@@ -6,7 +6,7 @@
    · Fix the gutter, fix the column, change only the count. The Guardian holds a
      20px gutter at every width and moves its column from 60 to 40 exactly once;
      the Washington Post holds 34/32 and only drops columns 20 → 16 → 12 → 10.
-   · One aspect ratio, four image sizes. The Guardian runs 1.25 at 620/460/220/98,
+   · One aspect ratio, three image sizes. The Guardian runs 1.25 at 620/460/220/98,
      The Athletic 1.50 at 600/453/162/118. A single thumbnail size across three
      tiers reads as a list of favicons.
    · Lead-to-tail type ratio never exceeds 2.0 anywhere in the sample, and line
@@ -360,8 +360,9 @@ body {
 .feature .head { font-size: 1.3125rem; line-height: 1.2; letter-spacing: -0.012em; }
 .brief .head   { font-size: 1.0625rem; line-height: 1.4; display: inline; }
 
-/* A feature with no photograph. About a third of items arrive without a usable
-   image, so this is an ordinary day rather than an exception, and the card is
+/* A feature with no photograph. Six of the fifty items published so far arrived
+   without a usable image, so this is an ordinary day rather than an exception,
+   and the card is
    not a card with a hole in it: the headline takes the space the picture would
    have had. One step up the same ladder, not a fourth size invented for the
    occasion — 1.3125 → 1.625rem, leading 1.2 → 1.16, tracking −0.012 → −0.016em

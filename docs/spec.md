@@ -14,22 +14,32 @@ Thirty items, five themes. Then the day ends.
 tail. An edition has thirty items and a bottom. Finishing it is possible, and
 that is the point.
 
-**Themes are a lens, not a section.** An item carries exactly one of `ai`,
-`world`, `games`, `science` or `culture`, and the edition is one ranked sequence
-across all five — not five lists stapled together. The reader's priority lives in
-how many items each theme may carry, so nothing is ever demoted for its theme.
-A theme with no news that day is simply absent, and that is a correct edition:
-the filter row is derived from the themes present in the day's items, never from
-a hardcoded list of five.
+**Ranked globally, presented by theme.** An item carries exactly one of `ai`,
+`world`, `games`, `science` or `culture`. Curation produces one ranked sequence
+across all five and `rank` is persisted that way, so nothing is ever demoted for
+its theme: the reader's priority lives in how many items each theme may carry,
+never in the order the themes are printed in. The page then *presents* that
+sequence grouped — rank 1 runs as the lead, and everything below it is dealt into
+`<section>`s in the fixed `THEMES` order of `lib/themes.ts`. Ranking and reading
+order are therefore two different things and deliberately so; on 9 August the
+rank-2 item opens the second section, tenth down the page. A theme with no news
+that day is simply absent, and that is a correct edition: the sections and the
+filter row are both derived from the themes present in the day's items, never
+from a hardcoded list of five.
 
 **Honest about its own limits.** Search answers only from what the archive
 actually contains. If nothing matches, the answer is "there is no story about
 that here" — never a plausible answer assembled from model knowledge. A news
 product that invents is worse than a news product that is silent.
 
-**Never publish broken.** If any step of the pipeline fails — fetch, model call,
-validation — nothing is written and yesterday's edition stays live, clearly
-marked as yesterday's. A stale edition is a fine outcome. A wrong one is not.
+**Never publish wrong.** A failed model call and a failed validation both abort
+the run: nothing is written, yesterday's edition stays live, and the page marks
+it as yesterday's. **Fetch is the deliberate exception.** Up to
+`MAX_SOURCE_FAILURES` sources — three of eighteen — may return nothing and the
+edition still publishes, because a flaky feed is not a broken pipeline and
+losing the day to one is the worse trade. Past three the pool is too thin to
+curate honestly and the run aborts with the count and the source names in its
+reason. A stale edition is a fine outcome. A wrong one is not.
 
 **Links out, does not republish.** Sentinel stores headlines, one-line
 descriptions and images. The article itself always opens at the source.
@@ -38,14 +48,21 @@ descriptions and images. The article itself always opens at the source.
 
 | Route | What it is |
 |---|---|
-| `/` | Today's edition: the day in one line, a filter row of the themes actually present, then thirty cards. One card per row on mobile. Tapping a card opens the original article in a new tab. |
-| `/day/[date]` | One day of the archive. Same layout, another date, with navigation between days. Every day the archive spans is a page, including the days that published nothing — those say so and offer the editions either side. |
+| `/` | Today's edition: the day in one line, a filter row of the themes actually present, then the day's items in order — up to thirty, and fewer when the day was thin or the edition predates the current target. One card per row on mobile. Tapping a card opens the original article in a new tab. |
+| `/day/[date]` | One day of the archive. Same layout, another date, with navigation between days. `/day/2026-08-08` runs twenty, from before the target rose. Every day the archive spans is a page, including the days that published nothing — those say so and offer the editions either side. |
 | `/archive` | The index: every edition there has been, grouped by month, newest first. It lists only the days that published, because a link to a day that ran nothing is a footnote rather than an entry. |
 | `/states` | The catalogue of the conditions that are not an ordinary day, rendered as a page so they cannot rot unseen. Not a reader's screen; it exists to be looked at when the design changes. |
+| `/_not-found` | Any address that is none of the above. Not a day the pipeline missed — that is `/day/[date]`, and it gets the archive's vocabulary — but an address the site never had. *No such page* stands where the date goes, and the one link points at the latest edition. `app/not-found.tsx`. |
+| the error boundary | Not an address: the surface Next renders in place of a route that threw. It names the failure, prints the digest so it can be found in the logs, and links to the latest edition. There is deliberately no retry control — every route here is prerendered, so a re-render produces the same payload and the same failure. `app/error.tsx`. |
 
-**Search is not a route.** Whether it was a full screen or a launcher pinned to
-the corner was left to the design phase, and the design phase chose the launcher:
-a button that opens a `<dialog>` over whichever screen the reader is on.
+The last two are reachable and hand-designed, which is why they are in this
+table rather than left to a framework default.
+
+**Search is not a screen.** It has a route — `POST /api/ask`, the one thing on
+this site that runs on demand — but no address a reader can visit. Whether the
+reader's end of it was a full screen or a launcher pinned to the corner was left
+to the design phase, and the design phase chose the launcher: a button that opens
+a `<dialog>` over whichever screen the reader is on.
 
 Answers cite the item and say which day it ran, and the day is a link to that
 day. A series holds at most three questions — a follow-up sends the earlier
@@ -56,9 +73,22 @@ the panel drops the series entirely.
 
 ### The card
 
-Image (or a designed fallback), publisher, publication time, title,
-description, theme. Nothing else. The fallback for an item without an image is
-typographic and generated in the component — never a grey placeholder box.
+Publisher, title, description, and a photograph when the item has one. Nothing
+else: `app/components/Item.tsx` renders those four things in all three tiers and
+no more.
+
+Two fields the card does *not* carry, both of which read as if it should.
+`publishedAt` is stored on every item and is read by no component — there is no
+`<time>` element inside an item anywhere in the served HTML. `theme` is not a
+card element either; it is the heading of the section the card sits in.
+
+**An item without an image gets no element at all** — not a placeholder box, and
+not a typographic fallback. `Plate` returns `null`, and
+`.item:not(:has(.plate)) .head` in the stylesheet is what hands the headline the
+space the picture would have had. That rule is why the component returns nothing
+rather than an empty wrapper: `:has(.plate)` matches an empty `<span
+class="plate">` exactly as happily as a full one. There is no `onError` either,
+so an image that 404s leaves a gap rather than falling back.
 
 ## Data
 
@@ -135,7 +165,7 @@ news by any reading, and Hacker News carries whatever was submitted.
 | NPR World | `feeds.npr.org/1004/rss.xml` | press | world |
 | Eurogamer | `eurogamer.net/feed` | press | games |
 | GamesIndustry.biz | `gamesindustry.biz/feed` | press | games |
-| Ars Technica | `arstechnica.com/science/feed/` | press | science |
+| Ars Technica Science | `arstechnica.com/science/feed/` | press | science |
 | Scientific American | `scientificamerican.com/platform/syndication/rss/` | press | science |
 | Quanta Magazine | `quantamagazine.org/feed/` | press | science |
 | Polygon | `polygon.com/rss/index.xml` | press | culture |
@@ -158,7 +188,13 @@ candidates for their own source kind later.
 
 ## Pipeline
 
-Runs daily at 09:00 via GitHub Actions.
+Runs daily at **09:23 UTC** via GitHub Actions — `cron: '23 9 * * *'` in
+`.github/workflows/daily.yml`, mirrored as `CLOSING_TIME` in
+`lib/ingest/config.ts` and printed by the masthead, the archive and the closing
+block. Deliberately off the top of the hour: `0 * * * *` is GitHub's
+highest-contention slot and runs scheduled there are routinely delayed or
+dropped. The edition is named for the UTC date, so the exact minute carries no
+editorial meaning.
 
 1. **Fetch** all sources in parallel. Three parsers total — RSS 2.0, Atom, and
    JSON — not one per source.
@@ -180,7 +216,8 @@ Runs daily at 09:00 via GitHub Actions.
 4. **Resolve images.** `media:content` → `media:thumbnail` → `enclosure` →
    `og:image` from the article page → `null`. Downloaded, resized, written to
    `public/img/`.
-5. **Curate.** One model call over the surviving set. Structured output: up to
+5. **Curate.** One model call over the surviving set, retried exactly once, so a
+   day costs one call or two and never more. Structured output: up to
    thirty ids ranked in one global sequence, one theme each, one editorial line
    each, topics, and the day's summary line. Each theme has a band — minima
    guarantee presence, maxima carry the reader's priority:
@@ -205,7 +242,10 @@ Runs daily at 09:00 via GitHub Actions.
    per-theme count is inside its band, with the minimum softened to what the
    candidates could actually supply. No empty fields. No URL absent from the
    fetched set. Failure aborts the run without writing.
-7. **Commit and push.** Vercel builds from the push.
+7. **Commit, push, then ask for a build.** The push on its own deploys nothing:
+   `vercel.json` turns Vercel's git deployment off for `main`. The job fires
+   `VERCEL_DEPLOY_HOOK` itself, under `if: always()`, and does not fail when the
+   hook does. `docs/deploys.md` is why there is only one way in.
 
 If fewer than thirty candidates survive, the edition publishes with what it has
 and records the shortfall. A thin news day is not a failure, and neither is a day
@@ -259,14 +299,24 @@ real address is known.
 ## Design
 
 Dark and light from the first version, not a later toggle. The design system is
-produced before implementation and documented in `docs/design-system.md`, with
-every value traceable to the approved screens.
+produced before implementation and documented in `docs/design-system.md`. Not
+every value in it is traceable to the approved screens — a number of them are
+measurements taken from a sample of ten editorial products instead — and that
+document says which is which rather than claiming one provenance for all of them.
 
-Twelve states are designed, not improvised: full edition, yesterday's edition
-(pipeline failed), a day the pipeline never wrote, a day whose edition is on
-disk and cannot be read, an edition missing one or more themes, item without an
-image, search idle, search running, search answering with citations, search with
-no result, a question after a question, archive navigation.
+**Eight states have a frame on `/states`**, which is the catalogue and the reason
+they cannot rot unseen: 01 yesterday's edition still live, 02 a thin day, 03 a
+day with no edition, 04 an item with no photograph, 05 the panel running and
+answered, 06 asking about something that is not here, 07 a question after a
+question, 08 a day whose edition cannot be read. `design-refs/states.html`
+carries the same eight in the same order, and `app/not-found.tsx` counts them the
+same way.
+
+What the catalogue does not frame is designed in place, because each of these is
+a whole page or a component's own copy rather than a condition worth showing
+beside another: the full edition, an edition missing one or more themes, archive
+navigation, no such page, the error boundary, and the panel's `failed` and
+`limited` states.
 
 The two no-edition days are two states and not one. A day that was never
 written and a day whose file failed validation look identical to the loader
@@ -299,7 +349,7 @@ so they are decisions rather than oversights.
 | Editions as JSON files in git | Fine into the thousands; slow clones eventually | Any database, or the same files behind object storage |
 | Search index built in memory at cold start | Fine at 30 items/day for years | A hosted index once the corpus grows large |
 | Static build per push | One build per day is trivial | Incremental Static Regeneration, or serving the archive dynamically |
-| Curation as one model call | Bounded by the context window | Cluster first, then curate per cluster |
+| Curation as a single model call, plus one retry | Bounded by the context window | Cluster first, then curate per cluster |
 
 None of these are load-bearing for the current scale, and each has an obvious
 replacement. The cheapest option was chosen on purpose.
@@ -310,8 +360,10 @@ Next.js 16 (App Router, static by default), React 19, TypeScript, plain CSS in
 one stylesheet, Vercel AI SDK, MiniSearch, deployed on Vercel. GitHub Actions
 runs the daily pipeline. One secret: the model API key.
 
-There is no CSS framework. The design system is eight colours, two typefaces and
-one interaction, and `app/globals.css` is the design reference's own stylesheet
+There is no CSS framework. The design system is nine colour roles across eight
+distinct values — `--rule-strong` deliberately carries `--ink`'s hex, and nothing
+enforces that — two typefaces and one interaction, and `app/globals.css` is the
+design reference's own stylesheet
 ported with its class names intact — so the implementation and the visual gate's
 reference are the same document in two places rather than two dialects of one
 design.

@@ -237,7 +237,7 @@ ${state(
 ${state(
   '04',
   'An item with no photograph',
-  'Roughly a third of items arrive without a usable image. The card is not a card with a hole in it — it is a card whose headline takes the space the picture would have had. The rhythm that produces is different every day and derived entirely from the day’s real data.',
+  'Six of the fifty items published so far arrived without a usable image — six of twenty on 8 August, none of thirty on 9 August. Two editions are not a rate, and the rate is not the point: the card is not a card with a hole in it, it is a card whose headline takes the space the picture would have had. The rhythm that produces is different every day and derived entirely from the day’s real data.',
   // The right-hand card carries no .plate, so the promotion comes from
   // `.feature:not(:has(.plate)) .head` in the stylesheet. It used to be an
   // inline font-size here, which meant the reference showed a rule the

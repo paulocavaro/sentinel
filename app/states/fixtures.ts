@@ -161,11 +161,11 @@ export const unreadableFixture: { date: string; dates: readonly string[] } = {
  * State 04 — a card with a photograph beside a card without one.
  *
  * The second item is a real item with its `image` set to null, which is the
- * same construction the reference makes and the honest one: about a third of
- * every day's items arrive this way, the field is nullable in the pipeline's
- * own type, and the alternative — the one item in the archive that happens to
- * have no picture — would tie the frame to whichever day that item was
- * published on.
+ * same construction the reference makes and the honest one: six of the fifty
+ * items published so far arrived this way, the field is nullable in the
+ * pipeline's own type, and the alternative — the one item in the archive that
+ * happens to have no picture — would tie the frame to whichever day that item
+ * was published on.
  */
 export async function photographFixture(): Promise<{
   withPhoto: EditionItem

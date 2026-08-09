@@ -168,7 +168,7 @@ export default async function States() {
       <State
         n="04"
         title="An item with no photograph"
-        why="Roughly a third of items arrive without a usable image. The card is not a card with a hole in it — it is a card whose headline takes the space the picture would have had. The rhythm that produces is different every day and derived entirely from the day’s real data."
+        why="Six of the fifty items published so far arrived without a usable image — six of twenty on 8 August, none of thirty on 9 August. Two editions are not a rate, and the rate is not the point: the card is not a card with a hole in it, it is a card whose headline takes the space the picture would have had. The rhythm that produces is different every day and derived entirely from the day’s real data."
       >
         {/* Two columns rather than the grid's four, because the frame is 904px
             wide and the point of the state is the pair. The wrapper is

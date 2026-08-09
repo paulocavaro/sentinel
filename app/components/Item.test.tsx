@@ -125,7 +125,7 @@ describe('Item', () => {
     })
   })
 
-  // About a third of every day's items arrive without a photograph, so this is
+  // Six of the fifty items published so far arrived without a photograph, so this is
   // an ordinary day rather than an exception. No element at all — not an empty
   // span — because `.item:not(:has(.plate)) .head` is what gives the headline
   // the space the picture would have had, and `:has(.plate)` matches an empty

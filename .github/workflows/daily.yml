@@ -1,7 +1,9 @@
 # The daily edition.
 #
-# One job, run once a day, that curates the day and commits the result. Vercel
-# builds from the push; nothing here deploys anything.
+# One job, run once a day, that curates the day, commits the result and then asks
+# for a production build. The push does NOT build anything on its own: `vercel.json`
+# turns Vercel's git deployment off for `main`, so the "Rebuild the site" step below
+# is what reaches production, and it runs under `always()`. See `docs/deploys.md`.
 #
 # Three things in this file are load-bearing and easy to "simplify" back into
 # bugs. Each is commented at the step that carries it:
