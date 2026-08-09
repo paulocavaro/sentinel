@@ -233,14 +233,6 @@ body {
 .panel-input::placeholder { color: var(--machine); }
 .panel-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .panel-note { font-size: 0.875rem; line-height: 1.55; color: var(--machine); margin: 1rem 0 0; }
-.panel-examples { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
-.example {
-  width: 100%; text-align: left; font-family: var(--face-text);
-  font-size: 0.9375rem; line-height: 1.45; color: var(--prose);
-  background: transparent; border: 0; border-top: 1px solid var(--rule-hair);
-  padding: 0.75rem 0; cursor: pointer; min-height: 44px;
-}
-.example:hover { color: var(--ink); }
 
 /* ─── The lead ───────────────────────────────────────────────────────────── */
 
@@ -740,11 +732,6 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
       <label class="panel-label" for="q">Ask about anything that has run in an edition.</label>
       <input class="panel-input" id="q" type="text" placeholder="What did OpenAI ship this week?" autocomplete="off">
       <p class="panel-note">Answers cite the item and the day it ran. If nothing here matches, it says so rather than inventing one.</p>
-      <ul class="panel-examples">
-        <li><button type="button" class="example">Everything about the Strait of Hormuz</button></li>
-        <li><button type="button" class="example">What has DeepMind announced?</button></li>
-        <li><button type="button" class="example">Games news from this week</button></li>
-      </ul>
     </div>
   </dialog>
 

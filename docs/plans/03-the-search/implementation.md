@@ -562,21 +562,21 @@ paid for: nothing is implemented before its reference exists.
 
 **Screens:** home (both), day (both)
 
-- [ ] **Step 1 — Remove `.panel-examples` and `.example`** from
+- [x] **Step 1 — Remove `.panel-examples` and `.example`** from
   `build-home.mjs`'s stylesheet and the `<ul class="panel-examples">` block from
   its panel markup, and the same two rules from `app/globals.css`. Both files or
   neither: they are deliberately the same document in two places, and removing
   from one breaks the identity that makes the visual gate worth running.
-- [ ] **Step 2 — Restore the reference's placeholder.** With a live field the
+- [x] **Step 2 — Restore the reference's placeholder.** With a live field the
   panel no longer says *"Not built yet"*; `build-home.mjs` has the real one.
-- [ ] **Step 3 — Regenerate all three references**, in the documented order.
-- [ ] **Step 4 — Gate**
-- [ ] **Step 5 — loop-verify `home` and `day`.** Expected: zero differing
+- [x] **Step 3 — Regenerate all three references**, in the documented order.
+- [x] **Step 4 — Gate**
+- [x] **Step 5 — loop-verify `home` and `day`.** Expected: zero differing
   pixels. The removed rules only ever applied inside a closed `<dialog>`, which
   is `display: none` and never in a screenshot — so a difference here means
   something else moved, and the maker stops rather than accepting a new
   baseline.
-- [ ] **Step 6 — Commit:** `design(03): drop the example questions`
+- [x] **Step 6 — Commit:** `design(03): drop the example questions`
 
 ---
 

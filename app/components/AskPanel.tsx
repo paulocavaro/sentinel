@@ -19,16 +19,16 @@
 // breaking its own honesty principle in the one component the principle is
 // named after. Disabled, it cannot accept what it cannot answer.
 //
-// **The reference's three example questions are not rendered this phase.** In
-// `design-refs/home.html` they are `<button class="example">` whose only job is
-// to put their text into the field; with no field to fill they have no job.
-// Neither of the other two shapes survives contact: as `disabled` buttons they
-// look exactly like live ones, because `.example` has no disabled state and
-// author `color`/`cursor` beat the UA's, so they would be controls that look
-// pressable and are not; as plain text they still inherit `.example`'s
-// `cursor: pointer` and hover shift, which is the same lie one step quieter.
-// `.example`'s CSS stays in the stylesheet for phase 03, which will render them
-// for real.
+// **The reference's three example questions are gone — from the design, not
+// only from here.** Phase 02 did not render them because their only job was to
+// put their text into a field that could do nothing with it. Phase 03 dropped
+// them outright rather than wiring them up: three questions written by hand when
+// the archive held two editions age, fixed, into a product whose first act is to
+// say it does not know, and a reader who has opened this panel already knows
+// what they want. The `<ul class="panel-examples">` block and the
+// `.panel-examples` and `.example` rules left `design-refs/build-home.mjs` and
+// `app/globals.css` in the same commit, so the two copies of that stylesheet
+// remain one document.
 //
 // The same argument decides the placeholder. `.panel-input` has no disabled
 // state — author `color` and `background` beat the UA's, and adding a rule
