@@ -201,9 +201,12 @@ Three rules, more important than the tokens.
 | `AskPanel` | — | idle, running, answered, **no result**, error |
 
 **The block-link pattern is load-bearing and must not be reimplemented.** The
-whole row is the target, but the accessible name is the title alone — without it
-a screen reader announces roughly forty words per card. Cost: the description is
-not selectable. Accepted.
+whole row is the target, but the accessible name is the title plus its
+destination — never the description. Without that boundary a screen reader
+announces roughly forty words per card, beginning with a publisher and a
+timestamp; with it, the announcement is the headline and where the tap goes,
+which is the decision the reader is actually making. Cost: the description is not
+selectable. Accepted.
 
 **The theme row is derived from the edition's items.** A theme with no supply is
 a correct edition, so hardcoding five chips would render a control that filters

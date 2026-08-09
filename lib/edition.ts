@@ -128,6 +128,15 @@ function toEdition(value: unknown, date: string): Edition | null {
 
   if (readable.length === 0) return null
 
+  // Whole file or nothing, the same rule every malformation above takes. A
+  // partial drop is the one failure here that lies rather than breaks: thirty
+  // items minus one unreadable renders twenty-nine, and the masthead then
+  // asserts an editorial fact that is false — "29 items · a thin day", with a
+  // closing sentence about a thin window. The window was fine; the file is
+  // damaged. Losing the day to NoEdition is the honest outcome, and a partially
+  // corrupt edition is a pipeline bug that should be loud.
+  if (readable.length !== items.length) return null
+
   return { date, generatedAt, summary, targetCount, items: readable }
 }
 

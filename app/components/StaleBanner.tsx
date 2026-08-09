@@ -32,7 +32,11 @@ export function StaleBanner({ edition, nextRun }: { edition: Edition; nextRun: s
       <p className="stale-what">{`You are reading ${editionDate(edition.date)}.`}</p>
       <p className="stale-why">
         {'Today’s edition did not build. The next run is '}
-        <time dateTime={`${nextRun}T${CLOSING_TIME}`}>{`${CLOSING_TIME} tomorrow`}</time>.
+        {/* The Z is load-bearing. Without a designator this is a local
+            date-and-time string, and the value is UTC — so the attribute the
+            <time> element exists to provide would be up to fourteen hours off
+            while the visible words stayed right. */}
+        <time dateTime={`${nextRun}T${CLOSING_TIME}Z`}>{`${CLOSING_TIME} tomorrow`}</time>.
       </p>
     </div>
   )
