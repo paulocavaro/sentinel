@@ -52,8 +52,8 @@
 > latest edition and `day.html` from the date given on argv, so the difference
 > between them is entirely the data.
 >
-> `states` is the catalogue of the six conditions that are not an ordinary day,
-> verified as a page in its own right so those states cannot rot unseen.
+> `states` is the catalogue of the seven conditions that are not an ordinary
+> day, verified as a page in its own right so those states cannot rot unseen.
 
 ## End of phase
 - qa: http://localhost:3000

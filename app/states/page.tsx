@@ -1,8 +1,8 @@
 // /states — the catalogue of every condition the edition can be in that is not
 // an ordinary day.
 //
-// It exists so those states cannot rot unseen. Four of the six are reachable in
-// production only when something goes wrong — the job fails, the window is
+// It exists so those states cannot rot unseen. Four of the seven are reachable
+// in production only when something goes wrong — the job fails, the window is
 // thin, a day was never written, an item arrives without a picture — which
 // means they are the four nobody looks at until the morning they are the only
 // thing on the site. Here they are all on one page, at 390 and at 1100, in both
@@ -15,13 +15,13 @@
 // mirrored into a second set of markup that agrees with the reference and no
 // longer with the site. What is hand-written is the catalogue chrome — `.cat`,
 // `.state`, `.state-frame` — which belongs to this route alone and to no
-// product surface, and the two `.panel-static` blocks, which have no component
-// behind them yet (see states 05 and 06 below).
+// product surface, and the `.panel-static` blocks, which have no component
+// behind them yet (see states 05, 06 and 07 below).
 //
 // The data is `./fixtures`, derived from the two committed editions.
 
 import type { Metadata } from 'next'
-import type { ReactNode } from 'react'
+import { Fragment, type ReactNode } from 'react'
 
 import { CloseBlock } from '@/app/components/EditionPage'
 import { Item } from '@/app/components/Item'
@@ -29,7 +29,13 @@ import { Masthead } from '@/app/components/Masthead'
 import { NoEdition } from '@/app/components/NoEdition'
 import { StaleBanner } from '@/app/components/StaleBanner'
 
-import { missingFixture, photographFixture, staleFixture, thinFixture } from './fixtures'
+import {
+  followUpFixture,
+  missingFixture,
+  photographFixture,
+  staleFixture,
+  thinFixture,
+} from './fixtures'
 
 export const metadata: Metadata = {
   title: 'States',
@@ -43,7 +49,7 @@ export const metadata: Metadata = {
  *
  * `.state-why` is prose about the design rather than product copy, which is why
  * it is written here in full and not derived from anything. The visual gate
- * compares text, so these six paragraphs are `design-refs/build-states.mjs`'s,
+ * compares text, so these seven paragraphs are `design-refs/build-states.mjs`'s,
  * word for word.
  */
 function State({
@@ -70,10 +76,11 @@ function State({
 }
 
 export default async function States() {
-  const [stale, thin, photograph] = await Promise.all([
+  const [stale, thin, photograph, answered] = await Promise.all([
     staleFixture(),
     thinFixture(),
     photographFixture(),
+    followUpFixture(),
   ])
 
   return (
@@ -132,19 +139,20 @@ export default async function States() {
         </div>
       </State>
 
-      {/* ── States 05 and 06 belong to phase 03. ────────────────────────────
-          The conversational search is out of scope for this phase: there is no
-          component behind Running, Answered or No result, and the panel that
-          ships today (`AskPanel`) is a disabled field that says the search
-          arrives next phase. So these two frames are the reference's static
-          markup, held here unchanged, and the copy in them is a mock of an
-          answer rather than an answer.
-          They are kept rather than dropped because they are the two states the
+      {/* ── States 05, 06 and 07 are the panel, and it is being built. ───────
+          There is still no component behind Running, Answered, No result or
+          Follow-up: `AskPanel` becomes live at the end of phase 03, and until
+          it does these frames are the reference's static markup, held here
+          unchanged.
+          They are kept rather than dropped because they are the states the
           product's central claim rests on — that it answers from the archive
           and says so when the archive has nothing — and a catalogue that
           silently skipped them would make that claim easy to forget while it is
-          being built. When phase 03 lands, the components replace this markup
-          and `design-refs/build-states.mjs` is regenerated with them.
+          being built. When the panel lands, the component replaces this markup
+          and `design-refs/build-states.mjs` is regenerated with it.
+          05 and 06 still carry a mock of an answer, written before the search
+          existed. 07 does not, and no frame written from here on will: its
+          sentences come out of a committed edition through `followUpFixture`.
           ──────────────────────────────────────────────────────────────────── */}
       <State
         n="05"
@@ -180,6 +188,37 @@ export default async function States() {
           <p className="ask-a">
             {'Nothing about the Formula One season has run in an edition. The archive holds 2 editions, from 8 August.'}
           </p>
+        </div>
+      </State>
+
+      <State
+        n="07"
+        title="A question after a question"
+        why="A second question is usually a fragment that means nothing on its own, so the pair it follows stays on the page rather than being cleared. The earlier question and its answer step back a tone and sit above a hairline; the live line keeps the full weight of ink, so reading the panel from the top is reading the series in order. Nothing here is new — it is the parts of 05, stacked."
+      >
+        {/* The two questions are written: they are the product's voice, and a
+            follow-up has to be a real fragment — *who is running it now* — for
+            the frame to show anything at all. The answer between them is not
+            written. It is two descriptions out of the 9 August edition, each
+            with the day it ran, exactly as `build-states.mjs` takes them. */}
+        <div className="panel-static">
+          <p className="panel-label">Follow-up</p>
+          <div className="ask-past">
+            <p className="ask-q">What is happening at DeepMind?</p>
+            <p className="ask-a">
+              {answered.map((sentence, n) => (
+                <Fragment key={sentence.id}>
+                  {`${n === 0 ? '' : ' '}${sentence.text} `}
+                  <span className="cite">{sentence.day}</span>
+                </Fragment>
+              ))}
+            </p>
+          </div>
+          <div className="ask-line">
+            <span className="ask-q">Who is running it now?</span>
+            <span className="ask-bar" />
+          </div>
+          <p className="panel-note">Reading 2 editions</p>
         </div>
       </State>
     </div>

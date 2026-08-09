@@ -230,14 +230,6 @@ body {
 .panel-input::placeholder { color: var(--machine); }
 .panel-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .panel-note { font-size: 0.875rem; line-height: 1.55; color: var(--machine); margin: 1rem 0 0; }
-.panel-examples { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
-.example {
-  width: 100%; text-align: left; font-family: var(--face-text);
-  font-size: 0.9375rem; line-height: 1.45; color: var(--prose);
-  background: transparent; border: 0; border-top: 1px solid var(--rule-hair);
-  padding: 0.75rem 0; cursor: pointer; min-height: 44px;
-}
-.example:hover { color: var(--ink); }
 
 /* ─── The lead ───────────────────────────────────────────────────────────── */
 
@@ -632,6 +624,25 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
     </div></div>
 </section>
 
+
+<section class="state">
+  <div class="state-head">
+    <p class="state-n">07</p>
+    <h2 class="state-title">A question after a question</h2>
+    <p class="state-why">A second question is usually a fragment that means nothing on its own, so the pair it follows stays on the page rather than being cleared. The earlier question and its answer step back a tone and sit above a hairline; the live line keeps the full weight of ink, so reading the panel from the top is reading the series in order. Nothing here is new — it is the parts of 05, stacked.</p>
+  </div>
+  <div class="state-frame"><div class="panel-static">
+      <p class="panel-label">Follow-up</p>
+      <div class="ask-past">
+        <p class="ask-q">What is happening at DeepMind?</p>
+        <p class="ask-a">Demis Hassabis is stepping back from Google DeepMind's helm, fueling concern the lab is losing research independence to commercial pressure. <span class="cite">9 August</span>
+      Google DeepMind disbanded its AlphaFold team after largely solving protein structure prediction, handing the torch to outside researchers. <span class="cite">9 August</span></p>
+      </div>
+      <div class="ask-line"><span class="ask-q">Who is running it now?</span><span class="ask-bar"></span></div>
+      <p class="panel-note">Reading 2 editions</p>
+    </div></div>
+</section>
+
 </div>
 
 <style>
@@ -648,6 +659,20 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
 .cite { font-family: var(--face-machine); font-size: 0.6875rem;
         letter-spacing: 0.083em; text-transform: uppercase; color: var(--accent);
         white-space: nowrap; margin-left: 0.25rem; }
+
+/* State 07's earlier pair. No new part: the question and the answer are .ask-q
+   and .ask-a exactly as state 05 sets them, and this only says they have been
+   read.
+   The tone step is to --prose, not to --machine. --machine is the layer the
+   machine stamped — a byline, a count — and an answer demoted into it would be
+   claiming to be furniture; --prose is where the model's editorial line already
+   lives, so a past answer stays what it was and only stops being the loud one.
+   The separator is the hairline, which is what this system puts between two
+   things of the same kind. --rule-strong opens a section, and a series of
+   questions is one thing, not a new one each time. */
+.ask-past { border-bottom: 1px solid var(--rule-hair); padding-bottom: 1.25rem; margin-bottom: 1.25rem; }
+.ask-past .ask-q { display: block; margin: 0; color: var(--prose); }
+.ask-past .ask-a { color: var(--prose); }
 </style>
 </body>
 </html>

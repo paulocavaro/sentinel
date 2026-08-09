@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-// A 404 is not one of the six designed states. It is not a day the pipeline
+// A 404 is not one of the seven designed states. It is not a day the pipeline
 // missed — that is NoEdition, which is a real date and gets the archive's
 // vocabulary — it is an address that was never part of the site. It borrows the
 // shape of states.html 03 all the same: the masthead says what is true in the

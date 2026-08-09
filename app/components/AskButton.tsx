@@ -22,8 +22,13 @@ import { AskPanel, ASK_PANEL_ID } from './AskPanel'
  * `position: fixed`, so the caller places this wherever it reads best in the
  * document order — `EditionPage` puts it after the closing block, which is
  * where a reader who has finished the day would look for it.
+ *
+ * @param editions  how many editions the archive holds. The panel's running note
+ *   is the reference's "Reading 2 editions", and the browser has no way to know
+ *   the number — but every caller is a Server Component that already has
+ *   `listEditionDates()` in hand, so it is a prop rather than a second fetch.
  */
-export function AskButton() {
+export function AskButton({ editions }: { editions: number }) {
   const panel = useRef<HTMLDialogElement>(null)
 
   return (
@@ -46,7 +51,7 @@ export function AskButton() {
         <span className="ask-fab-word">Ask</span>
         <span className="sr-only"> this archive</span>
       </button>
-      <AskPanel ref={panel} />
+      <AskPanel ref={panel} editions={editions} />
     </>
   )
 }

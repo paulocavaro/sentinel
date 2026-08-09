@@ -3,7 +3,8 @@
 A daily edition of AI, world, games, science and culture news. Every morning a
 pipeline reads eighteen sources, a model picks the thirty items that matter,
 ranks them and files each under one theme, and the result is committed to this
-repository as a dated JSON file. The site is static and serves the day.
+repository as a dated JSON file. Every page is static; the one thing that runs on
+demand is the search.
 
 Thirty items, five themes. Then the day ends.
 
@@ -38,11 +39,20 @@ descriptions and images. The article itself always opens at the source.
 | Route | What it is |
 |---|---|
 | `/` | Today's edition: the day in one line, a filter row of the themes actually present, then thirty cards. One card per row on mobile. Tapping a card opens the original article in a new tab. |
-| `/day/[date]` | The archive. Same layout, another date, with navigation between days. |
-| `/ask` | Conversational search across every edition. Answers cite the item and say which day it ran. No conversation history — each question starts clean. |
+| `/day/[date]` | One day of the archive. Same layout, another date, with navigation between days. Every day the archive spans is a page, including the days that published nothing — those say so and offer the editions either side. |
+| `/archive` | The index: every edition there has been, grouped by month, newest first. It lists only the days that published, because a link to a day that ran nothing is a footnote rather than an entry. |
+| `/states` | The catalogue of the conditions that are not an ordinary day, rendered as a page so they cannot rot unseen. Not a reader's screen; it exists to be looked at when the design changes. |
 
-Whether `/ask` is a full screen or a launcher pinned to the corner is a design
-decision, resolved in the design phase rather than here.
+**Search is not a route.** Whether it was a full screen or a launcher pinned to
+the corner was left to the design phase, and the design phase chose the launcher:
+a button that opens a `<dialog>` over whichever screen the reader is on.
+
+Answers cite the item and say which day it ran, and the day is a link to that
+day. A series holds at most three questions — a follow-up sends the earlier
+*questions* and never an earlier answer, so every answer is grounded in a fresh
+search of the archive rather than in a transcript, and there is no field a forged
+answer could arrive in. The fourth question starts a clean series, and closing
+the panel drops the series entirely.
 
 ### The card
 
@@ -222,14 +232,29 @@ files each under one theme and writes one line for each. It never writes article
 bodies and never invents an item: its output is a set of ids drawn from the
 input, with themes drawn from each item's allowlist, both enforced by validation.
 
-**Search** (`/ask`, runtime). A local MiniSearch index over every committed
-edition, exposed to the model as a `searchNews` tool. Every claim in an answer
-cites an item the tool returned, with the date it ran. When the tool returns
-nothing, the answer says so and stops.
+**Search** (`POST /api/ask`, runtime). A local MiniSearch index over every
+committed edition, built once per instance and exposed to the model as a
+`searchNews` tool. The model returns sentences carrying item ids, never prose
+with markers, and every id is checked against what the tool actually returned on
+that call. An answer carrying one id from anywhere else is discarded whole rather
+than repaired, because a complete-looking answer minus one citation reads as a
+complete answer. Each surviving sentence cites its items with the date they ran.
+When the searches turn up nothing, the answer says so and stops.
 
-Cost is bounded structurally rather than by instruction: the tool returns at
-most eight items, there is no conversation history, and search runs on the
-smallest model that handles the task.
+Cost is bounded structurally rather than by instruction: the tool returns at most
+eight items per search, the tool loop stops after four steps, a series carries at
+most three questions and never an answer, and the route refuses more than ten
+questions per ten minutes from one caller. The model is Sonnet 5 at medium
+effort — the dial this turns down is effort, not model size.
+
+**The rate limit is a speed bump, not a security control**, and this says so
+because a spec that overclaims a protection is worse than one that omits it. The
+caller is identified by a request header, so anyone willing to send a different
+value gets a fresh allowance. The counters live in one instance's memory, so a
+second instance counts from zero and a recycled instance forgets what it held. It
+stops a runaway loop and casual cost, which is what it was added for; anything
+that has to actually hold belongs at the platform edge, where the connection's
+real address is known.
 
 ## Design
 
@@ -237,10 +262,10 @@ Dark and light from the first version, not a later toggle. The design system is
 produced before implementation and documented in `docs/design-system.md`, with
 every value traceable to the approved screens.
 
-Nine states are designed, not improvised: full edition, yesterday's edition
+Ten states are designed, not improvised: full edition, yesterday's edition
 (pipeline failed), an edition missing one or more themes, item without an image,
 search idle, search running, search answering with citations, search with no
-result, archive navigation.
+result, a question after a question, archive navigation.
 
 The missing-theme state is the one most easily got wrong. A theme with no supply
 is a correct edition, so the filter row is built from the themes present in the
@@ -252,7 +277,8 @@ day's items — a chip that filters to zero cards must not be renderable.
 - Comments, reactions, sharing
 - Full article text, offline reading, a reader mode
 - Real-time updates — one edition per day is the product
-- Conversation history in search
+- Conversation history in search beyond a series of three questions: no stored
+  session, no transcript that outlives the panel, and no answer ever sent back
 
 ## Scalability and known debt
 
@@ -282,5 +308,5 @@ ported with its class names intact — so the implementation and the visual gate
 reference are the same document in two places rather than two dialects of one
 design.
 
-The site has exactly one runtime route. Everything else is generated at build
-time from files in this repository.
+The site has exactly one runtime route, `POST /api/ask`. Everything else is
+generated at build time from files in this repository.
