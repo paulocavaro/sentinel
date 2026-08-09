@@ -32,15 +32,21 @@
 > Until then loop-verify runs in REVIEW MODE against `spec_docs`.
 
 ## Screens map
-| screen | web route     | reference                  |
-|--------|---------------|----------------------------|
-| home   | /             | design-refs/home.html      |
-| day    | /day/[date]   | design-refs/day.html       |
-| ask    | /ask          | design-refs/ask.html       |
+| screen | web route     | reference                                    |
+|--------|---------------|----------------------------------------------|
+| home   | /             | design-refs/home.html                        |
+| day    | /day/[date]   | design-refs/home.html (same page, older date)|
+| states | —             | design-refs/states.html                      |
 
-> Whether `ask` is a full route or a launcher pinned to the corner is decided in
-> the design phase. If it becomes a launcher, this row's route changes to `/`
-> with the launcher open.
+> The design phase resolved two things this map used to leave open. `ask` is a
+> panel, not a route: a `<dialog>` opened from a floating button, so it is a
+> state of whatever page you are on rather than a screen of its own. And an
+> archive day is the same page as today with a different date, so it verifies
+> against the same reference — a second file would be a copy that drifts.
+>
+> `states` has no route. It is the catalogue of the six conditions that are not
+> an ordinary day, and it is verified as a page in its own right so those states
+> cannot rot unseen.
 
 ## End of phase
 - qa: http://localhost:3000
