@@ -33,6 +33,19 @@ describe('publisherFromUrl', () => {
     expect(publisherFromUrl('https://www.bloomberg.com/news/articles/x')).toBe('Bloomberg')
   })
 
+  // Both of these shipped in a published edition under the mechanical name —
+  // "Quantamagazine" and "Gamesindustry" — and were found by reading the archive
+  // rather than by any test failing. A hostname of two words run together has no
+  // seam to split on, so the fallback can only capitalise what it was handed;
+  // the list above is the only thing that can know better. Kept as a case of
+  // their own because the reason they were missed is the reason the next one
+  // will be: nothing goes wrong, the byline is just quietly not the outlet's
+  // name.
+  it('names the two outlets that were shipping under a run-together hostname', () => {
+    expect(publisherFromUrl('https://www.quantamagazine.org/x-20260809/')).toBe('Quanta Magazine')
+    expect(publisherFromUrl('https://www.gamesindustry.biz/x')).toBe('GamesIndustry.biz')
+  })
+
   it('reaches the pretty name through any subdomain the feed happens to use', () => {
     // The two BBC hosts in SOURCES and in real article links.
     expect(publisherFromUrl('https://feeds.bbci.co.uk/news/world/rss.xml')).toBe('BBC')

@@ -46,6 +46,12 @@ const KNOWN: Record<string, string> = {
   'reuters.com': 'Reuters',
   'cnn.com': 'CNN',
   'scientificamerican.com': 'Scientific American',
+  // Both were shipping under the mechanical name — "Quantamagazine" and
+  // "Gamesindustry" — because a hostname that is two words run together carries
+  // no seam to split on, and the fallback can only capitalise what it is given.
+  // They were on the published edition, in the byline, where a reader reads them.
+  'quantamagazine.org': 'Quanta Magazine',
+  'gamesindustry.biz': 'GamesIndustry.biz',
   'nytimes.com': 'The New York Times',
   'wsj.com': 'The Wall Street Journal',
   'washingtonpost.com': 'The Washington Post',
