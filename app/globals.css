@@ -470,6 +470,20 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
 .stale-banner { border: 1px solid var(--accent); border-left-width: 3px; padding: 0.875rem 1.125rem; }
 .stale-what { font-size: 1.0625rem; font-weight: 600; color: var(--ink); margin: 0; }
 .stale-why { font-size: 0.9375rem; line-height: 1.5; color: var(--prose); margin: 0.25rem 0 0; }
+/* Two rules the states catalogue implies and does not contain, because in
+   design-refs/states.html both are inline styles on the framed sample.
+   One: the banner is the first thing in the page column, and nothing above it
+   opens the page — `.masthead`'s 3rem of padding is what normally does that,
+   and on a stale day the banner is above the masthead. Without this the box is
+   flush against the top edge of the viewport with paper either side of it,
+   which reads as clipped rather than as an alert. Scoped to `.page >` so the
+   catalogue, where the banner stands inside a `.state-frame` with padding of
+   its own, is untouched to the pixel.
+   Two: with a banner above it the masthead opens at 1.5rem rather than 3rem,
+   which is exactly the `style="padding-top:1.5rem"` states.html 01 carries. The
+   page's opening space is spent once, above the alert, not twice. */
+.page > .stale-banner { margin-top: 3rem; }
+.stale-banner + .masthead { padding-top: 1.5rem; }
 
 .panel-static { max-width: 34em; }
 .ask-line { display: flex; align-items: baseline; gap: 0.75rem; border-bottom: 1px solid var(--rule-strong); padding-bottom: 0.625rem; }

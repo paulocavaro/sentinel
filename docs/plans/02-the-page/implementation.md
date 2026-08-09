@@ -320,16 +320,16 @@ modify `lib/ingest/config.ts`
 
 **Screens:** home (web)
 
-- [ ] **Step 1 — Implement.** `EditionPage` composes banner, masthead, edition
+- [x] **Step 1 — Implement.** `EditionPage` composes banner, masthead, edition
   bar, filter, edition, close block and ask button. **Both routes use it** — the
   previous plan had the day route "render exactly like the home route" with no
   shared component, which guarantees a copy that drifts on the first change.
   - The close mark carries `items.length`, never a constant.
   - `/` reads the latest edition; a null edition renders `NoEdition`.
-- [ ] **Step 2 — Gate**
-- [ ] **Step 3 — Look at it** at 390px and 1440px, both themes, against
+- [x] **Step 2 — Gate**
+- [x] **Step 3 — Look at it** at 390px and 1440px, both themes, against
   `design-refs/home.html`.
-- [ ] **Step 4 — Commit:** `feat(02): the home route`
+- [x] **Step 4 — Commit:** `feat(02): the home route`
 
 ---
 
