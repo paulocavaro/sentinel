@@ -5,9 +5,12 @@
 // theme filter, the chip row and the section anchors all agree with the page
 // only because they are all derived from these two functions.
 //
-// It deliberately does not import from `app/`: the tests run under vitest with
-// no `@/` alias configured, and a module the page's grouping rules live in
-// should be readable by anything, including the generator's descendants.
+// It deliberately does not import from `app/`. That used to be enforced by the
+// toolchain — vitest ran with no `@/` alias, so a module under `lib/` reaching
+// into `app/` simply failed to resolve — and `vitest.config.mts` now configures
+// the alias, because the component tests need it. The rule stands on its own
+// reasoning instead: a module the page's grouping rules live in should be
+// readable by anything, including the generator's descendants.
 
 import type { Edition, EditionItem } from './edition'
 import { THEMES } from './ingest/types'
