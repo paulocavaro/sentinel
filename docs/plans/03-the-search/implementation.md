@@ -590,7 +590,7 @@ paid for: nothing is implemented before its reference exists.
 - Consumes: `POST /api/ask`, the shapes from Task 5
 - Produces: the five reader-facing states
 
-- [ ] **Step 1 — Failing test:** `app/components/AskPanel.test.tsx`, rendering
+- [x] **Step 1 — Failing test:** `app/components/AskPanel.test.tsx`, rendering
   with `renderToStaticMarkup` and a stubbed `fetch`. It asserts the markup of
   each state against the classes the reference uses — `.ask-line`, `.ask-bar`,
   `.ask-a`, `.cite` — because those class names are the contract with the
@@ -607,8 +607,8 @@ paid for: nothing is implemented before its reference exists.
   it('starts clean on the fourth question')
   it('escapes markup in an answer, because the answer quotes third parties')
   ```
-- [ ] **Step 2 — Run, confirm failure:** `pnpm vitest run app/components`
-- [ ] **Step 3 — Implement.** State is a small discriminated union — `idle |
+- [x] **Step 2 — Run, confirm failure:** `pnpm vitest run app/components`
+- [x] **Step 3 — Implement.** State is a small discriminated union — `idle |
   running | answered | nothing | failed | limited` — plus the series, an array
   of at most `MAX_QUESTIONS` `{ question, result }` pairs. On submit: post the
   question and the previous **questions only**; on the fourth, drop the series
@@ -621,9 +621,9 @@ paid for: nothing is implemented before its reference exists.
   Escape closes the dialog and the series is dropped on close — `onClose` on the
   `<dialog>`, so it fires for the button, for Escape and for the backdrop
   without three handlers.
-- [ ] **Step 4 — Run tests, confirm green:** `pnpm vitest run app/components`
-- [ ] **Step 5 — Gate**
-- [ ] **Step 6 — Commit:** `feat(03): the panel answers`
+- [x] **Step 4 — Run tests, confirm green:** `pnpm vitest run app/components`
+- [x] **Step 5 — Gate**
+- [x] **Step 6 — Commit:** `feat(03): the panel answers`
 
 ---
 

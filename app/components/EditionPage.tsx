@@ -158,7 +158,7 @@ export function EditionPage({
 
       <CloseBlock edition={edition} />
 
-      <AskButton />
+      <AskButton editions={dates.length} />
     </div>
   )
 }

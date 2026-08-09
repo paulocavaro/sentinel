@@ -91,8 +91,13 @@ export const deps: { generate: Generator } = { generate: defaultGenerator }
  * reader-typed text, and an error body that quotes it makes the route a
  * reflector for whatever was posted; a cause is ours and belongs in the log.
  */
-function refuse(status: number, kind: string, message: string, headers?: HeadersInit): Response {
-  return Response.json({ kind, message }, { status, headers })
+function refuse(
+  status: number,
+  kind: string,
+  message: string,
+  { headers, ...extra }: { headers?: HeadersInit; retryAfter?: number } = {},
+): Response {
+  return Response.json({ kind, message, ...extra }, { status, headers })
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -103,11 +108,16 @@ export async function POST(request: Request): Promise<Response> {
   // blocking make the server build an index and parse a body on the way there.
   const limit = takeToken(bucketKey(request.headers))
   if (!limit.ok) {
-    return refuse(429, 'limited', 'Too many questions from here. Try again in a few minutes.', {
-      // Seconds, which is what the header is defined in and what `takeToken`
-      // returns. The body carries it too: the panel needs the number, and
-      // reading a response header is not what it is written to do.
-      'retry-after': String(limit.retryAfter),
+    return refuse(429, 'limited', 'Too many questions from here. Try again shortly.', {
+      // Seconds, which is what `Retry-After` is defined in and what `takeToken`
+      // returns. **The body carries it too**, and the comment used to claim that
+      // while `refuse` built `{ kind, message }` and nothing else — so the panel
+      // could not name a wait and said "a few minutes" whatever the number was.
+      // The header is for anything speaking HTTP; the body is for the panel,
+      // which is written to read JSON and would otherwise reach for a header to
+      // find the one number it needs.
+      headers: { 'retry-after': String(limit.retryAfter) },
+      retryAfter: limit.retryAfter,
     })
   }
 

@@ -224,7 +224,13 @@ describe('POST /api/ask', () => {
     // Seconds, and a number a client can act on: the header is what a polite
     // client obeys, the body is what the panel renders.
     expect(Number(refused.headers.get('retry-after'))).toBeGreaterThan(0)
-    expect(await refused.json()).toMatchObject({ kind: 'limited' })
+    // The same seconds in both places. The panel reads JSON and nothing else,
+    // so a body without this number leaves it unable to name the wait — which
+    // is what it did while this comment was true of the header alone.
+    expect(await refused.json()).toMatchObject({
+      kind: 'limited',
+      retryAfter: Number(refused.headers.get('retry-after')),
+    })
 
     // Another caller is unaffected, which is the whole point of a bucket.
     expect((await ask({ question: 'A first question' }, '198.51.100.7')).status).toBe(200)

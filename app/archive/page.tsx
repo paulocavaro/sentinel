@@ -141,7 +141,7 @@ export default async function Archive() {
         ))}
       </main>
 
-      <AskButton />
+      <AskButton editions={dates.length} />
     </div>
   )
 }
