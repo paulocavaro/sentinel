@@ -50,11 +50,18 @@ POST /api/ask              the site's only runtime route
    the panel renders prose, and a dated citation per sentence
 ```
 
-**The index is built per request, on the server**, from the same
-`listEditionDates` / `readEdition` the pages use. Two editions today; a year is
-~365 files and a few hundred kilobytes. A prebuilt index would save milliseconds
-and introduce a second source of truth that can fall out of step with the files
-actually committed — which is the failure this product is least able to afford.
+**The index is built on the server from `content/days/`**, through the same
+`listEditionDates` / `readEdition` the pages use. A prebuilt index would save
+milliseconds and introduce a second source of truth that can fall out of step
+with the files actually committed — the failure this product is least able to
+afford.
+
+Built **once per instance**, not once per request. The plan review changed this
+and the reasoning is worth keeping: a new edition means a push, a push means a
+build, and a build means new instances — the deployment's filesystem is a
+snapshot, so `content/days` cannot change under a running process. There is no
+invalidation to get wrong because there is no way for the cache to go stale, and
+the committed files remain the only source of truth.
 
 **The answer is structured, never prose with markers.** The model returns
 sentences, each with the ids it rests on; the component assembles the paragraph
@@ -96,7 +103,7 @@ what the button promises.
 
 | Decision | Rationale |
 |---|---|
-| **The index is built per request from `content/days/`.** | Always in step with what is committed. A build-time artefact is a second source of truth for the one product whose claim is that the files *are* the truth. |
+| **The index is built from `content/days/`, once per instance.** | Always in step with what is committed. A build-time artefact is a second source of truth for the one product whose claim is that the files *are* the truth. The archive is immutable for an instance's lifetime, so caching it there costs no correctness. |
 | **The answer is a structured object, validated against the tool's own results.** | An id the model invented cannot become a citation, because ids are checked against what `searchNews` returned on this call. Same discipline as `curate.ts`, and for the same reason. |
 | **A malformed or unsupported answer is dropped whole, not repaired.** | A half-rendered answer with one citation removed reads as a complete answer. The failure has to be visible. |
 | **Only previous questions are sent, never previous answers.** | Removes the forged-assistant-turn surface entirely, and the model does not need them: reformulating a query is what the questions are for. |
@@ -105,7 +112,7 @@ what the button promises.
 | **Sonnet 5, `effort: 'medium'`.** | `@ai-sdk/anthropic` v4 exposes `effort` as `low \| medium \| high \| xhigh \| max` through `providerOptions`, verified in the installed package rather than recalled. |
 | **The answer arrives whole, not streamed.** | The output is validated before it becomes prose, and half an object cannot be validated. The design already replaced the spinner with a rule that fills — the wait has a designed state, so streaming buys nothing it does not already have. |
 | **No example questions.** | The reference's three were written by hand when the archive held two editions; fixed, they age into a product whose first act is to say it does not know. A reader who opened the panel already knows what they want. |
-| **Tool results are untrusted text.** | Titles and descriptions are third-party — a Hacker News submission is literally user-supplied — and they enter the model's context as tool output. Delimited block, structured output constrained to the input's ids, validation. The pipeline's defence, applied at the second place the product reads other people's words. |
+| **Tool results are untrusted text, and the delimiter lives inside the tool's return value.** | Titles and descriptions are third-party — a Hacker News submission is literally user-supplied. `curate.ts` delimits in the prompt because the prompt string is ours; here the text arrives as a tool result whose framing belongs to the SDK, so the fence has to be built where we still own the bytes. The defences that hold: the system prompt naming tool output as quoted material, structured output that can only carry ids, and validation. |
 
 ## What the reader sees
 
