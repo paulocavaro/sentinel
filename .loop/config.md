@@ -32,15 +32,28 @@
 > Until then loop-verify runs in REVIEW MODE against `spec_docs`.
 
 ## Screens map
-| screen | web route     | reference                  |
-|--------|---------------|----------------------------|
-| home   | /             | design-refs/home.html      |
-| day    | /day/[date]   | design-refs/day.html       |
-| ask    | /ask          | design-refs/ask.html       |
+| screen | web route          | reference             |
+|--------|--------------------|-----------------------|
+| home   | /                  | design-refs/home.html |
+| day    | /day/2026-08-08    | design-refs/day.html  |
+| states | /states            | design-refs/states.html |
 
-> Whether `ask` is a full route or a launcher pinned to the corner is decided in
-> the design phase. If it becomes a launcher, this row's route changes to `/`
-> with the launcher open.
+> `ask` is a panel, not a route: a `<dialog>` opened from a floating button, so
+> it is a state of whatever page you are on rather than a screen of its own.
+>
+> `day` is pinned at a date, not left as `/day/[date]`, and it has a reference
+> of its own. It used to point at `home.html` on the reasoning that an archive
+> day is the same page with a different date — but the two committed editions
+> are not the same shape. 8 August is pre-theme: twenty items, no `theme` field
+> on any of them, six with no image, so it renders one lead, four features and
+> fifteen briefs in a single unlabelled group. Judged against a thirty-item
+> themed page it fails while being perfectly correct. It is not a copy that
+> drifts: `design-refs/build-home.mjs` writes both files, `home.html` from the
+> latest edition and `day.html` from the date given on argv, so the difference
+> between them is entirely the data.
+>
+> `states` is the catalogue of the six conditions that are not an ordinary day,
+> verified as a page in its own right so those states cannot rot unseen.
 
 ## End of phase
 - qa: http://localhost:3000

@@ -3,10 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sentinel — states</title>
+<title>Sentinel, Saturday 8 August</title>
+<meta name="theme-color" content="#F2F0EB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16171A" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-
 /* ─── Sentinel · design reference ───────────────────────────────────────────
    Direction: "the record". Closed at 09:23, dated, never rewritten.
 
@@ -471,183 +474,169 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
   .section:not(:has(.section-name)) > .features { border-top: 2px solid CanvasText; }
   .byline { color: GrayText; }
 }
-
-
-/* ─── Catalogue chrome. Not part of the system. ──────────────────────────── */
-.cat { width: min(100% - 2.5rem, 60rem); margin-inline: auto; padding: 3rem 0 6rem; }
-.cat-title { font-family: var(--face-machine); font-size: 0.75rem;
-             font-weight: 500; letter-spacing: 0.083em; text-transform: uppercase;
-             color: var(--machine); margin: 0 0 0.75rem; }
-.cat-lede { font-size: 1.0625rem; line-height: 1.55; color: var(--prose); margin: 0 0 3rem; max-width: 34em; }
-.state { padding-top: 3.5rem; }
-.state-head { border-top: 1px solid var(--rule-strong); padding-top: 0.875rem; margin-bottom: 1.5rem; }
-.state-n { font-family: var(--face-machine); font-size: 0.6875rem;
-           letter-spacing: 0.09em; color: var(--accent); margin: 0 0 0.5rem; }
-.state-title { font-size: 1.25rem; font-weight: 600; margin: 0; }
-.state-why { font-size: 0.9375rem; line-height: 1.55; color: var(--prose); margin: 0.5rem 0 0; max-width: 46em; }
-.state-frame { border: 1px solid var(--rule-hair); padding: 1.75rem; }
-/* A framed sample is the real component, and the real components carry the
-   page's own opening and closing space: .masthead opens at 3rem, .close closes
-   at 6rem/5rem. Inside a frame that space belongs to the frame's padding. It is
-   removed here rather than by an inline style on the sample, because a
-   component cannot carry one — the catalogue is what wants the change, so the
-   catalogue's own stylesheet is where it goes.
-   :first-child, so state 01 — where the masthead follows the stale banner and
-   opens at the 1.5rem that alert costs it — is untouched. */
-.state-frame .masthead:first-child { padding-top: 0; }
-.state-frame > .close { padding: 3rem 0 0; }
 </style>
 </head>
 <body>
-<div class="cat">
-  <p class="cat-title">Sentinel</p>
-  <h1 class="editiondate" style="font-size:2.25rem;margin:0 0 1rem">States</h1>
-  <p class="cat-lede">Every condition the edition can be in that is not an ordinary day. Each one is
-  designed, not improvised: the page has to say what happened in plain language, and it must never
-  present stale or partial content as if it were today's.</p>
+<button class="ask-fab" type="button" aria-haspopup="dialog" aria-controls="ask" onclick="document.getElementById('ask').showModal()"><span class="ask-fab-word">Ask</span><span class="sr-only"> this archive</span></button>
 
-
-<section class="state">
-  <div class="state-head">
-    <p class="state-n">01</p>
-    <h2 class="state-title">Yesterday’s edition, still live</h2>
-    <p class="state-why">The job failed, so nothing was written and the previous day stays up. The spec requires this be clearly marked. The banner is the one place the accent is spent on something other than the rank and the end mark, because it is the only genuine emergency the product has.</p>
-  </div>
-  <div class="state-frame"><div class="stale-banner">
-      <p class="stale-what">You are reading Saturday 8 August.</p>
-      <p class="stale-why">Today&rsquo;s edition did not build. The next run is <time datetime="2026-08-10T09:23">09:23 tomorrow</time>.</p>
+<div class="page">
+  <header class="masthead">
+    <p class="wordmark">Sentinel</p>
+    <h1 class="editiondate"><span class="weekday">Saturday</span> 8 August</h1>
+    <p class="manifest">Today's briefing pairs a wave of AI safety, cost and infrastructure stories with fast-moving geopolitical flashpoints from the Strait of Hormuz to the Spain-Italy border.</p>
+    <p class="promise">20 items · closed 09:23</p>
+    <div class="editionbar">
+      <nav class="days" aria-label="Editions">
+        <a class="day is-off" aria-disabled="true">7 August</a>
+        <span class="day is-current" aria-current="date">8 August</span>
+        <a class="day" href="/day/2026-08-09" rel="next">9 August →</a>
+        <a class="day day-all" href="/archive">All editions</a>
+      </nav>
     </div>
-    <header class="masthead" style="padding-top:1.5rem">
-      <p class="wordmark">Sentinel</p>
-      <h1 class="editiondate"><span class="weekday">Saturday</span> 8 August</h1>
-      <p class="manifest">Today's briefing pairs a wave of AI safety, cost and infrastructure stories with fast-moving geopolitical flashpoints from the Strait of Hormuz to the Spain-Italy border.</p>
-      <p class="promise">20 items &middot; closed 09:23</p>
-    </header></div>
-</section>
+  </header>
 
-
-<section class="state">
-  <div class="state-head">
-    <p class="state-n">02</p>
-    <h2 class="state-title">A thin day</h2>
-    <p class="state-why">Fewer than thirty candidates survived the window. The edition publishes anyway — a thin news day is not a failure — and says the number rather than leaving the reader to count. The end mark carries the real count, so it can never claim thirty on a day that had seventeen.</p>
-  </div>
-  <div class="state-frame"><header class="masthead">
-      <p class="wordmark">Sentinel</p>
-      <h1 class="editiondate"><span class="weekday">Tuesday</span> 11 August</h1>
-      <p class="manifest">AI safety dominates the day as OpenAI halts a risky model and DeepMind's founder steps back, while war, disaster and industry news round out a busy news cycle.</p>
-      <p class="promise">17 items &middot; closed 09:23 &middot; a thin day</p>
-    </header>
-    <footer class="close">
-      <p class="close-mark" aria-hidden="true">-17-</p>
-      <p class="close-sentence">That was Tuesday 11 August. Seventeen items — the window was thin.</p>
-      <p class="close-next">Next edition 09:23 tomorrow</p>
-      <span class="sr-only">End of edition.</span>
-    </footer></div>
-</section>
-
-
-<section class="state">
-  <div class="state-head">
-    <p class="state-n">03</p>
-    <h2 class="state-title">A day with no edition</h2>
-    <p class="state-why">An archive date the pipeline never wrote. Not a 404 — the date is a real day and the reader asked for it by name. It says what is true and offers the nearest thing that exists.</p>
-  </div>
-  <div class="state-frame"><div class="page">
-      <header class="masthead">
-        <p class="wordmark">Sentinel</p>
-        <h1 class="editiondate">Monday 3 August</h1>
-        <p class="promise">No edition</p>
-        <p class="manifest" style="font-style:normal">Nothing ran on 3 August. The job did not complete, and an edition is never written after the fact.</p>
-        <div class="editionbar">
-          <nav class="days" aria-label="Editions">
-            <a class="day" href="/day/2026-08-02" rel="prev">&larr; 2 August</a>
-            <a class="day" href="/day/2026-08-04" rel="next">4 August &rarr;</a>
-            <a class="day day-all" href="/">Latest edition</a>
-          </nav>
-        </div>
-      </header>
-    </div></div>
-</section>
-
-
-<section class="state">
-  <div class="state-head">
-    <p class="state-n">04</p>
-    <h2 class="state-title">An item with no photograph</h2>
-    <p class="state-why">Roughly a third of items arrive without a usable image. The card is not a card with a hole in it — it is a card whose headline takes the space the picture would have had. The rhythm that produces is different every day and derived entirely from the day’s real data.</p>
-  </div>
-  <div class="state-frame"><div class="features" style="grid-template-columns:repeat(2,minmax(0,1fr))">
-      <article class="item feature">
-        <span class="plate plate-feature"><img class="art" src="../public/img/7b1fdc1b9514.webp" alt="" loading="lazy" decoding="async"></span>
-        <div class="body">
-          <p class="byline">The Guardian</p>
-          <h3 class="head"><a class="link" href="https://www.theguardian.com/technology/2026/aug/08/google-demis-hassabis-deepmind-shifts-role" target="_blank" rel="noopener noreferrer">Google DeepMind enters a new era as co-founder Demis Hassabis shifts <span class="acr">AI</span> role<span class="sr-only"> (opens at theguardian.com)</span></a></h3>
-          <p class="dek"><b class="entry">Demis Hassabis</b> is stepping back from Google DeepMind's helm, fueling concern the lab is losing research independence to commercial pressure.</p>
+  <main id="results" tabindex="-1">
+      <article class="item lead">
+        <span class="plate plate-lead"><img class="art" src="../public/img/adfa31b3b83d.webp" alt="" loading="lazy" decoding="async"></span>
+        <div class="body"><p class="byline">The Guardian</p>
+          <h2 class="head"><a class="link " href="https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient" target="_blank" rel="noopener noreferrer">Trump orders new 15% tariff on key material for solar panels and microchips<span class="sr-only"> (opens at theguardian.com)</span></a></h2>
+          <p class="dek"><b class="entry">Trump's new</b> 15% tariff on polysilicon used in chips and solar panels is a direct swipe at China's dominance of the supply chain.</p>
         </div>
       </article>
-      <article class="item feature">
-        
-        <div class="body">
-          <p class="byline">BBC</p>
-          <h3 class="head"><a class="link" href="https://www.bbc.co.uk/news/articles/cz7dy8gq99eo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Child among three killed in Russian missile attacks near Kyiv<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
-          <p class="dek"><b class="entry">Russian missile</b> strikes near Kyiv killed a child and two others, underscoring Ukraine's dwindling air-defence supplies.</p>
-        </div>
-      </article>
-    </div></div>
-</section>
+    <section class="section">
+      <div class="features">
+        <article class="item feature">
+          <span class="plate plate-feature"><img class="art" src="../public/img/8dfbee8c355a.webp" alt="" loading="lazy" decoding="async"></span>
+          <div class="body"><p class="byline">NPR</p>
+            <h3 class="head"><a class="link " href="https://www.npr.org/2026/08/06/nx-s1-5923623/iran-strait-hormuz-us-israel-ban" target="_blank" rel="noopener noreferrer">Iran aims to ban U.S. and Israeli ships from Strait of Hormuz and charge others a toll<span class="sr-only"> (opens at npr.org)</span></a></h3>
+            <p class="dek"><b class="entry">Iran's push</b> to bar <span class="acr">US</span> and Israeli ships from the Strait of Hormuz and toll others raises the stakes in a critical global shipping lane.</p>
+          </div>
+        </article>
+        <article class="item feature">
+          <span class="plate plate-feature"><img class="art" src="../public/img/e66cc71d0943.webp" alt="" loading="lazy" decoding="async"></span>
+          <div class="body"><p class="byline">OpenAI</p>
+            <h3 class="head"><a class="link " href="https://openai.com/index/responding-next-frontier-critical-cyber-capabilities" target="_blank" rel="noopener noreferrer">Responding to the next frontier of critical cyber capabilities<span class="sr-only"> (opens at openai.com)</span></a></h3>
+            <p class="dek"><b class="entry">OpenAI is</b> publishing early cybersecurity evaluations of its Astra system as it moves to shore up safeguards against critical cyber misuse.</p>
+          </div>
+        </article>
+        <article class="item feature">
+          <span class="plate plate-feature"><img class="art" src="../public/img/889cc093dfad.webp" alt="" loading="lazy" decoding="async"></span>
+          <div class="body"><p class="byline">The Guardian</p>
+            <h3 class="head"><a class="link " href="https://www.theguardian.com/technology/2026/aug/08/uk-children-explicit-deepfake-images-ai" target="_blank" rel="noopener noreferrer">Rising number of <span class="acr">UK</span> children report seeing explicit deepfakes of themselves<span class="sr-only"> (opens at theguardian.com)</span></a></h3>
+            <p class="dek"><b class="entry">A surge</b> in <span class="acr">UK</span> children reporting explicit deepfakes of themselves shows how <span class="acr">AI</span> tools are making abusive content easier to produce.</p>
+          </div>
+        </article>
+        <article class="item feature">
+          <span class="plate plate-feature"><img class="art" src="../public/img/ce39f576b0ee.webp" alt="" loading="lazy" decoding="async"></span>
+          <div class="body"><p class="byline">BBC</p>
+            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/cewr898jy8go?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Trump's ex-lawyer Todd Blanche narrowly confirmed as <span class="acr">US</span> attorney general<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
+            <p class="dek"><b class="entry">Todd Blanche's</b> narrow Senate confirmation as attorney general, despite Republican pushback, cements Trump's former lawyer atop <span class="acr">US</span> law enforcement.</p>
+          </div>
+        </article>
+      </div>
+      <div class="briefs">
+        <article class="item brief">
+          <div class="body"><p class="byline">Reuters</p>
+            <h3 class="head"><a class="link " href="https://www.reuters.com/business/retail-consumer/alibaba-plans-charge-big-users-its-next-open-source-ai-model-sources-say-2026-08-07/" target="_blank" rel="noopener noreferrer">Alibaba plans to charge big users of its next open-source <span class="acr">AI</span> model<span class="sr-only"> (opens at reuters.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Alibaba's plan to charge heavy users of its next open-source model signals a shift away from free access as compute costs bite.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">BBC</p>
+            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/c5yv5l6yr5ko?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Spain imposes border controls against Italy as row over Ceuta migrant influx intensifies<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Spain has imposed border controls against Italy as a row over migrant flows through Ceuta escalates within the <span class="acr">EU</span>.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Google DeepMind</p>
+            <h3 class="head"><a class="link " href="https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones/" target="_blank" rel="noopener noreferrer">DeepMind's WeatherNext model achieves breakthrough forecasting cyclones<span class="sr-only"> (opens at deepmind.google)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">DeepMind says its WeatherNext model has achieved a breakthrough in forecasting cyclones, a high-stakes test for <span class="acr">AI</span> in climate prediction.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">BBC</p>
+            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/ckgdmrxxkdxo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">German airport drone-bomb: Could Russia be involved?<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Evidence suggests Russian-linked proxies have handled and delivered drones and explosives used in a German airport bomb plot.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Dealroom</p>
+            <h3 class="head"><a class="link " href="https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code" target="_blank" rel="noopener noreferrer">Oracle bans <span class="acr">AI</span>-generated code from OpenJDK<span class="sr-only"> (opens at app.dealroom.co)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Oracle's ban on <span class="acr">AI</span>-generated code in OpenJDK highlights growing institutional wariness about licensing and quality of machine-written contributions.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">NPR</p>
+            <h3 class="head"><a class="link " href="https://www.npr.org/2026/08/07/nx-s1-5924775/colombias-new-president-vows-to-remake-the-country-and-challenge-its-fragile-peace" target="_blank" rel="noopener noreferrer">Colombia's new president vows to remake the country — and challenge rebel groups<span class="sr-only"> (opens at npr.org)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Colombia's new hard-right president is promising order and confrontation with rebel groups, marking a sharp political shift.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">CNN</p>
+            <h3 class="head"><a class="link " href="https://www.cnn.com/2026/08/04/tech/ai-anthropic-openai-security-breach-intl-hnk" target="_blank" rel="noopener noreferrer"><span class="acr">AI</span> agents fake identities, target real people in new security incident<span class="sr-only"> (opens at cnn.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">A new security incident in which <span class="acr">AI</span> agents faked identities to target real people underscores emerging risks from autonomous systems.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">BBC</p>
+            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/c3r073eqvrjo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">'I ran because I knew I would die': Russian drones target medics in Ukraine<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Ukrainian medics describe escalating Russian drone attacks on hospitals and ambulances, a grim shift in wartime targeting.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">TechCrunch</p>
+            <h3 class="head"><a class="link " href="https://techcrunch.com/2026/08/07/cloudflare-launches-kitesurf-a-browser-built-for-ai-agents/" target="_blank" rel="noopener noreferrer">Cloudflare launches Kitesurf, a browser built for <span class="acr">AI</span> agents<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Cloudflare's Kitesurf is a cloud browser built specifically for <span class="acr">AI</span> agents, promising lighter, more efficient automation than Chromium.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Scientific American</p>
+            <h3 class="head"><a class="link " href="https://www.scientificamerican.com/article/openais-latest-math-breakthroughs-commit-research-misconduct-experts-say/" target="_blank" rel="noopener noreferrer">OpenAI's latest math breakthroughs commit research misconduct, experts say<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Experts are accusing OpenAI's touted math breakthroughs of research misconduct, a credibility challenge for the company's science claims.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Yahoo Finance</p>
+            <h3 class="head"><a class="link " href="https://finance.yahoo.com/technology/ai/articles/anthropic-ceo-reportedly-worried-hires-160000647.html" target="_blank" rel="noopener noreferrer">Anthropic <span class="acr">CEO</span> reportedly worried new hires only care about money<span class="sr-only"> (opens at finance.yahoo.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Anthropic's <span class="acr">CEO</span> is reportedly worried that new hires are drawn mainly by money rather than mission, a telling sign of <span class="acr">AI</span> industry culture.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Simon Willison</p>
+            <h3 class="head"><a class="link " href="https://simonwillison.net/2026/Aug/7/pdfs-are-terrible/#atom-everything" target="_blank" rel="noopener noreferrer">The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on <span class="acr">AI</span><span class="sr-only"> (opens at simonwillison.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Companies are scrambling to rein in runaway <span class="acr">AI</span> token spending, with reports suggesting non-engineers are driving much of the cost surge.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">TechCrunch</p>
+            <h3 class="head"><a class="link " href="https://techcrunch.com/2026/08/06/openais-new-ai-smart-speaker-will-reportedly-sell-for-between-300-and-400/" target="_blank" rel="noopener noreferrer">OpenAI’s new <span class="acr">AI</span> smart speaker will reportedly sell for between $300 and $400<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">New details suggest OpenAI's mysterious hardware device will be a hockey-puck-sized smart speaker priced between $300 and $400.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">Mezha</p>
+            <h3 class="head"><a class="link " href="https://mezha.net/eng/bukvy/ca117584_denmark_requires_oral/" target="_blank" rel="noopener noreferrer">Denmark Requires Oral Defenses for Students' Written Work to Counter <span class="acr">AI</span> Cheating<span class="sr-only"> (opens at mezha.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Denmark is requiring oral defenses of written student work to counter <span class="acr">AI</span>-assisted cheating in schools.</span>
+          </div>
+        </article>
+        <article class="item brief">
+          <div class="body"><p class="byline">The Guardian</p>
+            <h3 class="head"><a class="link " href="https://www.theguardian.com/us-news/2026/aug/07/datacenters-little-rock-arkansas" target="_blank" rel="noopener noreferrer">‘This is very real redlining’: outrage in Little Rock as two datacenters loom<span class="sr-only"> (opens at theguardian.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Residents in Little Rock are protesting two proposed hyperscale datacenters over water use, power strain and land rights concerns.</span>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
 
-
-<section class="state">
-  <div class="state-head">
-    <p class="state-n">05</p>
-    <h2 class="state-title">Asking, and being answered</h2>
-    <p class="state-why">The panel’s three live states. Running is a rule that fills, not a spinner: a spinner says the software is busy, a rule says the archive is being read. The answer names the day every item ran, because the whole claim is that this is a dated record.</p>
-  </div>
-  <div class="state-frame"><div class="panel-static">
-      <p class="panel-label">Running</p>
-      <div class="ask-line"><span class="ask-q">What did OpenAI ship this week?</span><span class="ask-bar"></span></div>
-      <p class="panel-note">Reading 2 editions</p>
+  <dialog class="panel" id="ask" aria-label="Ask this archive">
+    <form method="dialog" class="panel-head">
+      <p class="panel-title">Ask this archive</p>
+      <button class="panel-x" aria-label="Close">Close</button>
+    </form>
+    <div class="panel-body">
+      <label class="panel-label" for="q">Ask about anything that has run in an edition.</label>
+      <input class="panel-input" id="q" type="text" placeholder="What did OpenAI ship this week?" autocomplete="off">
+      <p class="panel-note">Answers cite the item and the day it ran. If nothing here matches, it says so rather than inventing one.</p>
+      <ul class="panel-examples">
+        <li><button type="button" class="example">Everything about the Strait of Hormuz</button></li>
+        <li><button type="button" class="example">What has DeepMind announced?</button></li>
+        <li><button type="button" class="example">Games news from this week</button></li>
+      </ul>
     </div>
-    <div class="panel-static" style="margin-top:2rem">
-      <p class="panel-label">Answered</p>
-      <p class="ask-a">OpenAI paused work on its Astra model after finding it could launch cyberattacks
-      on its own, and it published early cybersecurity evaluations of the same system.
-      <span class="cite">9 August</span> It also acquired the presentation startup NextSlide.
-      <span class="cite">9 August</span></p>
-    </div></div>
-</section>
+  </dialog>
 
-
-<section class="state">
-  <div class="state-head">
-    <p class="state-n">06</p>
-    <h2 class="state-title">Asking about something that is not here</h2>
-    <p class="state-why">The most important state in the product. A news product that answers from the model’s own memory is lying about what it holds, and the reader finds out on the first thing they check. It says the limit plainly and offers nothing it cannot support.</p>
-  </div>
-  <div class="state-frame"><div class="panel-static">
-      <p class="panel-label">No result</p>
-      <p class="ask-a">Nothing about the Formula One season has run in an edition.
-      The archive holds 2 editions, from 8 August.</p>
-    </div></div>
-</section>
-
+  <footer class="close">
+    <p class="close-mark" aria-hidden="true">-20-</p>
+    <p class="close-sentence">That was Saturday 8 August.</p>
+    <p class="close-next">Next edition 09:23 tomorrow</p>
+    <span class="sr-only">End of edition.</span>
+  </footer>
 </div>
-
-<style>
-/* Components introduced by the states, promoted into the system on approval. */
-.stale-banner { border: 1px solid var(--accent); border-left-width: 3px; padding: 0.875rem 1.125rem; }
-.stale-what { font-size: 1.0625rem; font-weight: 600; color: var(--ink); margin: 0; }
-.stale-why { font-size: 0.9375rem; line-height: 1.5; color: var(--prose); margin: 0.25rem 0 0; }
-
-.panel-static { max-width: 34em; }
-.ask-line { display: flex; align-items: baseline; gap: 0.75rem; border-bottom: 1px solid var(--rule-strong); padding-bottom: 0.625rem; }
-.ask-q { font-size: 1.0625rem; color: var(--ink); }
-.ask-bar { flex: 1; height: 2px; background: var(--accent); opacity: 0.55; }
-.ask-a { font-size: 1.0625rem; line-height: 1.6; color: var(--ink); margin: 0.5rem 0 0; }
-.cite { font-family: var(--face-machine); font-size: 0.6875rem;
-        letter-spacing: 0.083em; text-transform: uppercase; color: var(--accent);
-        white-space: nowrap; margin-left: 0.25rem; }
-</style>
 </body>
 </html>

@@ -1,69 +1,93 @@
-import Image from "next/image";
+// The front page: the latest edition the pipeline published.
+//
+// **The latest, not "today's".** That one choice is what makes the stale state
+// fall out of the data instead of needing a branch of its own: the newest file
+// is rendered, its date is compared to today's, and when they differ the banner
+// appears. A route that asked for today's edition by name would have to handle
+// "there isn't one" separately, and would then be showing nothing on the exact
+// morning the reader most needs to be told why.
+//
+// Everything below the two reads is `EditionPage`, which `/day/[date]` renders
+// as well. Nothing about the front page's layout lives here.
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+import type { Metadata } from 'next'
+
+import { EditionPage } from '@/app/components/EditionPage'
+import { editionDate } from '@/lib/date'
+import { listEditionDates, readLatestEdition } from '@/lib/edition'
+import { CLOSING_TIME } from '@/lib/ingest/config'
+
+/**
+ * Today, as a UTC calendar date.
+ *
+ * UTC because every other date in this codebase is: editions are named after
+ * the UTC day they cover, and `lib/date.ts` formats them with an explicit
+ * `timeZone: 'UTC'` so a page prerendered anywhere says the same day to
+ * everyone. Comparing a UTC edition date against the build machine's local date
+ * would call an edition stale for four hours a day, west of Greenwich.
+ *
+ * Read at build time, and there is no honest way around that on a prerendered
+ * route — see `EditionPage`'s `today` and Task 11.
+ */
+function todayUTC(): string {
+  return new Date().toISOString().slice(0, 10)
+}
+
+/**
+ * The title is the edition's date.
+ *
+ * **Written out in full, with `absolute`, rather than left to the layout's
+ * template.** `title.template` applies to *child* route segments and not to the
+ * segment it is declared in — `node_modules/next/dist/docs/01-app/03-api-reference/04-functions/generate-metadata.md`
+ * says so in as many words — and `app/page.tsx` is the root layout's own
+ * segment. A bare `title: '…'` here is emitted verbatim, so the front page
+ * would be the one page on the site whose tab does not say Sentinel, while
+ * `/day/2026-08-08` — a real child segment — would be templated normally. The
+ * suffix is spelled out so the two routes read the same in a tab strip.
+ *
+ * Both readers are `React.cache`-wrapped, so this call and the page's call
+ * below read `content/days` once between them rather than twice.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const edition = await readLatestEdition()
+
+  // Nothing published: no title at all, so the layout's `default` — "Sentinel"
+  // — stands on its own.
+  return edition === null
+    ? {}
+    : { title: { absolute: `${editionDate(edition.date)} — Sentinel` } }
+}
+
+export default async function Home() {
+  const [edition, dates] = await Promise.all([readLatestEdition(), listEditionDates()])
+
+  // An empty archive, which is a fresh clone and this repository between its
+  // first commit and its first successful ingest.
+  //
+  // **This is not `NoEdition`.** That state — `states.html` 03, Task 10 — is an
+  // archive date the pipeline never wrote: it has a date in the masthead, a
+  // sentence naming that date, calendar neighbours to offer and a link to the
+  // latest edition. Here there is no date, no neighbour and no latest edition to
+  // link to, so reusing the component would mean giving all four of them a
+  // second, empty mode to serve a page that shares only the masthead with it.
+  // Two small honest states, rather than one component that is neither.
+  if (edition === null) {
+    return (
+      <div className="page">
+        <header className="masthead">
+          <p className="wordmark">Sentinel</p>
+          <h1 className="editiondate">No editions yet</h1>
+          <p className="promise">Nothing published</p>
+          {/* Upright, like `not-found.tsx` and `states.html` 03: `.manifest` is
+              italic because it usually carries the model's editorial line, and
+              this sentence is the product speaking. */}
+          <p className="manifest" style={{ fontStyle: 'normal' }}>
+            {`Sentinel publishes one edition a morning, closed at ${CLOSING_TIME}. The first one has not run yet.`}
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+        </header>
+      </div>
+    )
+  }
+
+  return <EditionPage edition={edition} dates={dates} today={todayUTC()} />
 }

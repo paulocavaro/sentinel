@@ -1,7 +1,39 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+// Builds an edition reference: the whole page, rendered from a real edition in
+// content/days.
+//
+//   node design-refs/build-home.mjs              → the latest edition → home.html
+//   node design-refs/build-home.mjs 2026-08-08   → that edition       → day.html
+//
+// One script, two outputs, because the screens map in .loop/config.md has two
+// edition screens: `home` is whatever the pipeline published last, and `day` is
+// an archive date asked for by name. The output is named after the screen and
+// not after the date — a 2026-08-08.html would not be in the map, and refs_dir
+// is one file per screen, so dated filenames would either need a config edit
+// every time the pinned day moves or leave orphans accumulating beside it.
+//
+// The two are the same script rather than two, so the day page cannot drift
+// from the home page; the differences between them are entirely in the data.
 
-const ROOT = '/Users/pauloluiz/dev/sentinel'
-const ed = JSON.parse(readFileSync(`${ROOT}/content/days/2026-08-09.json`, 'utf8'))
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const DAYS = `${ROOT}/content/days`
+
+const dates = readdirSync(DAYS)
+  .filter((f) => f.endsWith('.json'))
+  .map((f) => f.slice(0, -5))
+  .sort()
+
+const arg = process.argv[2]
+if (arg && !dates.includes(arg)) {
+  throw new Error(`no edition for ${arg}. Have: ${dates.join(', ')}`)
+}
+const editionDate = arg ?? dates[dates.length - 1]
+const outfile = arg ? 'day.html' : 'home.html'
+
+const ed = JSON.parse(readFileSync(`${DAYS}/${editionDate}.json`, 'utf8'))
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 const host = (u) => new URL(u).hostname.replace(/^www\./, '')
@@ -19,15 +51,33 @@ const THEMES = [
   ['culture', 'Culture'],
 ]
 
-const date = new Date(`${ed.date}T12:00:00Z`)
-const weekday = date.toLocaleDateString('en-GB', { weekday: 'long' })
-const dayMonth = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
-
-const prev = new Date(date); prev.setUTCDate(prev.getUTCDate() - 1)
-const next = new Date(date); next.setUTCDate(next.getUTCDate() + 1)
+const atNoon = (d) => new Date(`${d}T12:00:00Z`)
 const fmt = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
-const prevLabel = fmt(prev)
-const nextLabel = fmt(next)
+const shift = (d, n) => {
+  const x = atNoon(d)
+  x.setUTCDate(x.getUTCDate() + n)
+  return x
+}
+
+const date = atNoon(ed.date)
+const weekday = date.toLocaleDateString('en-GB', { weekday: 'long' })
+const dayMonth = fmt(date)
+
+// Prev and next are the nearest editions that exist, not the calendar
+// neighbours. On a pipeline designed to miss days, ±1 unconditionally sends
+// half the links at a day the archive never wrote. When a direction has no
+// edition at all the slot still shows the calendar neighbour's date — present,
+// not offered — and it is the absent arrow, not a dimmer grey, that says so.
+const idx = dates.indexOf(ed.date)
+const prevDate = idx > 0 ? dates[idx - 1] : null
+const nextDate = idx < dates.length - 1 ? dates[idx + 1] : null
+
+const prevSlot = prevDate
+  ? `<a class="day" href="/day/${prevDate}" rel="prev">← ${fmt(atNoon(prevDate))}</a>`
+  : `<a class="day is-off" aria-disabled="true">${fmt(shift(ed.date, -1))}</a>`
+const nextSlot = nextDate
+  ? `<a class="day" href="/day/${nextDate}" rel="next">${fmt(atNoon(nextDate))} →</a>`
+  : `<a class="day is-off" aria-disabled="true">${fmt(shift(ed.date, 1))}</a>`
 
 const link = (i, cls = '') =>
   `<a class="link ${cls}" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">${smallCaps(esc(i.title))}<span class="sr-only"> (opens at ${esc(host(i.url))})</span></a>`
@@ -60,11 +110,19 @@ const brief = (i) => `        <article class="item brief">
           </div>
         </article>`
 
+// key and label are null for an edition whose items carry no theme — the
+// archive holds one, from before the field existed. That edition is not
+// mis-grouped into five empty sections and it is not dropped: it is one
+// unlabelled group, which is a section with no name and therefore no
+// --rule-strong opening it.
 const section = (key, label, items) => {
   const features = items.slice(0, 4).map(feature).join('\n')
   const briefs = items.slice(4).map(brief).join('\n')
-  return `    <section class="section" id="${key}" aria-labelledby="${key}-name">
-      <h2 class="section-name" id="${key}-name">${label}</h2>
+  const open = key
+    ? `<section class="section" id="${key}" aria-labelledby="${key}-name">
+      <h2 class="section-name" id="${key}-name">${label}</h2>`
+    : `<section class="section">`
+  return `    ${open}
       <div class="features">
 ${features}
       </div>${briefs ? `\n      <div class="briefs">\n${briefs}\n      </div>` : ''}
@@ -72,15 +130,32 @@ ${features}
 }
 
 const lead = ed.items.find((i) => i.rank === 1)
-const present = THEMES.filter(([k]) => ed.items.some((i) => i.theme === k && i.rank !== 1))
+const rest = ed.items.filter((i) => i.rank !== 1)
+const present = THEMES.filter(([k]) => rest.some((i) => i.theme === k))
 
-const nav = present
-  .map(([k, label]) => `<li><a class="chip" href="#${k}">${label}</a></li>`)
-  .join('\n        ')
+// The theme row is derived from the items present. An edition with no themes
+// produces no row at all rather than five chips that filter to nothing — a dead
+// control is worse than an absent one.
+//
+// One href, two behaviours. `?theme=ai#ai` is a link to a section for a reader
+// with no script — which is all this file ever is — and the instruction to
+// filter for one with script; the app reads the parameter and puts two classes
+// on <main>, and the stylesheet below does the rest. The live region is here
+// for the same reason the query is: this document and the app are one design in
+// two places, and a difference that is invisible is still a difference.
+const themeNav = present.length
+  ? `
+    <nav aria-label="Themes">
+      <ul class="themes">
+        ${present.map(([k, label]) => `<li><a class="chip" href="?theme=${k}#${k}">${label}</a></li>`).join('\n        ')}
+      </ul>
+      <p class="sr-only" role="status" aria-live="polite">Showing the whole edition.</p>
+    </nav>`
+  : ''
 
-const sections = present
-  .map(([k, label]) => section(k, label, ed.items.filter((i) => i.theme === k && i.rank !== 1)))
-  .join('\n')
+const sections = present.length
+  ? present.map(([k, label]) => section(k, label, rest.filter((i) => i.theme === k))).join('\n')
+  : section(null, null, rest)
 
 const html = `<!doctype html>
 <html lang="en">
@@ -130,6 +205,13 @@ const html = `<!doctype html>
   --rule-strong: light-dark(#17171A, #ECEAE4);
   --edge:        light-dark(#C9C5BC, #3B3D42);
 
+  /* Two faces, named once, and never named again. This file loads them from the
+     Google stylesheet linked above, so the properties name the families
+     directly; app/globals.css points the same two properties at its next/font
+     variables. That pair of lines is the only difference between the two. */
+  --face-text:    Spectral, Georgia, serif;
+  --face-machine: 'IBM Plex Mono', ui-monospace, monospace;
+
   --col: 60px;
   --gap: 20px;
   --tracks: 16;
@@ -149,7 +231,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: Spectral, Georgia, serif;
+  font-family: var(--face-text);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -168,13 +250,13 @@ body {
 .masthead { padding: 3rem 0 1.5rem; }
 
 .wordmark {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
   text-transform: uppercase; color: var(--machine); margin: 0;
 }
 
 .editiondate {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-variant-numeric: tabular-nums;
   font-size: clamp(2.5rem, 7vw, 3.75rem);
   font-weight: 400; line-height: 0.98; letter-spacing: -0.035em;
@@ -188,7 +270,7 @@ body {
 }
 
 .promise {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.09em;
   text-transform: uppercase; color: var(--machine); margin: 0.875rem 0 0;
 }
@@ -198,12 +280,26 @@ body {
 .themes { list-style: none; display: flex; flex-wrap: wrap; gap: 1.5rem;
           margin: 1.75rem 0 0; padding: 0 0 1.25rem; }
 .chip {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
   text-transform: uppercase; color: var(--machine); text-decoration: none;
   padding-bottom: 0.25rem; border-bottom: 2px solid transparent;
 }
 .chip:hover { color: var(--ink); border-bottom-color: var(--accent); }
+/* Selected, and the two channels the comment above promises. One: the label
+   goes from --machine to full ink. Two: the 2px rule the chip has been
+   reserving all along turns on, in --rule-strong — the same weight that opens
+   a section, because a selected chip *is* an opened section. Ink rather than
+   the accent keeps selected legible against hover and keeps the accent scarce.
+   The rule is also the channel that survives forced-colors, where every
+   anchor's colour is forced to LinkText and channel one disappears.
+   Written as [aria-current]:not([aria-current="false"]) rather than the bare
+   attribute: React renders aria-current={false} as the string "false", which
+   is the ARIA value for *not* current, and the bare selector would paint every
+   unselected chip as the selected one. */
+.chip[aria-current]:not([aria-current="false"]) {
+  color: var(--ink); border-bottom-color: var(--rule-strong);
+}
 
 /* The edition bar: which day you are reading, and the one control the product
    has. World in Brief puts its date and pager in a full-width bar above the
@@ -213,14 +309,26 @@ body {
 .editionbar { margin-top: 1.5rem; }
 .days { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: baseline; }
 .day {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
   text-transform: uppercase; color: var(--machine); text-decoration: none;
+  border-bottom: 1px solid var(--rule-hair); padding-bottom: 1px;
 }
-.day:hover { color: var(--ink); }
-.day.is-current { color: var(--ink); }
-.day.is-off { opacity: 0.45; }              /* present, not offered — never removed */
-.day-all { border-bottom: 1px solid var(--rule-hair); padding-bottom: 1px; }
+.day:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.day.is-current { color: var(--ink); border-bottom-color: transparent; }
+/* Present, not offered — never removed. This was opacity: 0.45, which
+   composites --machine to #B5B3AD on light paper and #4A4947 on dark: 1.84:1
+   and 1.99:1, nowhere near AA, and bought by the one mechanism the system
+   forbids — the machine layer recedes by size, tracking and case and never by
+   opacity, because it is already 9% of a card's ink and quiet by structure.
+   So the unavailable direction keeps the full --machine tone, 4.88:1 and
+   4.94:1, the same as every other label on the page, and recedes by losing the
+   two marks that say a date can be reached: its arrow, which is markup, and
+   its hairline, which is here. Its hover goes nowhere for the same reason. */
+.day.is-off { border-bottom-color: transparent; }
+.day.is-off:hover { color: var(--machine); border-bottom-color: transparent; }
+/* .day-all needs no declaration of its own now that the hairline lives on
+   .day. The class stays: it is the hook the all-editions link is named by. */
 
 /* The one round thing in a system whose form language is pinned at zero radius.
    A newspaper has no rounded corners, so this reads as arriving from somewhere
@@ -237,7 +345,7 @@ body {
   transition: transform var(--dur-tap) var(--ease-out), background-color var(--dur-tap) var(--ease-out);
 }
 .ask-fab-word {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
 }
 .ask-fab:hover { background: var(--accent); }
@@ -265,7 +373,7 @@ body {
   padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--rule-hair);
 }
 .panel-title, .panel-x {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em; text-transform: uppercase;
 }
 .panel-title { color: var(--ink); margin: 0; }
@@ -276,7 +384,7 @@ body {
 .panel-body { padding: 1.5rem; overflow-y: auto; }
 .panel-label { display: block; font-size: 1rem; line-height: 1.5; color: var(--prose); margin: 0 0 0.875rem; }
 .panel-input {
-  width: 100%; font-family: Spectral, Georgia, serif; font-size: 1.0625rem;
+  width: 100%; font-family: var(--face-text); font-size: 1.0625rem;
   color: var(--ink); background: transparent;
   border: 0; border-bottom: 1px solid var(--rule-strong); border-radius: 0;
   padding: 0.625rem 0; min-height: 44px;
@@ -286,7 +394,7 @@ body {
 .panel-note { font-size: 0.875rem; line-height: 1.55; color: var(--machine); margin: 1rem 0 0; }
 .panel-examples { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
 .example {
-  width: 100%; text-align: left; font-family: Spectral, Georgia, serif;
+  width: 100%; text-align: left; font-family: var(--face-text);
   font-size: 0.9375rem; line-height: 1.45; color: var(--prose);
   background: transparent; border: 0; border-top: 1px solid var(--rule-hair);
   padding: 0.75rem 0; cursor: pointer; min-height: 44px;
@@ -305,6 +413,17 @@ body {
 }
 .plate-lead { grid-column: span 10; }
 .lead .body { grid-column: span 6; }
+/* A lead with no photograph. There is no ten-column plate to sit beside, so
+   the text takes the whole measure instead of keeping six of sixteen tracks
+   and leaving ten empty columns to its right — which is what the page did
+   before this line existed. The lead headline is not promoted to compensate:
+   it is already at 2.125rem against the brief's 1.0625, exactly the 2.0
+   lead-to-tail ratio the system caps itself at, so width is the only channel
+   left. It has not happened yet — every lead in the archive carries an image —
+   which is precisely why it is written before it does.
+   Specificity is (0,3,0) against the media queries' (0,2,0), so it holds at
+   every width without being repeated in each one. */
+.lead:not(:has(.plate)) .body { grid-column: 1 / -1; }
 /* The one place the ratio breaks. The Economist does this exactly once, for its
    cover, which is what makes the break read as a signal rather than an accident:
    at 3/2 the lead plate stands taller than the column beside it and leaves the
@@ -318,7 +437,7 @@ body {
 .section { padding-top: 2.25rem; }
 
 .section-name {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--ink);
   margin: 0; padding-top: 0.75rem;
@@ -329,6 +448,28 @@ body {
   display: grid; gap: var(--gap) var(--gap);
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-top: 1.5rem;
+}
+
+/* A section with no name still opens.
+   The token table's job for --rule-strong is "opens a section", but the rule
+   that does it is attached to .section-name — so the one edition whose items
+   carry no theme renders a section with no name, no rule and therefore no
+   opening at all: the lead stops, and four features begin an inch and a half
+   later with nothing in between. It reads as a gap rather than as a
+   transition, and a page whose only strong rule is the one above the lead is
+   the twenty-identical-bands failure the ladder exists to prevent, arrived at
+   from the other side.
+   So when the name is absent the rule hangs on the features block instead, at
+   exactly the offset the name's own border occupies — the section's 2.25rem of
+   padding — and the labelled page is untouched to the pixel. Nothing is
+   invented for the occasion: same token, same weight, same position, minus the
+   word. What is deliberately *not* done is a rhythm rule every N briefs; every
+   mark in this system stands for something (this is the lead, this is a
+   section, this is where one item ends), and a divider placed by counting would
+   be the first one on the page that means nothing. */
+.section:not(:has(.section-name)) > .features {
+  border-top: 1px solid var(--rule-strong);
+  margin-top: 0; padding-top: 1.5rem;
 }
 
 .briefs {
@@ -346,7 +487,7 @@ body {
 .briefs .brief:first-child, .briefs .brief:nth-child(2) { border-top: 0; }
 
 .byline {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.6875rem; font-weight: 500; line-height: 1.4;
   letter-spacing: 0.083em; text-transform: uppercase;
   color: var(--machine); margin: 0 0 0.3125rem;
@@ -355,6 +496,23 @@ body {
 .head { margin: 0; font-weight: 600; }
 .feature .head { font-size: 1.3125rem; line-height: 1.2; letter-spacing: -0.012em; }
 .brief .head   { font-size: 1.0625rem; line-height: 1.4; display: inline; }
+
+/* A feature with no photograph. About a third of items arrive without a usable
+   image, so this is an ordinary day rather than an exception, and the card is
+   not a card with a hole in it: the headline takes the space the picture would
+   have had. One step up the same ladder, not a fourth size invented for the
+   occasion — 1.3125 → 1.625rem, leading 1.2 → 1.16, tracking −0.012 → −0.016em
+   is the feature tier interpolated toward the lead's 2.125 / 1.12 / −0.02, so
+   leading still moves with size instead of becoming a third free variable. It
+   stops well short of the lead: 1.625 over the tail's 1.0625 is 1.53 against
+   the ceiling of 2.0.
+   Only the feature tier gets a rule. A brief never carries a plate at all, so
+   the general .item:not(:has(.plate)) rule would promote all fifteen of them and
+   the compact tier would stop existing; and a lead cannot be promoted because
+   it is already at the ceiling — it takes the full measure instead, above. */
+.feature:not(:has(.plate)) .head {
+  font-size: 1.625rem; line-height: 1.16; letter-spacing: -0.016em;
+}
 
 .link { color: inherit; text-decoration: none; }
 .link::after { content: ""; position: absolute; inset: 0; }
@@ -387,18 +545,62 @@ body {
 }
 .item:has(.link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; }
 
+/* ─── The filtered view ──────────────────────────────────────────────────────
+   A selected chip is a filter, and the filter is two classes on <main>:
+   is-filtered, which is the mode, and filter-<theme>, which is the one
+   section that stays. Nothing else on the page knows. The DOM underneath is the
+   same server-rendered edition either way, which is what keeps the route
+   prerendered and keeps the no-script path — an anchor to a section that is
+   still there — working. The reference never carries the classes and neither
+   file needs to: they carry the rules, and they are one stylesheet in two
+   places. app/components/ThemeFilter.tsx is what puts the classes on.
+
+   The visible section goes compact rather than re-tiered. A brief is a
+   different shape — no plate, an inline headline, a dash and a run — so
+   re-tiering means re-rendering every item, on the client or at request time,
+   and both were refused. What the eye reads as compact is three differences and
+   all three are CSS: the plates go, the features grid goes to one column, and
+   the headline steps down. The step is the one the narrow width already takes,
+   1.3125 → 1.1875rem, rather than a fourth size invented for the occasion.
+
+   It deliberately also overrides the no-photograph promotion. With every plate
+   hidden, a promoted headline would be the only line in the list set larger for
+   a reason that is no longer on the screen. It wins on specificity rather than
+   on order — main.is-filtered .feature .head is (0,3,1) against the
+   promotion's (0,3,0) — so it holds inside the width queries below as well.
+
+   The briefs block is deliberately left alone. Collapsing it too was tried and
+   looked worse at 1440: two columns is where a compact item already reads on
+   this page, and one column runs the same line to 1260px, three times the
+   measure the deks beside it are capped at. The section still reads as one list
+   because the step from a one-column run of features into a two-column run of
+   briefs is the step the unfiltered page makes as well. */
+
+main.is-filtered > .lead,
+main.is-filtered > .section { display: none; }
+
+main.filter-ai      > #ai,
+main.filter-world   > #world,
+main.filter-games   > #games,
+main.filter-science > #science,
+main.filter-culture > #culture { display: block; }
+
+main.is-filtered .plate { display: none; }
+main.is-filtered .features { grid-template-columns: 1fr; gap: 1.75rem; }
+main.is-filtered .feature .head { font-size: 1.1875rem; }
+
 /* ─── The end ────────────────────────────────────────────────────────────── */
 
 .close { padding: 6rem 0 5rem; }
 .close-mark {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-variant-numeric: tabular-nums;
   font-size: clamp(3.25rem, 9vw, 4.5rem); line-height: 0.9; letter-spacing: 0.02em;
   color: var(--accent); margin: 0 0 1.25rem -0.11em;
 }
 .close-sentence { font-size: 1.0625rem; line-height: 1.5; color: var(--ink); margin: 0; }
 .close-next {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase;
   color: var(--machine); margin: 0.625rem 0 0;
 }
@@ -420,28 +622,21 @@ body {
   .briefs { grid-template-columns: 1fr; }
   .briefs .brief:nth-child(2) { border-top: 1px solid var(--rule-hair); }
   .feature .head { font-size: 1.1875rem; }
+  /* the promotion holds the same ~1.24 step over the tier it belongs to */
+  .feature:not(:has(.plate)) .head { font-size: 1.4375rem; }
   .dek { max-width: none; }
 }
 
 @media (forced-colors: active) {
   .brief, .briefs { border-top: 1px solid CanvasText; }
-  .section-name, .lead { border-top: 2px solid CanvasText; }
+  .section-name, .lead,
+  .section:not(:has(.section-name)) > .features { border-top: 2px solid CanvasText; }
   .byline { color: GrayText; }
-}
-
-.toggle {
-  position: fixed; top: 1rem; right: 1rem; z-index: 10;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase;
-  background: var(--paper); color: var(--machine);
-  border: 1px solid var(--rule-hair); border-radius: 0;
-  padding: 0.6rem 0.75rem; cursor: pointer; min-height: 44px;
 }
 </style>
 </head>
 <body>
 <button class="ask-fab" type="button" aria-haspopup="dialog" aria-controls="ask" onclick="document.getElementById('ask').showModal()"><span class="ask-fab-word">Ask</span><span class="sr-only"> this archive</span></button>
-<button class="toggle" onclick="const r=document.documentElement;const d=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',d?'light':'dark')">Light / Dark</button>
 
 <div class="page">
   <header class="masthead">
@@ -451,20 +646,15 @@ body {
     <p class="promise">${ed.items.length} items · closed 09:23</p>
     <div class="editionbar">
       <nav class="days" aria-label="Editions">
-        <a class="day" href="#" rel="prev">← ${prevLabel}</a>
+        ${prevSlot}
         <span class="day is-current" aria-current="date">${dayMonth}</span>
-        <span class="day is-off" aria-disabled="true">${nextLabel} →</span>
-        <a class="day day-all" href="#">All editions</a>
+        ${nextSlot}
+        <a class="day day-all" href="/archive">All editions</a>
       </nav>
-    </div>
-    <nav aria-label="Themes">
-      <ul class="themes">
-        ${nav}
-      </ul>
-    </nav>
+    </div>${themeNav}
   </header>
 
-  <main>
+  <main id="results" tabindex="-1">
 ${leadCard(lead)}
 ${sections}
   </main>
@@ -497,10 +687,15 @@ ${sections}
 </html>
 `
 
-writeFileSync(`${ROOT}/design-refs/home.html`, html)
-console.log('escrito: design-refs/home.html')
+writeFileSync(`${ROOT}/design-refs/${outfile}`, html)
+console.log(`escrito: design-refs/${outfile} — ${ed.date}, ${ed.items.length} itens`)
 console.log('lead:', lead.publisher)
-for (const [k, label] of present) {
-  const n = ed.items.filter((i) => i.theme === k && i.rank !== 1).length
-  console.log(`  ${label.padEnd(24)} ${n} itens — ${Math.min(4, n)} destaque, ${Math.max(0, n - 4)} compacto`)
+if (present.length) {
+  for (const [k, label] of present) {
+    const n = rest.filter((i) => i.theme === k).length
+    console.log(`  ${label.padEnd(24)} ${n} itens — ${Math.min(4, n)} destaque, ${Math.max(0, n - 4)} compacto`)
+  }
+} else {
+  console.log(`  sem temas — um grupo sem rótulo: ${Math.min(4, rest.length)} destaque, ${Math.max(0, rest.length - 4)} compacto`)
 }
+console.log(`  sem foto: ${ed.items.filter((i) => !i.image).length} de ${ed.items.length}`)

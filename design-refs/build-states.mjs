@@ -4,16 +4,60 @@
 // from the page it describes.
 
 import { readFileSync, writeFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const ROOT = '/Users/pauloluiz/dev/sentinel'
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const home = readFileSync(`${ROOT}/design-refs/home.html`, 'utf8')
 const css = home.match(/<style>([\s\S]*?)<\/style>/)[1]
 const fonts = home.match(/<link href="https:\/\/fonts[^>]*>/)[0]
 
 const ed = JSON.parse(readFileSync(`${ROOT}/content/days/2026-08-09.json`, 'utf8'))
+const prevEd = JSON.parse(readFileSync(`${ROOT}/content/days/2026-08-08.json`, 'utf8'))
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
-const sample = ed.items[1]
+// The two transforms and the three pieces of card markup, exactly as
+// build-home.mjs writes them. They are duplicated rather than imported because
+// that script is a top-to-bottom program with no exports — but they are
+// duplicated *deliberately and identically*: the frames below used to be
+// hand-written excerpts, and every place they simplified turned into a
+// guaranteed false failure the moment /states was built from the real
+// components. A dek here is typeset like a dek anywhere.
+const host = (u) => new URL(u).hostname.replace(/^www\./, '')
+const smallCaps = (s) => s.replace(/\b([A-Z]{2,4})\b/g, '<span class="acr">$1</span>')
+const leadIn = (s) => {
+  const m = s.match(/^(\S+\s+\S+)(\s+)([\s\S]*)$/)
+  return m ? `<b class="entry">${smallCaps(esc(m[1]))}</b>${m[2]}${smallCaps(esc(m[3]))}` : smallCaps(esc(s))
+}
+
+const link = (i) =>
+  `<a class="link" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">${smallCaps(esc(i.title))}<span class="sr-only"> (opens at ${esc(host(i.url))})</span></a>`
+const plate = (i, cls) =>
+  i.image ? `<span class="plate ${cls}"><img class="art" src="../public${i.image}" alt="" loading="lazy" decoding="async"></span>` : ''
+const feature = (i) => `<article class="item feature">
+        ${plate(i, 'plate-feature')}
+        <div class="body">
+          <p class="byline">${esc(i.publisher)}</p>
+          <h3 class="head">${link(i)}</h3>
+          <p class="dek">${leadIn(i.description)}</p>
+        </div>
+      </article>`
+
+// Dates the way lib/date.ts does them: parsed at noon UTC and formatted with an
+// explicit UTC zone, so the reference and the app cannot disagree by a day.
+const atNoon = (d) => new Date(`${d}T12:00:00Z`)
+const dayMonth = (d) => atNoon(d).toLocaleDateString('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'long' })
+const weekday = (d) => atNoon(d).toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'long' })
+
+// State 02's edition: thirty items truncated to seventeen and relabelled to a
+// Tuesday. targetCount stays at thirty — it is the ceiling the edition was
+// built against, and it is the whole of what makes the day thin.
+const THIN_DATE = '2026-08-11'
+const thin = { ...ed, date: THIN_DATE, items: ed.items.slice(0, 17) }
+
+// State 04's pair: a real card, and a real card with its photograph removed.
+const withPhoto = ed.items[3]
+const withoutPhoto = { ...ed.items[1], image: null }
 
 const state = (n, title, why, body) => `
 <section class="state">
@@ -37,17 +81,27 @@ ${css}
 
 /* ─── Catalogue chrome. Not part of the system. ──────────────────────────── */
 .cat { width: min(100% - 2.5rem, 60rem); margin-inline: auto; padding: 3rem 0 6rem; }
-.cat-title { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.75rem;
+.cat-title { font-family: var(--face-machine); font-size: 0.75rem;
              font-weight: 500; letter-spacing: 0.083em; text-transform: uppercase;
              color: var(--machine); margin: 0 0 0.75rem; }
 .cat-lede { font-size: 1.0625rem; line-height: 1.55; color: var(--prose); margin: 0 0 3rem; max-width: 34em; }
 .state { padding-top: 3.5rem; }
 .state-head { border-top: 1px solid var(--rule-strong); padding-top: 0.875rem; margin-bottom: 1.5rem; }
-.state-n { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.6875rem;
+.state-n { font-family: var(--face-machine); font-size: 0.6875rem;
            letter-spacing: 0.09em; color: var(--accent); margin: 0 0 0.5rem; }
 .state-title { font-size: 1.25rem; font-weight: 600; margin: 0; }
 .state-why { font-size: 0.9375rem; line-height: 1.55; color: var(--prose); margin: 0.5rem 0 0; max-width: 46em; }
 .state-frame { border: 1px solid var(--rule-hair); padding: 1.75rem; }
+/* A framed sample is the real component, and the real components carry the
+   page's own opening and closing space: .masthead opens at 3rem, .close closes
+   at 6rem/5rem. Inside a frame that space belongs to the frame's padding. It is
+   removed here rather than by an inline style on the sample, because a
+   component cannot carry one — the catalogue is what wants the change, so the
+   catalogue's own stylesheet is where it goes.
+   :first-child, so state 01 — where the masthead follows the stale banner and
+   opens at the 1.5rem that alert costs it — is untouched. */
+.state-frame .masthead:first-child { padding-top: 0; }
+.state-frame > .close { padding: 3rem 0 0; }
 </style>
 </head>
 <body>
@@ -62,14 +116,19 @@ ${state(
   '01',
   'Yesterday’s edition, still live',
   'The job failed, so nothing was written and the previous day stays up. The spec requires this be clearly marked. The banner is the one place the accent is spent on something other than the rank and the end mark, because it is the only genuine emergency the product has.',
+  // The masthead is the whole component, not an excerpt of it: the weekday is
+  // its own span at --machine, and the manifest — the model's editorial line —
+  // is between the date and the promise. Both were missing here, and both would
+  // have failed /states against a page that was right.
   `<div class="stale-banner">
-      <p class="stale-what">You are reading Saturday 8 August.</p>
-      <p class="stale-why">Today&rsquo;s edition did not build. The next run is 09:23 tomorrow.</p>
+      <p class="stale-what">You are reading ${weekday(prevEd.date)} ${dayMonth(prevEd.date)}.</p>
+      <p class="stale-why">Today&rsquo;s edition did not build. The next run is <time datetime="2026-08-10T09:23">09:23 tomorrow</time>.</p>
     </div>
     <header class="masthead" style="padding-top:1.5rem">
       <p class="wordmark">Sentinel</p>
-      <h1 class="editiondate">Saturday 8 August</h1>
-      <p class="promise">20 items &middot; closed 09:23</p>
+      <h1 class="editiondate"><span class="weekday">${weekday(prevEd.date)}</span> ${dayMonth(prevEd.date)}</h1>
+      <p class="manifest">${esc(prevEd.summary)}</p>
+      <p class="promise">${prevEd.items.length} items &middot; closed 09:23</p>
     </header>`,
 )}
 
@@ -77,15 +136,20 @@ ${state(
   '02',
   'A thin day',
   'Fewer than thirty candidates survived the window. The edition publishes anyway — a thin news day is not a failure — and says the number rather than leaving the reader to count. The end mark carries the real count, so it can never claim thirty on a day that had seventeen.',
-  `<header class="masthead" style="padding-top:0">
+  // No inline padding on either block. A framed sample is the real component
+  // and a component cannot carry one; the two rules that close the gap are in
+  // the catalogue chrome at the top of this file.
+  `<header class="masthead">
       <p class="wordmark">Sentinel</p>
-      <h1 class="editiondate">Tuesday 11 August</h1>
-      <p class="promise">17 items &middot; closed 09:23 &middot; a thin day</p>
+      <h1 class="editiondate"><span class="weekday">${weekday(thin.date)}</span> ${dayMonth(thin.date)}</h1>
+      <p class="manifest">${esc(thin.summary)}</p>
+      <p class="promise">${thin.items.length} items &middot; closed 09:23 &middot; a thin day</p>
     </header>
-    <footer class="close" style="padding:3rem 0 0">
-      <p class="close-mark" aria-hidden="true">-17-</p>
-      <p class="close-sentence">That was Tuesday 11 August. Seventeen items — the window was thin.</p>
+    <footer class="close">
+      <p class="close-mark" aria-hidden="true">-${thin.items.length}-</p>
+      <p class="close-sentence">That was ${weekday(thin.date)} ${dayMonth(thin.date)}. Seventeen items — the window was thin.</p>
       <p class="close-next">Next edition 09:23 tomorrow</p>
+      <span class="sr-only">End of edition.</span>
     </footer>`,
 )}
 
@@ -93,39 +157,44 @@ ${state(
   '03',
   'A day with no edition',
   'An archive date the pipeline never wrote. Not a 404 — the date is a real day and the reader asked for it by name. It says what is true and offers the nearest thing that exists.',
-  `<header class="masthead" style="padding-top:0">
-      <p class="wordmark">Sentinel</p>
-      <h1 class="editiondate">Monday 3 August</h1>
-      <p class="promise">No edition</p>
-      <p class="manifest" style="font-style:normal">Nothing ran on 3 August. The job did not complete, and an edition is never written after the fact.</p>
-      <nav class="days" style="margin-top:1.25rem">
-        <a class="day" href="#">&larr; 2 August</a>
-        <a class="day" href="#">4 August &rarr;</a>
-        <a class="day day-all" href="#">Latest edition</a>
-      </nav>
-    </header>`,
+  // `NoEdition` is a route body, so it owns the page column — the frame gets
+  // the `.page` wrapper the component actually renders rather than a bare
+  // masthead. The nav sits in `.editionbar` for the same reason: that class is
+  // the token for the space under a masthead, and the 1.25rem written here by
+  // hand was an approximation of its 1.5rem, four pixels out.
+  `<div class="page">
+      <header class="masthead">
+        <p class="wordmark">Sentinel</p>
+        <h1 class="editiondate">Monday 3 August</h1>
+        <p class="promise">No edition</p>
+        <p class="manifest" style="font-style:normal">Nothing ran on 3 August. The job did not complete, and an edition is never written after the fact.</p>
+        <div class="editionbar">
+          <nav class="days" aria-label="Editions">
+            <a class="day" href="/day/2026-08-02" rel="prev">&larr; 2 August</a>
+            <a class="day" href="/day/2026-08-04" rel="next">4 August &rarr;</a>
+            <a class="day day-all" href="/">Latest edition</a>
+          </nav>
+        </div>
+      </header>
+    </div>`,
 )}
 
 ${state(
   '04',
   'An item with no photograph',
   'Roughly a third of items arrive without a usable image. The card is not a card with a hole in it — it is a card whose headline takes the space the picture would have had. The rhythm that produces is different every day and derived entirely from the day’s real data.',
+  // The right-hand card carries no .plate, so the promotion comes from
+  // `.feature:not(:has(.plate)) .head` in the stylesheet. It used to be an
+  // inline font-size here, which meant the reference showed a rule the
+  // stylesheet did not contain and what shipped was the card with the hole.
+  //
+  // Both cards go through `feature()` now. Written out by hand they lost the
+  // lead-in bold and the small caps that every other dek on the site carries,
+  // so the frame demonstrating the no-photograph rule was also, silently, a
+  // frame demonstrating untypeset text.
   `<div class="features" style="grid-template-columns:repeat(2,minmax(0,1fr))">
-      <article class="item feature">
-        <span class="plate plate-feature"><img class="art" src="../public${ed.items[3].image}" alt=""></span>
-        <div class="body">
-          <p class="byline">${esc(ed.items[3].publisher)}</p>
-          <h3 class="head"><a class="link" href="#">${esc(ed.items[3].title)}</a></h3>
-          <p class="dek">${esc(ed.items[3].description)}</p>
-        </div>
-      </article>
-      <article class="item feature">
-        <div class="body">
-          <p class="byline">${esc(sample.publisher)}</p>
-          <h3 class="head" style="font-size:1.625rem;line-height:1.16"><a class="link" href="#">${esc(sample.title)}</a></h3>
-          <p class="dek">${esc(sample.description)}</p>
-        </div>
-      </article>
+      ${feature(withPhoto)}
+      ${feature(withoutPhoto)}
     </div>`,
 )}
 
@@ -171,7 +240,7 @@ ${state(
 .ask-q { font-size: 1.0625rem; color: var(--ink); }
 .ask-bar { flex: 1; height: 2px; background: var(--accent); opacity: 0.55; }
 .ask-a { font-size: 1.0625rem; line-height: 1.6; color: var(--ink); margin: 0.5rem 0 0; }
-.cite { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.6875rem;
+.cite { font-family: var(--face-machine); font-size: 0.6875rem;
         letter-spacing: 0.083em; text-transform: uppercase; color: var(--accent);
         white-space: nowrap; margin-left: 0.25rem; }
 </style>
