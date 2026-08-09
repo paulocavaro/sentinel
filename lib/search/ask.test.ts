@@ -236,16 +236,47 @@ describe('askArchive', () => {
     for (const failure of failures) expect(Object.keys(failure)).toEqual(['kind'])
   })
 
-  it('fails rather than refuses when the model never searched', async () => {
-    // Not in the plan's list, and it closes the one hole the refusal has. A
-    // refusal is a *claim about the archive* — "no story about that has run
-    // here" — and a model that never called the tool has no standing to make
-    // it. Answering `nothing` from memory would put the product's own sin, an
-    // unsourced assertion, into the sentence that exists to avoid it.
+  // ── The model that answers without searching ──────────────────────────────
+  //
+  // A refusal is a *claim about the archive* — "no story about that has run
+  // here" — and a model that never called the tool has no standing to make it.
+  // The first version of this failed outright, and an end-to-end run showed why
+  // that was the wrong correction: on a question with no real content the model
+  // skips the tool, and the reader got "something went wrong" where "nothing
+  // about that here" was the truer sentence.
+  //
+  // So the claim is checked rather than taken or refused on trust: one search,
+  // on the reader's own words, and the archive decides.
+  describe('when the model never searched', () => {
     const unsearched: Generator = async () => ({ kind: 'nothing' })
 
-    expect(await askArchive(deps(unsearched), { question: 'Anything?' })).toEqual({
-      kind: 'failed',
+    it('refuses, when a search on the question would also have found nothing', async () => {
+      expect(
+        await askArchive(deps(unsearched), { question: 'zeppelin regatta timetables' }),
+      ).toEqual({ kind: 'nothing', editions: 3, from: '2026-08-07' })
+    })
+
+    it('fails, when there was material and the model declined to look', async () => {
+      // "Anthropic" is in the corpus. Refusing over items that exist is the
+      // unsourced assertion this module exists to prevent, so there is no
+      // answer to give.
+      expect(await askArchive(deps(unsearched), { question: 'Anthropic' })).toEqual({
+        kind: 'failed',
+      })
+    })
+
+    it('still fails when it cited ids it was never given', async () => {
+      // The confirming search fills `seen` with real items; the model's ids came
+      // from nowhere, so validation refuses them exactly as it would any other
+      // unearned id.
+      const invented: Generator = async () => ({
+        kind: 'answer',
+        sentences: [{ text: 'Something happened.', ids: [UNSEEN] }],
+      })
+
+      expect(await askArchive(deps(invented), { question: 'Anthropic' })).toEqual({
+        kind: 'failed',
+      })
     })
   })
 

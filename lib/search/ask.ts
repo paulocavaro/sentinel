@@ -363,7 +363,26 @@ export async function askArchive(
     return { kind: 'failed' }
   }
 
-  if (tally.searches === 0) return { kind: 'failed' }
+  // **The model answered without ever searching.**
+  //
+  // A refusal is a claim about the archive — *"no story about that has run
+  // here"* — and a model that never looked has no standing to make it. But
+  // failing outright was the wrong correction: an end-to-end run showed the
+  // model skipping the tool on a question with no real content, and the reader
+  // then got *"something went wrong"* where *"nothing about that here"* was the
+  // truer sentence.
+  //
+  // So the claim is made checkable instead of being taken or refused on trust:
+  // search once, on the reader's own words, and let the archive decide. An empty
+  // result means the refusal was right for the wrong reason, and it stands. A
+  // non-empty one means there was material and the model declined to look at
+  // it — there is no answer to give, and inventing a refusal over items that
+  // exist is exactly the failure this module exists to prevent.
+  if (tally.searches === 0) {
+    for (const hit of searchNews(index, asked)) seen.set(hit.id, hit)
+    if (seen.size > 0) return { kind: 'failed' }
+  }
+
   if (seen.size === 0) return refusal()
 
   const answer = validateAnswer(raw, seen)
