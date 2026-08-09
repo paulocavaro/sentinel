@@ -37,13 +37,13 @@ ${css}
 
 /* ─── Catalogue chrome. Not part of the system. ──────────────────────────── */
 .cat { width: min(100% - 2.5rem, 60rem); margin-inline: auto; padding: 3rem 0 6rem; }
-.cat-title { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.75rem;
+.cat-title { font-family: var(--face-machine); font-size: 0.75rem;
              font-weight: 500; letter-spacing: 0.083em; text-transform: uppercase;
              color: var(--machine); margin: 0 0 0.75rem; }
 .cat-lede { font-size: 1.0625rem; line-height: 1.55; color: var(--prose); margin: 0 0 3rem; max-width: 34em; }
 .state { padding-top: 3.5rem; }
 .state-head { border-top: 1px solid var(--rule-strong); padding-top: 0.875rem; margin-bottom: 1.5rem; }
-.state-n { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.6875rem;
+.state-n { font-family: var(--face-machine); font-size: 0.6875rem;
            letter-spacing: 0.09em; color: var(--accent); margin: 0 0 0.5rem; }
 .state-title { font-size: 1.25rem; font-weight: 600; margin: 0; }
 .state-why { font-size: 0.9375rem; line-height: 1.55; color: var(--prose); margin: 0.5rem 0 0; max-width: 46em; }
@@ -171,7 +171,7 @@ ${state(
 .ask-q { font-size: 1.0625rem; color: var(--ink); }
 .ask-bar { flex: 1; height: 2px; background: var(--accent); opacity: 0.55; }
 .ask-a { font-size: 1.0625rem; line-height: 1.6; color: var(--ink); margin: 0.5rem 0 0; }
-.cite { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.6875rem;
+.cite { font-family: var(--face-machine); font-size: 0.6875rem;
         letter-spacing: 0.083em; text-transform: uppercase; color: var(--accent);
         white-space: nowrap; margin-left: 0.25rem; }
 </style>

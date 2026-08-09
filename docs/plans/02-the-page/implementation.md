@@ -63,29 +63,29 @@ places rather than two dialects of one design.
 
 **Files:** modify `app/layout.tsx`; create `app/not-found.tsx`, `app/error.tsx`
 
-- [ ] **Step 1 — Fonts.** `next/font/google`: `Spectral` weights 400 and 600,
+- [x] **Step 1 — Fonts.** `next/font/google`: `Spectral` weights 400 and 600,
   styles normal and italic; `IBM_Plex_Mono` weights 400 and 500. Spectral is not
   a variable font, so the request loads all four combinations — say so in a
   comment rather than leaving it to be discovered. Expose them as CSS variables
   and introduce `--face-text` / `--face-machine` in the stylesheet **and in
   `design-refs/home.html`**, so the two documents stay identical. This is a
   refactor of the reference, not only of the port.
-- [ ] **Step 2 — Layout.** Drop `Geist`, the `@theme` block, and the
+- [x] **Step 2 — Layout.** Drop `Geist`, the `@theme` block, and the
   `h-full antialiased` / `min-h-full flex flex-col` utilities — nothing in the
   design needs full height or flex, and the stylesheet already sets font
   smoothing. Real metadata: a title template, the spec's first line as
   description, `metadataBase`, and an icon.
-- [ ] **Step 3 — The viewport export, not `metadata.themeColor`.**
+- [x] **Step 3 — The viewport export, not `metadata.themeColor`.**
   `Metadata.themeColor` is deprecated in Next 16, still typechecks, and is
   **silently not emitted** — it only logs a build warning. The gate would be
   green and the tags absent, which is exactly the failure the tags prevent. Use
   `export const viewport: Viewport = { themeColor: [...] }` with the two
   `prefers-color-scheme` entries.
-- [ ] **Step 4 — `not-found.tsx` and `error.tsx`**, in the product's voice. The
+- [x] **Step 4 — `not-found.tsx` and `error.tsx`**, in the product's voice. The
   end-of-phase checklist requires an error state on every surface and no other
   task produces one.
-- [ ] **Step 5 — Gate**
-- [ ] **Step 6 — Commit:** `feat(02): the shell`
+- [x] **Step 5 — Gate**
+- [x] **Step 6 — Commit:** `feat(02): the shell`
 
 ---
 

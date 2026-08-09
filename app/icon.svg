@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Sentinel">
+  <!-- The design system has no icon set: "any glyph is a character in IBM Plex
+       Mono, or it does not exist". So the mark is the wordmark's first letter,
+       ink on paper, set in the machine face with the same tracking the wordmark
+       carries. Ground is the dark paper in both schemes — a tab strip is chrome,
+       not the page, and a mark that inverts with the theme is two marks. -->
+  <rect width="32" height="32" fill="#16171A"/>
+  <text x="16.4" y="23.2" text-anchor="middle" fill="#ECEAE4"
+        font-family="'IBM Plex Mono', ui-monospace, monospace"
+        font-size="21" font-weight="500" letter-spacing="1.8">S</text>
+</svg>

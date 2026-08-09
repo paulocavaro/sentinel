@@ -130,6 +130,13 @@ const html = `<!doctype html>
   --rule-strong: light-dark(#17171A, #ECEAE4);
   --edge:        light-dark(#C9C5BC, #3B3D42);
 
+  /* Two faces, named once, and never named again. This file loads them from the
+     Google stylesheet linked above, so the properties name the families
+     directly; app/globals.css points the same two properties at its next/font
+     variables. That pair of lines is the only difference between the two. */
+  --face-text:    Spectral, Georgia, serif;
+  --face-machine: 'IBM Plex Mono', ui-monospace, monospace;
+
   --col: 60px;
   --gap: 20px;
   --tracks: 16;
@@ -149,7 +156,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: Spectral, Georgia, serif;
+  font-family: var(--face-text);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -168,13 +175,13 @@ body {
 .masthead { padding: 3rem 0 1.5rem; }
 
 .wordmark {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
   text-transform: uppercase; color: var(--machine); margin: 0;
 }
 
 .editiondate {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-variant-numeric: tabular-nums;
   font-size: clamp(2.5rem, 7vw, 3.75rem);
   font-weight: 400; line-height: 0.98; letter-spacing: -0.035em;
@@ -188,7 +195,7 @@ body {
 }
 
 .promise {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.09em;
   text-transform: uppercase; color: var(--machine); margin: 0.875rem 0 0;
 }
@@ -198,7 +205,7 @@ body {
 .themes { list-style: none; display: flex; flex-wrap: wrap; gap: 1.5rem;
           margin: 1.75rem 0 0; padding: 0 0 1.25rem; }
 .chip {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
   text-transform: uppercase; color: var(--machine); text-decoration: none;
   padding-bottom: 0.25rem; border-bottom: 2px solid transparent;
@@ -213,7 +220,7 @@ body {
 .editionbar { margin-top: 1.5rem; }
 .days { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: baseline; }
 .day {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
   text-transform: uppercase; color: var(--machine); text-decoration: none;
 }
@@ -237,7 +244,7 @@ body {
   transition: transform var(--dur-tap) var(--ease-out), background-color var(--dur-tap) var(--ease-out);
 }
 .ask-fab-word {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
 }
 .ask-fab:hover { background: var(--accent); }
@@ -265,7 +272,7 @@ body {
   padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--rule-hair);
 }
 .panel-title, .panel-x {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em; text-transform: uppercase;
 }
 .panel-title { color: var(--ink); margin: 0; }
@@ -276,7 +283,7 @@ body {
 .panel-body { padding: 1.5rem; overflow-y: auto; }
 .panel-label { display: block; font-size: 1rem; line-height: 1.5; color: var(--prose); margin: 0 0 0.875rem; }
 .panel-input {
-  width: 100%; font-family: Spectral, Georgia, serif; font-size: 1.0625rem;
+  width: 100%; font-family: var(--face-text); font-size: 1.0625rem;
   color: var(--ink); background: transparent;
   border: 0; border-bottom: 1px solid var(--rule-strong); border-radius: 0;
   padding: 0.625rem 0; min-height: 44px;
@@ -286,7 +293,7 @@ body {
 .panel-note { font-size: 0.875rem; line-height: 1.55; color: var(--machine); margin: 1rem 0 0; }
 .panel-examples { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
 .example {
-  width: 100%; text-align: left; font-family: Spectral, Georgia, serif;
+  width: 100%; text-align: left; font-family: var(--face-text);
   font-size: 0.9375rem; line-height: 1.45; color: var(--prose);
   background: transparent; border: 0; border-top: 1px solid var(--rule-hair);
   padding: 0.75rem 0; cursor: pointer; min-height: 44px;
@@ -318,7 +325,7 @@ body {
 .section { padding-top: 2.25rem; }
 
 .section-name {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--ink);
   margin: 0; padding-top: 0.75rem;
@@ -346,7 +353,7 @@ body {
 .briefs .brief:first-child, .briefs .brief:nth-child(2) { border-top: 0; }
 
 .byline {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.6875rem; font-weight: 500; line-height: 1.4;
   letter-spacing: 0.083em; text-transform: uppercase;
   color: var(--machine); margin: 0 0 0.3125rem;
@@ -391,14 +398,14 @@ body {
 
 .close { padding: 6rem 0 5rem; }
 .close-mark {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-variant-numeric: tabular-nums;
   font-size: clamp(3.25rem, 9vw, 4.5rem); line-height: 0.9; letter-spacing: 0.02em;
   color: var(--accent); margin: 0 0 1.25rem -0.11em;
 }
 .close-sentence { font-size: 1.0625rem; line-height: 1.5; color: var(--ink); margin: 0; }
 .close-next {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase;
   color: var(--machine); margin: 0.625rem 0 0;
 }
@@ -431,7 +438,7 @@ body {
 
 .toggle {
   position: fixed; top: 1rem; right: 1rem; z-index: 10;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-family: var(--face-machine);
   font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase;
   background: var(--paper); color: var(--machine);
   border: 1px solid var(--rule-hair); border-radius: 0;
