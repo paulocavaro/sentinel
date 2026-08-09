@@ -424,7 +424,7 @@ code path production runs.
 - Produces: `takeToken(key: string, now?: number): { ok: true } | { ok: false; retryAfter: number }`,
   `WINDOW_MS`, `MAX_IN_WINDOW`, `bucketKey(headers: Headers): string`
 
-- [ ] **Step 1 — Failing test:** `lib/search/limit.test.ts`, with the clock
+- [x] **Step 1 — Failing test:** `lib/search/limit.test.ts`, with the clock
   injected rather than faked globally.
 
   ```ts
@@ -443,8 +443,8 @@ code path production runs.
     it('falls back to a shared bucket when neither is present', () => {})
   })
   ```
-- [ ] **Step 2 — Run, confirm failure:** `pnpm vitest run lib/search`
-- [ ] **Step 3 — Implement.** A `Map<string, number[]>` of timestamps, pruned on
+- [x] **Step 2 — Run, confirm failure:** `pnpm vitest run lib/search`
+- [x] **Step 3 — Implement.** A `Map<string, number[]>` of timestamps, pruned on
   read. `WINDOW_MS = 10 * 60_000`, `MAX_IN_WINDOW = 10`.
 
   Two honest limits go in the file's comment rather than being discovered later.
@@ -454,8 +454,8 @@ code path production runs.
   instance recycling forgets its counters. Both were accepted in the design; a
   datastore is the wrong shape for a site whose whole claim is that it is files
   in a repository.
-- [ ] **Step 4 — Run tests, confirm green:** `pnpm vitest run lib/search`
-- [ ] **Step 5 — Commit:** `feat(03): a rate limit on the one paid route`
+- [x] **Step 4 — Run tests, confirm green:** `pnpm vitest run lib/search`
+- [x] **Step 5 — Commit:** `feat(03): a rate limit on the one paid route`
 
 ---
 
