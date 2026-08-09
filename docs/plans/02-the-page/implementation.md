@@ -154,7 +154,7 @@ regenerate both HTML files; create `design-refs/day.html`
 `readLatestEdition(): Promise<Edition | null>`, `themesOf(edition)`,
 `isThin(edition)`
 
-- [ ] **Step 1 — Failing test**, reading from a temp directory so no test depends
+- [x] **Step 1 — Failing test**, reading from a temp directory so no test depends
   on the committed editions. Cover: dates newest first; a corrupt file skipped;
   `readEdition` null for a missing date; **`themesOf` empty for an edition whose
   items carry no `theme`** — the 8 August edition predates the field and must
@@ -162,14 +162,14 @@ regenerate both HTML files; create `design-refs/day.html`
   appearance; **`isThin` reads `edition.targetCount`, never `TARGET_COUNT`** —
   the 8 August edition is a complete twenty-item edition with `targetCount: 20`,
   and a maker importing the constant would label it a thin day.
-- [ ] **Step 2 — Run, confirm failure**
-- [ ] **Step 3 — Implement.** The reader's item type makes `theme` optional; a
+- [x] **Step 2 — Run, confirm failure**
+- [x] **Step 3 — Implement.** The reader's item type makes `theme` optional; a
   type that lies about the archive pushes the failure into a component.
   `readLatestEdition` returns `Edition | null` — an empty `content/days` is
   reachable on a fresh clone. Wrap the readers in `React.cache`: `generateMetadata`
   and the page each call them, and non-`fetch` reads are not memoised.
-- [ ] **Step 4 — Gate**
-- [ ] **Step 5 — Commit:** `feat(02): the edition reader`
+- [x] **Step 4 — Gate**
+- [x] **Step 5 — Commit:** `feat(02): the edition reader`
 
 ---
 
