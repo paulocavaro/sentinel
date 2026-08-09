@@ -82,6 +82,30 @@ body {
   clip-path: inset(50%); white-space: nowrap;
 }
 
+/* The skip link: the first focusable thing in the document, and the only way
+   past nineteen item links to the footer that does not cost nineteen presses.
+   It is deliberately not .sr-only. That class clips an element to one pixel,
+   which is right for text that must never be seen and wrong for a control whose
+   whole job is to appear the moment it is reached — unclipping it means putting
+   six properties back. A fixed box translated up by its own height is off the
+   viewport, still focusable, still in the accessible tree, and comes back with
+   one property.
+   :focus, not :focus-visible. The link cannot be clicked while it is off the
+   viewport, so every focus it ever gets is a keyboard's, and the two selectors
+   mean the same thing here — except that :focus-visible is the one that would
+   fail if a screen reader moved focus to it without a key press.
+   The box is paper with the ring drawn inside its own edge rather than a border
+   plus a ring, so the control has one line around it and not two. */
+.skip {
+  position: fixed; top: 0; left: 0; z-index: 30;
+  transform: translateY(-100%);
+  font-family: var(--face-machine);
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  background: var(--paper); padding: 0.875rem 1.25rem;
+}
+.skip:focus { transform: none; outline: 2px solid var(--ink); outline-offset: -2px; }
+
 .page { width: min(100% - 2.5rem, var(--content)); margin-inline: auto; }
 
 .acr { font-variant-caps: all-small-caps; letter-spacing: 0.03em; }
@@ -89,6 +113,23 @@ body {
 /* ─── Masthead ───────────────────────────────────────────────────────────── */
 
 .masthead { padding: 3rem 0 1.5rem; }
+
+/* The body of a page that is not an edition.
+   Five surfaces are a masthead, one sentence saying what happened, and the way
+   out: no such page, this page did not render, a day with no edition, a day
+   whose edition will not read, and an empty archive. All five used to put every
+   one of those elements inside header.masthead, which told a landmark reader
+   the page was a banner from top to bottom, and left the skip link above with
+   nowhere to go. The sentence and the links are a main element now.
+   These two rules are the entire pixel cost of that, and they cancel it. The
+   masthead's 1.5rem of closing space is what separated its last line from the
+   sentence under it; with the header ending early that space would land between
+   the two blocks *and* the sentence's own 1rem margin would follow it, opening
+   a gap the design never had. So the space moves with the content — off the
+   header, onto the end of the main, where it closes the page exactly as it did
+   before. Nothing else about these five pages changes. */
+.masthead:has(+ .wayout) { padding-bottom: 0; }
+.wayout { padding-bottom: 1.5rem; }
 
 .wordmark {
   font-family: var(--face-machine);
@@ -360,6 +401,18 @@ body {
 .brief .dash { color: var(--machine); }
 .brief .run  { font-size: 1.0625rem; line-height: 1.4; color: var(--prose); }
 
+/* The three elements on the page that carry a stranger's words, and the only
+   three that can be handed a string with no legal break point in it.
+   lib/ingest/sanitize.ts permits a single token of 200 characters — a URL in a
+   headline, a hashtag, a compound noun — and a feature column is four 60px
+   tracks wide, so one of those runs out of its column and across the one beside
+   it. Breaking inside a word is worse typography than not breaking; a headline
+   nobody can read is worse than both.
+   break-word rather than anywhere, which additionally shrinks the element's
+   min-content size — the grid would hand that back to the other columns, and
+   how wide a track is has never been the text's business. */
+.head, .dek, .run { overflow-wrap: break-word; }
+
 /* Photographs run in colour. A duotone would unify twenty publishers' colour
    grades into one plate, which is what Espresso does — but Espresso has one
    picture editor and these are twenty strangers' choices, so the cost is that
@@ -469,6 +522,7 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
 </style>
 </head>
 <body>
+<a class="skip" href="#results">Skip to the content</a>
 <button class="ask-fab" type="button" aria-haspopup="dialog" aria-controls="ask" onclick="document.getElementById('ask').showModal()"><span class="ask-fab-word">Ask</span><span class="sr-only"> this archive</span></button>
 
 <div class="page">
@@ -480,8 +534,8 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
     <div class="editionbar">
       <nav class="days" aria-label="Editions">
         <a class="day" href="/day/2026-08-08" rel="prev">← 8 August</a>
-        <span class="day is-current" aria-current="date">9 August</span>
-        <a class="day is-off" aria-disabled="true">10 August</a>
+        <span class="day is-current" aria-current="date"><span class="sr-only">Reading </span>9 August</span>
+        <span class="day is-off">10 August<span class="sr-only"> (no edition)</span></span>
         <a class="day day-all" href="/archive">All editions</a>
       </nav>
     </div>
@@ -502,8 +556,8 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
       <article class="item lead">
         <span class="plate plate-lead"><img class="art" src="../public/img/07c8fd08b015.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="body"><p class="byline">TechCrunch</p>
-          <h2 class="head"><a class="link " href="https://techcrunch.com/2026/08/07/openai-says-it-slowed-astra-model-development-over-security-concerns/" target="_blank" rel="noopener noreferrer">OpenAI says it slowed Astra model development over security concerns<span class="sr-only"> (opens at techcrunch.com)</span></a></h2>
-          <p class="dek"><b class="entry">OpenAI paused</b> development of its Astra model after finding it could independently launch cyberattacks, a stark warning about <span class="acr">AI</span>'s offensive potential.</p>
+          <h2 class="head" dir="auto"><a class="link " href="https://techcrunch.com/2026/08/07/openai-says-it-slowed-astra-model-development-over-security-concerns/" target="_blank" rel="noopener noreferrer">OpenAI says it slowed Astra model development over security concerns<span class="sr-only"> (opens at techcrunch.com)</span></a></h2>
+          <p class="dek" dir="auto"><b class="entry">OpenAI paused</b> development of its Astra model after finding it could independently launch cyberattacks, a stark warning about <span class="acr">AI</span>'s offensive potential.</p>
         </div>
       </article>
     <section class="section" id="ai" aria-labelledby="ai-name">
@@ -512,51 +566,51 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/7b1fdc1b9514.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">The Guardian</p>
-            <h3 class="head"><a class="link " href="https://www.theguardian.com/technology/2026/aug/08/google-demis-hassabis-deepmind-shifts-role" target="_blank" rel="noopener noreferrer">Google DeepMind enters a new era as co-founder Demis Hassabis shifts <span class="acr">AI</span> role<span class="sr-only"> (opens at theguardian.com)</span></a></h3>
-            <p class="dek"><b class="entry">Demis Hassabis</b> is stepping back from Google DeepMind's helm, fueling concern the lab is losing research independence to commercial pressure.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.theguardian.com/technology/2026/aug/08/google-demis-hassabis-deepmind-shifts-role" target="_blank" rel="noopener noreferrer">Google DeepMind enters a new era as co-founder Demis Hassabis shifts <span class="acr">AI</span> role<span class="sr-only"> (opens at theguardian.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Demis Hassabis</b> is stepping back from Google DeepMind's helm, fueling concern the lab is losing research independence to commercial pressure.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/a73be5838e2d.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">TechCrunch</p>
-            <h3 class="head"><a class="link " href="https://techcrunch.com/2026/08/07/new-mexico-court-orders-meta-to-pay-additional-567m-in-child-safety-case/" target="_blank" rel="noopener noreferrer">New Mexico court orders Meta to pay additional $567M in child safety case<span class="sr-only"> (opens at techcrunch.com)</span></a></h3>
-            <p class="dek"><b class="entry">A New</b> Mexico court hit Meta with another $567 million penalty in a child-safety case, pushing its total fine past $900 million.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://techcrunch.com/2026/08/07/new-mexico-court-orders-meta-to-pay-additional-567m-in-child-safety-case/" target="_blank" rel="noopener noreferrer">New Mexico court orders Meta to pay additional $567M in child safety case<span class="sr-only"> (opens at techcrunch.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">A New</b> Mexico court hit Meta with another $567 million penalty in a child-safety case, pushing its total fine past $900 million.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/50d8c339199a.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Ars Technica</p>
-            <h3 class="head"><a class="link " href="https://arstechnica.com/ai/2026/08/bytedance-trains-massive-ai-model-in-bid-to-rival-anthropic/" target="_blank" rel="noopener noreferrer">ByteDance trains massive <span class="acr">AI</span> model in bid to rival Anthropic<span class="sr-only"> (opens at arstechnica.com)</span></a></h3>
-            <p class="dek"><b class="entry">ByteDance is</b> training a 10-trillion-parameter model as it races to challenge Anthropic in the frontier <span class="acr">AI</span> arms race.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://arstechnica.com/ai/2026/08/bytedance-trains-massive-ai-model-in-bid-to-rival-anthropic/" target="_blank" rel="noopener noreferrer">ByteDance trains massive <span class="acr">AI</span> model in bid to rival Anthropic<span class="sr-only"> (opens at arstechnica.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">ByteDance is</b> training a 10-trillion-parameter model as it races to challenge Anthropic in the frontier <span class="acr">AI</span> arms race.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/3fa81885b902.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">TechCrunch</p>
-            <h3 class="head"><a class="link " href="https://techcrunch.com/2026/08/08/planned-amazon-data-center-could-become-the-biggest-climate-polluter-in-the-u-s/" target="_blank" rel="noopener noreferrer">Planned Amazon data center could become the biggest climate polluter in the U.S.<span class="sr-only"> (opens at techcrunch.com)</span></a></h3>
-            <p class="dek"><b class="entry">A planned</b> Amazon data center in Texas could become the single largest source of climate pollution in the U.S.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://techcrunch.com/2026/08/08/planned-amazon-data-center-could-become-the-biggest-climate-polluter-in-the-u-s/" target="_blank" rel="noopener noreferrer">Planned Amazon data center could become the biggest climate polluter in the U.S.<span class="sr-only"> (opens at techcrunch.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">A planned</b> Amazon data center in Texas could become the single largest source of climate pollution in the U.S.</p>
           </div>
         </article>
       </div>
       <div class="briefs">
         <article class="item brief">
           <div class="body"><p class="byline">The Guardian</p>
-            <h3 class="head"><a class="link " href="https://www.theguardian.com/technology/2026/aug/07/white-house-ai" target="_blank" rel="noopener noreferrer">The White House’s plan to vet potentially dangerous <span class="acr">AI</span> is cloaked in secrecy<span class="sr-only"> (opens at theguardian.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">The Trump administration finalized a secretive framework for vetting <span class="acr">AI</span> models' safety and cybersecurity risks, drawing transparency concerns.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.theguardian.com/technology/2026/aug/07/white-house-ai" target="_blank" rel="noopener noreferrer">The White House’s plan to vet potentially dangerous <span class="acr">AI</span> is cloaked in secrecy<span class="sr-only"> (opens at theguardian.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">The Trump administration finalized a secretive framework for vetting <span class="acr">AI</span> models' safety and cybersecurity risks, drawing transparency concerns.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">TechCrunch</p>
-            <h3 class="head"><a class="link " href="https://techcrunch.com/2026/08/08/openai-acquires-presentation-startup-nextslide/" target="_blank" rel="noopener noreferrer">OpenAI acquires presentation startup NextSlide<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">OpenAI acquired presentation startup NextSlide, folding its team into ChatGPT's product work.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://techcrunch.com/2026/08/08/openai-acquires-presentation-startup-nextslide/" target="_blank" rel="noopener noreferrer">OpenAI acquires presentation startup NextSlide<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">OpenAI acquired presentation startup NextSlide, folding its team into ChatGPT's product work.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">Ars Technica</p>
-            <h3 class="head"><a class="link " href="https://arstechnica.com/science/2026/08/deepminds-hurricane-model-bought-forecasters-an-extra-day/" target="_blank" rel="noopener noreferrer">DeepMind’s hurricane breakthrough has surprised weather scientists<span class="sr-only"> (opens at arstechnica.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">DeepMind's open WeatherNext model is surprising scientists with accurate hurricane forecasts from lower-resolution data.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://arstechnica.com/science/2026/08/deepminds-hurricane-model-bought-forecasters-an-extra-day/" target="_blank" rel="noopener noreferrer">DeepMind’s hurricane breakthrough has surprised weather scientists<span class="sr-only"> (opens at arstechnica.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">DeepMind's open WeatherNext model is surprising scientists with accurate hurricane forecasts from lower-resolution data.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">Ars Technica</p>
-            <h3 class="head"><a class="link " href="https://arstechnica.com/ai/2026/08/ai-chatbots-have-failed-people-in-crisis-can-that-be-fixed/" target="_blank" rel="noopener noreferrer"><span class="acr">AI</span> chatbots have failed people in crisis. Can that be fixed?<span class="sr-only"> (opens at arstechnica.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Clinicians say <span class="acr">AI</span> chatbots have repeatedly failed people in mental-health crises, and want companies to open up safety data.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://arstechnica.com/ai/2026/08/ai-chatbots-have-failed-people-in-crisis-can-that-be-fixed/" target="_blank" rel="noopener noreferrer"><span class="acr">AI</span> chatbots have failed people in crisis. Can that be fixed?<span class="sr-only"> (opens at arstechnica.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Clinicians say <span class="acr">AI</span> chatbots have repeatedly failed people in mental-health crises, and want companies to open up safety data.</span>
           </div>
         </article>
       </div>
@@ -567,46 +621,46 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/14cbb727ee27.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/cz7dy8gq99eo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Child among three killed in Russian missile attacks near Kyiv<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
-            <p class="dek"><b class="entry">Russian missile</b> strikes near Kyiv killed a child and two others, underscoring Ukraine's dwindling air-defence supplies.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/cz7dy8gq99eo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Child among three killed in Russian missile attacks near Kyiv<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Russian missile</b> strikes near Kyiv killed a child and two others, underscoring Ukraine's dwindling air-defence supplies.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/87fd73108bda.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">NPR</p>
-            <h3 class="head"><a class="link " href="https://www.npr.org/2026/08/07/nx-s1-5921212/el-obeid-sudan-war" target="_blank" rel="noopener noreferrer">Besieged Sudanese city faces relentless drone strikes and risk of mass atrocities, U.N. warns<span class="sr-only"> (opens at npr.org)</span></a></h3>
-            <p class="dek"><b class="entry">The U.N.</b> warns that drone strikes and disease are pushing Sudan's besieged el-Obeid toward mass atrocities.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.npr.org/2026/08/07/nx-s1-5921212/el-obeid-sudan-war" target="_blank" rel="noopener noreferrer">Besieged Sudanese city faces relentless drone strikes and risk of mass atrocities, U.N. warns<span class="sr-only"> (opens at npr.org)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">The U.N.</b> warns that drone strikes and disease are pushing Sudan's besieged el-Obeid toward mass atrocities.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/bcbeb063c2d9.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/c934j5y2lq9o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Hormuz talks positive, Oman says, as Iran warns deal would not open strait<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
-            <p class="dek"><b class="entry">Oman says</b> talks over the Strait of Hormuz are moving positively, though Iran still won't guarantee the waterway stays open.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/c934j5y2lq9o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Hormuz talks positive, Oman says, as Iran warns deal would not open strait<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Oman says</b> talks over the Strait of Hormuz are moving positively, though Iran still won't guarantee the waterway stays open.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/3c9131230eb4.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/c30418m4mj4o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Saudi Arabia, Turkey and Pakistan sign defence pact<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
-            <p class="dek"><b class="entry">Saudi Arabia,</b> Turkey and Pakistan signed a mutual-defence pact treating an attack on one as an attack on all, amid Middle East tensions.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/c30418m4mj4o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Saudi Arabia, Turkey and Pakistan sign defence pact<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Saudi Arabia,</b> Turkey and Pakistan signed a mutual-defence pact treating an attack on one as an attack on all, amid Middle East tensions.</p>
           </div>
         </article>
       </div>
       <div class="briefs">
         <article class="item brief">
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/cx25dkwk3e3o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Fast-moving Canada wildfire doubles in size forcing thousands to flee homes<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">A fast-moving wildfire in British Columbia has doubled in size, forcing thousands to flee as it remains out of control.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/cx25dkwk3e3o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Fast-moving Canada wildfire doubles in size forcing thousands to flee homes<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">A fast-moving wildfire in British Columbia has doubled in size, forcing thousands to flee as it remains out of control.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/cvglp2zlvrlo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Typhoon Dolphin batters Japan's Okinawa before bearing down on China<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Typhoon Dolphin has cut power to tens of thousands in Okinawa before turning toward China.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/cvglp2zlvrlo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Typhoon Dolphin batters Japan's Okinawa before bearing down on China<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Typhoon Dolphin has cut power to tens of thousands in Okinawa before turning toward China.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/cdewx6rew04o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Thai <span class="acr">PM</span> vows to introduce stricter gun laws after eight killed in shooting<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Thailand's prime minister promised stricter gun laws after a 14-year-old killed eight people in a shooting spree.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/cdewx6rew04o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Thai <span class="acr">PM</span> vows to introduce stricter gun laws after eight killed in shooting<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Thailand's prime minister promised stricter gun laws after a 14-year-old killed eight people in a shooting spree.</span>
           </div>
         </article>
       </div>
@@ -617,41 +671,41 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/e919ebec9745.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Eurogamer</p>
-            <h3 class="head"><a class="link " href="https://www.eurogamer.net/take-two-strauss-zelnick-not-concerned-rockstar-union-busting-gta-6" target="_blank" rel="noopener noreferrer">Take-Two boss &quot;not in the least&quot; concerned bad press around Rockstar's employment tribunal will affect <span class="acr">GTA</span> 6 launch<span class="sr-only"> (opens at eurogamer.net)</span></a></h3>
-            <p class="dek"><b class="entry">Take-Two's <span class="acr">CEO</span></b> says bad press over Rockstar's labor tribunal won't dent the marketing push toward <span class="acr">GTA</span> 6's launch.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.eurogamer.net/take-two-strauss-zelnick-not-concerned-rockstar-union-busting-gta-6" target="_blank" rel="noopener noreferrer">Take-Two boss &quot;not in the least&quot; concerned bad press around Rockstar's employment tribunal will affect <span class="acr">GTA</span> 6 launch<span class="sr-only"> (opens at eurogamer.net)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Take-Two's <span class="acr">CEO</span></b> says bad press over Rockstar's labor tribunal won't dent the marketing push toward <span class="acr">GTA</span> 6's launch.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/7263367b5a25.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Eurogamer</p>
-            <h3 class="head"><a class="link " href="https://www.eurogamer.net/ps5-boxes-labels-physical-media-2028" target="_blank" rel="noopener noreferrer">Sony appears to be putting labels on PS5 console boxes to warn people it's ending disc production<span class="sr-only"> (opens at eurogamer.net)</span></a></h3>
-            <p class="dek"><b class="entry">Sony is</b> now warning buyers on PS5 boxes that the console will stop supporting physical discs starting in 2028.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.eurogamer.net/ps5-boxes-labels-physical-media-2028" target="_blank" rel="noopener noreferrer">Sony appears to be putting labels on PS5 console boxes to warn people it's ending disc production<span class="sr-only"> (opens at eurogamer.net)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Sony is</b> now warning buyers on PS5 boxes that the console will stop supporting physical discs starting in 2028.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/a8eef7dec7b3.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Eurogamer</p>
-            <h3 class="head"><a class="link " href="https://www.eurogamer.net/devolver-digital-goes-private" target="_blank" rel="noopener noreferrer">Indie game publisher Devolver Digital wants to go private<span class="sr-only"> (opens at eurogamer.net)</span></a></h3>
-            <p class="dek"><b class="entry">Indie publisher</b> Devolver Digital is seeking to go private after a rocky stretch as a public company.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.eurogamer.net/devolver-digital-goes-private" target="_blank" rel="noopener noreferrer">Indie game publisher Devolver Digital wants to go private<span class="sr-only"> (opens at eurogamer.net)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Indie publisher</b> Devolver Digital is seeking to go private after a rocky stretch as a public company.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/f48a8eb25592.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Eurogamer</p>
-            <h3 class="head"><a class="link " href="https://www.eurogamer.net/br1-infinite-extraction-pays-for-kills" target="_blank" rel="noopener noreferrer">Extraction shooter BR1 Infinite is paying players for every in-game kill, drawing concerns about gambling and cheating<span class="sr-only"> (opens at eurogamer.net)</span></a></h3>
-            <p class="dek"><b class="entry">New extraction</b> shooter BR1 Infinite pays players for every kill, sparking worries about gambling incentives and cheating.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.eurogamer.net/br1-infinite-extraction-pays-for-kills" target="_blank" rel="noopener noreferrer">Extraction shooter BR1 Infinite is paying players for every in-game kill, drawing concerns about gambling and cheating<span class="sr-only"> (opens at eurogamer.net)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">New extraction</b> shooter BR1 Infinite pays players for every kill, sparking worries about gambling incentives and cheating.</p>
           </div>
         </article>
       </div>
       <div class="briefs">
         <article class="item brief">
           <div class="body"><p class="byline">Eurogamer</p>
-            <h3 class="head"><a class="link " href="https://www.eurogamer.net/gears-of-war-multiplayer-beta-popular-steam" target="_blank" rel="noopener noreferrer">Gears of War: E-Day multiplayer beta blows past series' records on Steam<span class="sr-only"> (opens at eurogamer.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Gears of War: E-Day's open beta has already shattered the series' concurrent-player records on Steam.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.eurogamer.net/gears-of-war-multiplayer-beta-popular-steam" target="_blank" rel="noopener noreferrer">Gears of War: E-Day multiplayer beta blows past series' records on Steam<span class="sr-only"> (opens at eurogamer.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Gears of War: E-Day's open beta has already shattered the series' concurrent-player records on Steam.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">Gamesindustry</p>
-            <h3 class="head"><a class="link " href="https://www.gamesindustry.biz/tripledot-studios-acquires-supersonic-from-unity-for-40m" target="_blank" rel="noopener noreferrer">Tripledot Studios acquires Supersonic from Unity for $40m<span class="sr-only"> (opens at gamesindustry.biz)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Tripledot Studios bought mobile publisher Supersonic from Unity for $40 million, consolidating mobile game publishing.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.gamesindustry.biz/tripledot-studios-acquires-supersonic-from-unity-for-40m" target="_blank" rel="noopener noreferrer">Tripledot Studios acquires Supersonic from Unity for $40m<span class="sr-only"> (opens at gamesindustry.biz)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Tripledot Studios bought mobile publisher Supersonic from Unity for $40 million, consolidating mobile game publishing.</span>
           </div>
         </article>
       </div>
@@ -662,36 +716,36 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/9e6e054c7d44.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Scientific American</p>
-            <h3 class="head"><a class="link " href="https://www.scientificamerican.com/article/why-google-deepmind-broke-up-the-alphafold-team/" target="_blank" rel="noopener noreferrer">Why Google DeepMind broke up the AlphaFold team<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3>
-            <p class="dek"><b class="entry">Google DeepMind</b> disbanded its AlphaFold team after largely solving protein structure prediction, handing the torch to outside researchers.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.scientificamerican.com/article/why-google-deepmind-broke-up-the-alphafold-team/" target="_blank" rel="noopener noreferrer">Why Google DeepMind broke up the AlphaFold team<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Google DeepMind</b> disbanded its AlphaFold team after largely solving protein structure prediction, handing the torch to outside researchers.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/f3240bd4ea3d.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Scientific American</p>
-            <h3 class="head"><a class="link " href="https://www.scientificamerican.com/article/ai-just-created-a-virus-not-found-in-nature-and-scientists-are-worried/" target="_blank" rel="noopener noreferrer"><span class="acr">AI</span> just created a virus not found in nature, and scientists are worried<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3>
-            <p class="dek"><b class="entry">Scientists used</b> <span class="acr">AI</span> to design a virus not found in nature, raising hope for new antibiotics and fears of misuse.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.scientificamerican.com/article/ai-just-created-a-virus-not-found-in-nature-and-scientists-are-worried/" target="_blank" rel="noopener noreferrer"><span class="acr">AI</span> just created a virus not found in nature, and scientists are worried<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Scientists used</b> <span class="acr">AI</span> to design a virus not found in nature, raising hope for new antibiotics and fears of misuse.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/4156665e59da.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Scientific American</p>
-            <h3 class="head"><a class="link " href="https://www.scientificamerican.com/article/nasas-voyager-2-survives-daring-big-bang-maneuver/" target="_blank" rel="noopener noreferrer"><span class="acr">NASA</span>’s Voyager 2 survives daring ‘big bang’ maneuver<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3>
-            <p class="dek"><b class="entry"><span class="acr">NASA</span> pulled</b> off a daring maneuver to keep Voyager 2 running nearly 49 years after launch despite fading power.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.scientificamerican.com/article/nasas-voyager-2-survives-daring-big-bang-maneuver/" target="_blank" rel="noopener noreferrer"><span class="acr">NASA</span>’s Voyager 2 survives daring ‘big bang’ maneuver<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry"><span class="acr">NASA</span> pulled</b> off a daring maneuver to keep Voyager 2 running nearly 49 years after launch despite fading power.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/81699bf62a28.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Scientific American</p>
-            <h3 class="head"><a class="link " href="https://www.scientificamerican.com/article/life-on-earth-emerged-twice-study/" target="_blank" rel="noopener noreferrer">Did life on Earth only arise once? Perhaps not<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3>
-            <p class="dek"><b class="entry">New research</b> suggests the last common ancestor of life on Earth may not have been alive at all, challenging assumptions about life's origin.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.scientificamerican.com/article/life-on-earth-emerged-twice-study/" target="_blank" rel="noopener noreferrer">Did life on Earth only arise once? Perhaps not<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">New research</b> suggests the last common ancestor of life on Earth may not have been alive at all, challenging assumptions about life's origin.</p>
           </div>
         </article>
       </div>
       <div class="briefs">
         <article class="item brief">
           <div class="body"><p class="byline">Quantamagazine</p>
-            <h3 class="head"><a class="link " href="https://www.quantamagazine.org/neutrinos-from-deep-inside-earth-provide-a-new-picture-of-the-mantle-20260807/" target="_blank" rel="noopener noreferrer">Neutrinos From Deep Inside Earth Provide a New Picture of the Mantle<span class="sr-only"> (opens at quantamagazine.org)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">A global network of neutrino detectors is giving scientists a new view of the radioactive elements powering Earth's mantle.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.quantamagazine.org/neutrinos-from-deep-inside-earth-provide-a-new-picture-of-the-mantle-20260807/" target="_blank" rel="noopener noreferrer">Neutrinos From Deep Inside Earth Provide a New Picture of the Mantle<span class="sr-only"> (opens at quantamagazine.org)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">A global network of neutrino detectors is giving scientists a new view of the radioactive elements powering Earth's mantle.</span>
           </div>
         </article>
       </div>
@@ -702,22 +756,22 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/793b48fdfba7.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Polygon</p>
-            <h3 class="head"><a class="link " href="https://www.polygon.com/the-witcher-season-5-has-been-quietly-delayed/" target="_blank" rel="noopener noreferrer">The Witcher season 5 delayed on Netflix, new report says<span class="sr-only"> (opens at polygon.com)</span></a></h3>
-            <p class="dek"><b class="entry">Netflix has</b> quietly pushed The Witcher's fifth and final season back to 2027.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.polygon.com/the-witcher-season-5-has-been-quietly-delayed/" target="_blank" rel="noopener noreferrer">The Witcher season 5 delayed on Netflix, new report says<span class="sr-only"> (opens at polygon.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Netflix has</b> quietly pushed The Witcher's fifth and final season back to 2027.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/2bf158788315.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Variety</p>
-            <h3 class="head"><a class="link " href="https://variety.com/2026/legit/news/andrew-lloyd-webber-cats-the-jellicle-ball-closing-night-1236830708/" target="_blank" rel="noopener noreferrer">Andrew Lloyd Webber Is ‘Gutted’ on ‘Cats: The Jellicle Ball’ Closing Night: Producing on Broadway Is ‘Unsustainable’<span class="sr-only"> (opens at variety.com)</span></a></h3>
-            <p class="dek"><b class="entry">Andrew Lloyd</b> Webber says he's 'gutted' as Cats: The Jellicle Ball closes, calling Broadway production economics unsustainable.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://variety.com/2026/legit/news/andrew-lloyd-webber-cats-the-jellicle-ball-closing-night-1236830708/" target="_blank" rel="noopener noreferrer">Andrew Lloyd Webber Is ‘Gutted’ on ‘Cats: The Jellicle Ball’ Closing Night: Producing on Broadway Is ‘Unsustainable’<span class="sr-only"> (opens at variety.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Andrew Lloyd</b> Webber says he's 'gutted' as Cats: The Jellicle Ball closes, calling Broadway production economics unsustainable.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/f930645e5371.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">Polygon</p>
-            <h3 class="head"><a class="link " href="https://www.polygon.com/matt-damon-action-thriller-netflix-biggest-streaming-hit-of-2026/" target="_blank" rel="noopener noreferrer">Matt Damon’s 113-Minute 10/10 Action Thriller Officially Crowned as Netflix’s Biggest Movie of 2026<span class="sr-only"> (opens at polygon.com)</span></a></h3>
-            <p class="dek"><b class="entry">Matt Damon's</b> action thriller has been crowned Netflix's most-streamed movie of 2026 with over 4.4 billion minutes watched.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.polygon.com/matt-damon-action-thriller-netflix-biggest-streaming-hit-of-2026/" target="_blank" rel="noopener noreferrer">Matt Damon’s 113-Minute 10/10 Action Thriller Officially Crowned as Netflix’s Biggest Movie of 2026<span class="sr-only"> (opens at polygon.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Matt Damon's</b> action thriller has been crowned Netflix's most-streamed movie of 2026 with over 4.4 billion minutes watched.</p>
           </div>
         </article>
       </div>

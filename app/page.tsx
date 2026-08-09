@@ -78,13 +78,21 @@ export default async function Home() {
           <p className="wordmark">Sentinel</p>
           <h1 className="editiondate">No editions yet</h1>
           <p className="promise">Nothing published</p>
+        </header>
+
+        {/* The sentence is the whole of this page's content, and it is a
+            `<main class="wayout">` for that reason — the same split every page
+            here that is not an edition makes, and the only one where the main
+            holds no link, because with nothing published there is nowhere to
+            offer. See `NoEdition`, and `.wayout` for why it costs no pixels. */}
+        <main className="wayout" id="results">
           {/* Upright, like `not-found.tsx` and `states.html` 03: `.manifest` is
               italic because it usually carries the model's editorial line, and
               this sentence is the product speaking. */}
           <p className="manifest" style={{ fontStyle: 'normal' }}>
             {`Sentinel publishes one edition a morning, closed at ${CLOSING_TIME}. The first one has not run yet.`}
           </p>
-        </header>
+        </main>
       </div>
     )
   }

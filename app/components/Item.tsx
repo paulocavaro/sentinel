@@ -63,6 +63,25 @@ function Headline({ item }: { item: EditionItem }) {
   )
 }
 
+/**
+ * `dir="auto"` sits on every element that carries a stranger's words — the
+ * headline, the description, the run — and nowhere else on the site.
+ *
+ * There is no other `dir` in the document: the page is `lang="en"` and
+ * left-to-right throughout, and an item whose headline opens with an Arabic or
+ * Hebrew name is a right-to-left paragraph inside it. Left to resolve against
+ * the page, the bidi algorithm reorders the neutral characters between that
+ * name and the English after it, and the publisher at the end of the line can
+ * come out at the wrong end. `auto` asks the element to take its direction from
+ * its own first strong character, which is the only thing here that knows.
+ *
+ * Per element rather than once on a wrapper, because the direction is a
+ * property of each item's text: a right-to-left headline can sit above a
+ * left-to-right description, and a wrapper would have to pick one for both.
+ *
+ * `lib/ingest/sanitize.ts` already strips bidi *controls* at ingest, so this is
+ * about ordinary right-to-left data rather than about an attack.
+ */
 export function Item({ item, tier }: { item: EditionItem; tier: ItemTier }) {
   // The summary runs on after an em dash rather than opening a block of its
   // own, which is how thirty attributed items fit on a screen without a card.
@@ -74,11 +93,11 @@ export function Item({ item, tier }: { item: EditionItem; tier: ItemTier }) {
       <article className="item brief">
         <div className="body">
           <Byline>{item.publisher}</Byline>
-          <h3 className="head">
+          <h3 className="head" dir="auto">
             <Headline item={item} />
           </h3>
           <span className="dash" aria-hidden="true">{' — '}</span>
-          <span className="run">{smallCaps(item.description)}</span>
+          <span className="run" dir="auto">{smallCaps(item.description)}</span>
         </div>
       </article>
     )
@@ -90,10 +109,10 @@ export function Item({ item, tier }: { item: EditionItem; tier: ItemTier }) {
         <Plate image={item.image} variant="lead" />
         <div className="body">
           <Byline>{item.publisher}</Byline>
-          <h2 className="head">
+          <h2 className="head" dir="auto">
             <Headline item={item} />
           </h2>
-          <p className="dek">{leadIn(item.description)}</p>
+          <p className="dek" dir="auto">{leadIn(item.description)}</p>
         </div>
       </article>
     )
@@ -104,10 +123,10 @@ export function Item({ item, tier }: { item: EditionItem; tier: ItemTier }) {
       <Plate image={item.image} variant="feature" />
       <div className="body">
         <Byline>{item.publisher}</Byline>
-        <h3 className="head">
+        <h3 className="head" dir="auto">
           <Headline item={item} />
         </h3>
-        <p className="dek">{leadIn(item.description)}</p>
+        <p className="dek" dir="auto">{leadIn(item.description)}</p>
       </div>
     </article>
   )

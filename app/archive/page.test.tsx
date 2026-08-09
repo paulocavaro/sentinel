@@ -44,15 +44,26 @@ describe('Archive', () => {
   describe('an empty archive', () => {
     // A fresh clone, and this repository between its first commit and its first
     // successful ingest. The same sentence `/` says, because it is the same
-    // fact — and the masthead is the only part of this page with anything to
-    // render.
+    // fact — and there is no list to draw.
     it('says the first edition has not run, and lists nothing', async () => {
       const page = html(await Archive())
 
       expect(page).toContain('No editions yet')
       expect(page).toContain('The first one has not run yet.')
       expect(page).toContain('Nothing published')
-      expect(page).not.toContain('<main>')
+      expect(page).not.toContain('class="section"')
+    })
+
+    // Nothing to list is not nothing to say. This page used to be a masthead
+    // and no more — a document a landmark reader is told is a banner from top
+    // to bottom, with nowhere for the layout's skip link to go. The sentence is
+    // the content, so the sentence is the main.
+    it('still puts what it does say in a main', async () => {
+      const page = html(await Archive())
+
+      expect(page).toContain('<main class="wayout" id="results">')
+      expect(page.indexOf('</header>')).toBeLessThan(page.indexOf('<main'))
+      expect(page.indexOf('<main')).toBeLessThan(page.indexOf('The first one has not run yet.'))
     })
   })
 
@@ -94,6 +105,15 @@ describe('Archive', () => {
       for (const date of ['2026-06-01', '2026-07-15', '2026-08-09']) {
         expect(page).toContain(`href="/day/${date}"`)
       }
+    })
+
+    // The list is the skip link's destination here as it is everywhere else,
+    // and this is the page where the bypass grows with the archive: one Tab per
+    // day published, forever, without it.
+    it('is the skip link target', async () => {
+      await publish('2026-08-09')
+
+      expect(html(await Archive())).toContain('<main id="results">')
     })
   })
 

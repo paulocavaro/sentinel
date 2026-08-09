@@ -20,6 +20,14 @@ export default function Error({ error }: { error: Error & { digest?: string } })
         <p className="promise">
           {error.digest ? `Failure ${error.digest}` : "Failure"}
         </p>
+      </header>
+
+      {/* The sentence and the way back are a `<main class="wayout">`, as on
+          every page here that is not an edition — see `NoEdition`. It matters
+          most on this one: an error boundary replaces the whole route, so
+          without it the reader of a failed page is handed a document that is
+          nothing but a banner. */}
+      <main className="wayout" id="results">
         {/* Upright, as in not-found.tsx: the italic on .manifest belongs to the
             model's editorial line, and this is the product speaking. */}
         <p className="manifest" style={{ fontStyle: "normal" }}>
@@ -34,7 +42,7 @@ export default function Error({ error }: { error: Error & { digest?: string } })
             </Link>
           </nav>
         </div>
-      </header>
+      </main>
     </div>
   );
 }

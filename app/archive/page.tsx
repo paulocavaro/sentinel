@@ -86,11 +86,20 @@ export default async function Archive() {
         <header className="masthead">
           <p className="wordmark">Sentinel</p>
           <h1 className="editiondate">No editions yet</h1>
+        </header>
+
+        {/* The sentence and the count are a `<main class="wayout">`, as on every
+            page here that is not an edition. The promise line comes *after* the
+            sentence on this page and before it on `app/page.tsx`, so it falls on
+            this side of the split — the order is what the two pages render
+            today, and moving a line to tidy the split would be moving pixels to
+            tidy a landmark. */}
+        <main className="wayout" id="results">
           <p className="manifest" style={{ fontStyle: 'normal' }}>
             {`Sentinel publishes one edition a morning, closed at ${CLOSING_TIME}. The first one has not run yet.`}
           </p>
           <p className="promise">Nothing published</p>
-        </header>
+        </main>
       </div>
     )
   }
@@ -118,7 +127,11 @@ export default async function Archive() {
         </div>
       </header>
 
-      <main>
+      {/* `id="results"` is the skip link's destination, which `app/layout.tsx`
+          points at on every route. It matters here as much as on an edition: a
+          reader on a keyboard otherwise arrives at the last month by pressing
+          Tab once per day the archive has published. */}
+      <main id="results">
         {months.map((month) => (
           <section className="section" key={month.key} aria-labelledby={`${month.key}-name`}>
             <h2 className="section-name" id={`${month.key}-name`}>

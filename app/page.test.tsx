@@ -126,6 +126,16 @@ describe('Home', () => {
     it('offers no edition bar, because there is nothing to step to', async () => {
       expect(html(await Home())).not.toContain('editionbar')
     })
+
+    // One sentence is still content. Inside the header it was a page a landmark
+    // reader is told is a banner and nothing else, with nowhere for the
+    // layout's skip link to land.
+    it('puts the sentence in a main, not in the masthead', async () => {
+      const page = html(await Home())
+
+      expect(page).toContain('<main class="wayout" id="results">')
+      expect(page.indexOf('</header>')).toBeLessThan(page.indexOf('The first one has not run yet.'))
+    })
   })
 })
 

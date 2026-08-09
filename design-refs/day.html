@@ -82,6 +82,30 @@ body {
   clip-path: inset(50%); white-space: nowrap;
 }
 
+/* The skip link: the first focusable thing in the document, and the only way
+   past nineteen item links to the footer that does not cost nineteen presses.
+   It is deliberately not .sr-only. That class clips an element to one pixel,
+   which is right for text that must never be seen and wrong for a control whose
+   whole job is to appear the moment it is reached — unclipping it means putting
+   six properties back. A fixed box translated up by its own height is off the
+   viewport, still focusable, still in the accessible tree, and comes back with
+   one property.
+   :focus, not :focus-visible. The link cannot be clicked while it is off the
+   viewport, so every focus it ever gets is a keyboard's, and the two selectors
+   mean the same thing here — except that :focus-visible is the one that would
+   fail if a screen reader moved focus to it without a key press.
+   The box is paper with the ring drawn inside its own edge rather than a border
+   plus a ring, so the control has one line around it and not two. */
+.skip {
+  position: fixed; top: 0; left: 0; z-index: 30;
+  transform: translateY(-100%);
+  font-family: var(--face-machine);
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  background: var(--paper); padding: 0.875rem 1.25rem;
+}
+.skip:focus { transform: none; outline: 2px solid var(--ink); outline-offset: -2px; }
+
 .page { width: min(100% - 2.5rem, var(--content)); margin-inline: auto; }
 
 .acr { font-variant-caps: all-small-caps; letter-spacing: 0.03em; }
@@ -89,6 +113,23 @@ body {
 /* ─── Masthead ───────────────────────────────────────────────────────────── */
 
 .masthead { padding: 3rem 0 1.5rem; }
+
+/* The body of a page that is not an edition.
+   Five surfaces are a masthead, one sentence saying what happened, and the way
+   out: no such page, this page did not render, a day with no edition, a day
+   whose edition will not read, and an empty archive. All five used to put every
+   one of those elements inside header.masthead, which told a landmark reader
+   the page was a banner from top to bottom, and left the skip link above with
+   nowhere to go. The sentence and the links are a main element now.
+   These two rules are the entire pixel cost of that, and they cancel it. The
+   masthead's 1.5rem of closing space is what separated its last line from the
+   sentence under it; with the header ending early that space would land between
+   the two blocks *and* the sentence's own 1rem margin would follow it, opening
+   a gap the design never had. So the space moves with the content — off the
+   header, onto the end of the main, where it closes the page exactly as it did
+   before. Nothing else about these five pages changes. */
+.masthead:has(+ .wayout) { padding-bottom: 0; }
+.wayout { padding-bottom: 1.5rem; }
 
 .wordmark {
   font-family: var(--face-machine);
@@ -360,6 +401,18 @@ body {
 .brief .dash { color: var(--machine); }
 .brief .run  { font-size: 1.0625rem; line-height: 1.4; color: var(--prose); }
 
+/* The three elements on the page that carry a stranger's words, and the only
+   three that can be handed a string with no legal break point in it.
+   lib/ingest/sanitize.ts permits a single token of 200 characters — a URL in a
+   headline, a hashtag, a compound noun — and a feature column is four 60px
+   tracks wide, so one of those runs out of its column and across the one beside
+   it. Breaking inside a word is worse typography than not breaking; a headline
+   nobody can read is worse than both.
+   break-word rather than anywhere, which additionally shrinks the element's
+   min-content size — the grid would hand that back to the other columns, and
+   how wide a track is has never been the text's business. */
+.head, .dek, .run { overflow-wrap: break-word; }
+
 /* Photographs run in colour. A duotone would unify twenty publishers' colour
    grades into one plate, which is what Espresso does — but Espresso has one
    picture editor and these are twenty strangers' choices, so the cost is that
@@ -469,6 +522,7 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
 </style>
 </head>
 <body>
+<a class="skip" href="#results">Skip to the content</a>
 <button class="ask-fab" type="button" aria-haspopup="dialog" aria-controls="ask" onclick="document.getElementById('ask').showModal()"><span class="ask-fab-word">Ask</span><span class="sr-only"> this archive</span></button>
 
 <div class="page">
@@ -479,8 +533,8 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
     <p class="promise">20 items · closed 09:23</p>
     <div class="editionbar">
       <nav class="days" aria-label="Editions">
-        <a class="day is-off" aria-disabled="true">7 August</a>
-        <span class="day is-current" aria-current="date">8 August</span>
+        <span class="day is-off">7 August<span class="sr-only"> (no edition)</span></span>
+        <span class="day is-current" aria-current="date"><span class="sr-only">Reading </span>8 August</span>
         <a class="day" href="/day/2026-08-09" rel="next">9 August →</a>
         <a class="day day-all" href="/">Latest edition</a>
         <a class="day day-all" href="/archive">All editions</a>
@@ -492,8 +546,8 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
       <article class="item lead">
         <span class="plate plate-lead"><img class="art" src="../public/img/adfa31b3b83d.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="body"><p class="byline">The Guardian</p>
-          <h2 class="head"><a class="link " href="https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient" target="_blank" rel="noopener noreferrer">Trump orders new 15% tariff on key material for solar panels and microchips<span class="sr-only"> (opens at theguardian.com)</span></a></h2>
-          <p class="dek"><b class="entry">Trump's new</b> 15% tariff on polysilicon used in chips and solar panels is a direct swipe at China's dominance of the supply chain.</p>
+          <h2 class="head" dir="auto"><a class="link " href="https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient" target="_blank" rel="noopener noreferrer">Trump orders new 15% tariff on key material for solar panels and microchips<span class="sr-only"> (opens at theguardian.com)</span></a></h2>
+          <p class="dek" dir="auto"><b class="entry">Trump's new</b> 15% tariff on polysilicon used in chips and solar panels is a direct swipe at China's dominance of the supply chain.</p>
         </div>
       </article>
     <section class="section">
@@ -501,106 +555,106 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/8dfbee8c355a.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">NPR</p>
-            <h3 class="head"><a class="link " href="https://www.npr.org/2026/08/06/nx-s1-5923623/iran-strait-hormuz-us-israel-ban" target="_blank" rel="noopener noreferrer">Iran aims to ban U.S. and Israeli ships from Strait of Hormuz and charge others a toll<span class="sr-only"> (opens at npr.org)</span></a></h3>
-            <p class="dek"><b class="entry">Iran's push</b> to bar <span class="acr">US</span> and Israeli ships from the Strait of Hormuz and toll others raises the stakes in a critical global shipping lane.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.npr.org/2026/08/06/nx-s1-5923623/iran-strait-hormuz-us-israel-ban" target="_blank" rel="noopener noreferrer">Iran aims to ban U.S. and Israeli ships from Strait of Hormuz and charge others a toll<span class="sr-only"> (opens at npr.org)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Iran's push</b> to bar <span class="acr">US</span> and Israeli ships from the Strait of Hormuz and toll others raises the stakes in a critical global shipping lane.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/e66cc71d0943.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">OpenAI</p>
-            <h3 class="head"><a class="link " href="https://openai.com/index/responding-next-frontier-critical-cyber-capabilities" target="_blank" rel="noopener noreferrer">Responding to the next frontier of critical cyber capabilities<span class="sr-only"> (opens at openai.com)</span></a></h3>
-            <p class="dek"><b class="entry">OpenAI is</b> publishing early cybersecurity evaluations of its Astra system as it moves to shore up safeguards against critical cyber misuse.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://openai.com/index/responding-next-frontier-critical-cyber-capabilities" target="_blank" rel="noopener noreferrer">Responding to the next frontier of critical cyber capabilities<span class="sr-only"> (opens at openai.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">OpenAI is</b> publishing early cybersecurity evaluations of its Astra system as it moves to shore up safeguards against critical cyber misuse.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/889cc093dfad.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">The Guardian</p>
-            <h3 class="head"><a class="link " href="https://www.theguardian.com/technology/2026/aug/08/uk-children-explicit-deepfake-images-ai" target="_blank" rel="noopener noreferrer">Rising number of <span class="acr">UK</span> children report seeing explicit deepfakes of themselves<span class="sr-only"> (opens at theguardian.com)</span></a></h3>
-            <p class="dek"><b class="entry">A surge</b> in <span class="acr">UK</span> children reporting explicit deepfakes of themselves shows how <span class="acr">AI</span> tools are making abusive content easier to produce.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.theguardian.com/technology/2026/aug/08/uk-children-explicit-deepfake-images-ai" target="_blank" rel="noopener noreferrer">Rising number of <span class="acr">UK</span> children report seeing explicit deepfakes of themselves<span class="sr-only"> (opens at theguardian.com)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">A surge</b> in <span class="acr">UK</span> children reporting explicit deepfakes of themselves shows how <span class="acr">AI</span> tools are making abusive content easier to produce.</p>
           </div>
         </article>
         <article class="item feature">
           <span class="plate plate-feature"><img class="art" src="../public/img/ce39f576b0ee.webp" alt="" loading="lazy" decoding="async"></span>
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/cewr898jy8go?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Trump's ex-lawyer Todd Blanche narrowly confirmed as <span class="acr">US</span> attorney general<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
-            <p class="dek"><b class="entry">Todd Blanche's</b> narrow Senate confirmation as attorney general, despite Republican pushback, cements Trump's former lawyer atop <span class="acr">US</span> law enforcement.</p>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/cewr898jy8go?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Trump's ex-lawyer Todd Blanche narrowly confirmed as <span class="acr">US</span> attorney general<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
+            <p class="dek" dir="auto"><b class="entry">Todd Blanche's</b> narrow Senate confirmation as attorney general, despite Republican pushback, cements Trump's former lawyer atop <span class="acr">US</span> law enforcement.</p>
           </div>
         </article>
       </div>
       <div class="briefs">
         <article class="item brief">
           <div class="body"><p class="byline">Reuters</p>
-            <h3 class="head"><a class="link " href="https://www.reuters.com/business/retail-consumer/alibaba-plans-charge-big-users-its-next-open-source-ai-model-sources-say-2026-08-07/" target="_blank" rel="noopener noreferrer">Alibaba plans to charge big users of its next open-source <span class="acr">AI</span> model<span class="sr-only"> (opens at reuters.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Alibaba's plan to charge heavy users of its next open-source model signals a shift away from free access as compute costs bite.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.reuters.com/business/retail-consumer/alibaba-plans-charge-big-users-its-next-open-source-ai-model-sources-say-2026-08-07/" target="_blank" rel="noopener noreferrer">Alibaba plans to charge big users of its next open-source <span class="acr">AI</span> model<span class="sr-only"> (opens at reuters.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Alibaba's plan to charge heavy users of its next open-source model signals a shift away from free access as compute costs bite.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/c5yv5l6yr5ko?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Spain imposes border controls against Italy as row over Ceuta migrant influx intensifies<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Spain has imposed border controls against Italy as a row over migrant flows through Ceuta escalates within the <span class="acr">EU</span>.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/c5yv5l6yr5ko?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Spain imposes border controls against Italy as row over Ceuta migrant influx intensifies<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Spain has imposed border controls against Italy as a row over migrant flows through Ceuta escalates within the <span class="acr">EU</span>.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">Google DeepMind</p>
-            <h3 class="head"><a class="link " href="https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones/" target="_blank" rel="noopener noreferrer">DeepMind's WeatherNext model achieves breakthrough forecasting cyclones<span class="sr-only"> (opens at deepmind.google)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">DeepMind says its WeatherNext model has achieved a breakthrough in forecasting cyclones, a high-stakes test for <span class="acr">AI</span> in climate prediction.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones/" target="_blank" rel="noopener noreferrer">DeepMind's WeatherNext model achieves breakthrough forecasting cyclones<span class="sr-only"> (opens at deepmind.google)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">DeepMind says its WeatherNext model has achieved a breakthrough in forecasting cyclones, a high-stakes test for <span class="acr">AI</span> in climate prediction.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/ckgdmrxxkdxo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">German airport drone-bomb: Could Russia be involved?<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Evidence suggests Russian-linked proxies have handled and delivered drones and explosives used in a German airport bomb plot.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/ckgdmrxxkdxo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">German airport drone-bomb: Could Russia be involved?<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Evidence suggests Russian-linked proxies have handled and delivered drones and explosives used in a German airport bomb plot.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">Dealroom</p>
-            <h3 class="head"><a class="link " href="https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code" target="_blank" rel="noopener noreferrer">Oracle bans <span class="acr">AI</span>-generated code from OpenJDK<span class="sr-only"> (opens at app.dealroom.co)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Oracle's ban on <span class="acr">AI</span>-generated code in OpenJDK highlights growing institutional wariness about licensing and quality of machine-written contributions.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code" target="_blank" rel="noopener noreferrer">Oracle bans <span class="acr">AI</span>-generated code from OpenJDK<span class="sr-only"> (opens at app.dealroom.co)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Oracle's ban on <span class="acr">AI</span>-generated code in OpenJDK highlights growing institutional wariness about licensing and quality of machine-written contributions.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">NPR</p>
-            <h3 class="head"><a class="link " href="https://www.npr.org/2026/08/07/nx-s1-5924775/colombias-new-president-vows-to-remake-the-country-and-challenge-its-fragile-peace" target="_blank" rel="noopener noreferrer">Colombia's new president vows to remake the country — and challenge rebel groups<span class="sr-only"> (opens at npr.org)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Colombia's new hard-right president is promising order and confrontation with rebel groups, marking a sharp political shift.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.npr.org/2026/08/07/nx-s1-5924775/colombias-new-president-vows-to-remake-the-country-and-challenge-its-fragile-peace" target="_blank" rel="noopener noreferrer">Colombia's new president vows to remake the country — and challenge rebel groups<span class="sr-only"> (opens at npr.org)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Colombia's new hard-right president is promising order and confrontation with rebel groups, marking a sharp political shift.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">CNN</p>
-            <h3 class="head"><a class="link " href="https://www.cnn.com/2026/08/04/tech/ai-anthropic-openai-security-breach-intl-hnk" target="_blank" rel="noopener noreferrer"><span class="acr">AI</span> agents fake identities, target real people in new security incident<span class="sr-only"> (opens at cnn.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">A new security incident in which <span class="acr">AI</span> agents faked identities to target real people underscores emerging risks from autonomous systems.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.cnn.com/2026/08/04/tech/ai-anthropic-openai-security-breach-intl-hnk" target="_blank" rel="noopener noreferrer"><span class="acr">AI</span> agents fake identities, target real people in new security incident<span class="sr-only"> (opens at cnn.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">A new security incident in which <span class="acr">AI</span> agents faked identities to target real people underscores emerging risks from autonomous systems.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">BBC</p>
-            <h3 class="head"><a class="link " href="https://www.bbc.co.uk/news/articles/c3r073eqvrjo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">'I ran because I knew I would die': Russian drones target medics in Ukraine<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Ukrainian medics describe escalating Russian drone attacks on hospitals and ambulances, a grim shift in wartime targeting.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.bbc.co.uk/news/articles/c3r073eqvrjo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">'I ran because I knew I would die': Russian drones target medics in Ukraine<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Ukrainian medics describe escalating Russian drone attacks on hospitals and ambulances, a grim shift in wartime targeting.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">TechCrunch</p>
-            <h3 class="head"><a class="link " href="https://techcrunch.com/2026/08/07/cloudflare-launches-kitesurf-a-browser-built-for-ai-agents/" target="_blank" rel="noopener noreferrer">Cloudflare launches Kitesurf, a browser built for <span class="acr">AI</span> agents<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Cloudflare's Kitesurf is a cloud browser built specifically for <span class="acr">AI</span> agents, promising lighter, more efficient automation than Chromium.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://techcrunch.com/2026/08/07/cloudflare-launches-kitesurf-a-browser-built-for-ai-agents/" target="_blank" rel="noopener noreferrer">Cloudflare launches Kitesurf, a browser built for <span class="acr">AI</span> agents<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Cloudflare's Kitesurf is a cloud browser built specifically for <span class="acr">AI</span> agents, promising lighter, more efficient automation than Chromium.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">Scientific American</p>
-            <h3 class="head"><a class="link " href="https://www.scientificamerican.com/article/openais-latest-math-breakthroughs-commit-research-misconduct-experts-say/" target="_blank" rel="noopener noreferrer">OpenAI's latest math breakthroughs commit research misconduct, experts say<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Experts are accusing OpenAI's touted math breakthroughs of research misconduct, a credibility challenge for the company's science claims.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.scientificamerican.com/article/openais-latest-math-breakthroughs-commit-research-misconduct-experts-say/" target="_blank" rel="noopener noreferrer">OpenAI's latest math breakthroughs commit research misconduct, experts say<span class="sr-only"> (opens at scientificamerican.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Experts are accusing OpenAI's touted math breakthroughs of research misconduct, a credibility challenge for the company's science claims.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">Yahoo Finance</p>
-            <h3 class="head"><a class="link " href="https://finance.yahoo.com/technology/ai/articles/anthropic-ceo-reportedly-worried-hires-160000647.html" target="_blank" rel="noopener noreferrer">Anthropic <span class="acr">CEO</span> reportedly worried new hires only care about money<span class="sr-only"> (opens at finance.yahoo.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Anthropic's <span class="acr">CEO</span> is reportedly worried that new hires are drawn mainly by money rather than mission, a telling sign of <span class="acr">AI</span> industry culture.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://finance.yahoo.com/technology/ai/articles/anthropic-ceo-reportedly-worried-hires-160000647.html" target="_blank" rel="noopener noreferrer">Anthropic <span class="acr">CEO</span> reportedly worried new hires only care about money<span class="sr-only"> (opens at finance.yahoo.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Anthropic's <span class="acr">CEO</span> is reportedly worried that new hires are drawn mainly by money rather than mission, a telling sign of <span class="acr">AI</span> industry culture.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">Simon Willison</p>
-            <h3 class="head"><a class="link " href="https://simonwillison.net/2026/Aug/7/pdfs-are-terrible/#atom-everything" target="_blank" rel="noopener noreferrer">The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on <span class="acr">AI</span><span class="sr-only"> (opens at simonwillison.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Companies are scrambling to rein in runaway <span class="acr">AI</span> token spending, with reports suggesting non-engineers are driving much of the cost surge.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://simonwillison.net/2026/Aug/7/pdfs-are-terrible/#atom-everything" target="_blank" rel="noopener noreferrer">The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on <span class="acr">AI</span><span class="sr-only"> (opens at simonwillison.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Companies are scrambling to rein in runaway <span class="acr">AI</span> token spending, with reports suggesting non-engineers are driving much of the cost surge.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">TechCrunch</p>
-            <h3 class="head"><a class="link " href="https://techcrunch.com/2026/08/06/openais-new-ai-smart-speaker-will-reportedly-sell-for-between-300-and-400/" target="_blank" rel="noopener noreferrer">OpenAI’s new <span class="acr">AI</span> smart speaker will reportedly sell for between $300 and $400<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">New details suggest OpenAI's mysterious hardware device will be a hockey-puck-sized smart speaker priced between $300 and $400.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://techcrunch.com/2026/08/06/openais-new-ai-smart-speaker-will-reportedly-sell-for-between-300-and-400/" target="_blank" rel="noopener noreferrer">OpenAI’s new <span class="acr">AI</span> smart speaker will reportedly sell for between $300 and $400<span class="sr-only"> (opens at techcrunch.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">New details suggest OpenAI's mysterious hardware device will be a hockey-puck-sized smart speaker priced between $300 and $400.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">Mezha</p>
-            <h3 class="head"><a class="link " href="https://mezha.net/eng/bukvy/ca117584_denmark_requires_oral/" target="_blank" rel="noopener noreferrer">Denmark Requires Oral Defenses for Students' Written Work to Counter <span class="acr">AI</span> Cheating<span class="sr-only"> (opens at mezha.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Denmark is requiring oral defenses of written student work to counter <span class="acr">AI</span>-assisted cheating in schools.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://mezha.net/eng/bukvy/ca117584_denmark_requires_oral/" target="_blank" rel="noopener noreferrer">Denmark Requires Oral Defenses for Students' Written Work to Counter <span class="acr">AI</span> Cheating<span class="sr-only"> (opens at mezha.net)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Denmark is requiring oral defenses of written student work to counter <span class="acr">AI</span>-assisted cheating in schools.</span>
           </div>
         </article>
         <article class="item brief">
           <div class="body"><p class="byline">The Guardian</p>
-            <h3 class="head"><a class="link " href="https://www.theguardian.com/us-news/2026/aug/07/datacenters-little-rock-arkansas" target="_blank" rel="noopener noreferrer">‘This is very real redlining’: outrage in Little Rock as two datacenters loom<span class="sr-only"> (opens at theguardian.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run">Residents in Little Rock are protesting two proposed hyperscale datacenters over water use, power strain and land rights concerns.</span>
+            <h3 class="head" dir="auto"><a class="link " href="https://www.theguardian.com/us-news/2026/aug/07/datacenters-little-rock-arkansas" target="_blank" rel="noopener noreferrer">‘This is very real redlining’: outrage in Little Rock as two datacenters loom<span class="sr-only"> (opens at theguardian.com)</span></a></h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">Residents in Little Rock are protesting two proposed hyperscale datacenters over water use, power strain and land rights concerns.</span>
           </div>
         </article>
       </div>

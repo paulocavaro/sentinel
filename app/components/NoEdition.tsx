@@ -23,11 +23,21 @@
 // on the day you asked about. Answering with a 404 would tell a reader their
 // link was wrong when it was the pipeline that was quiet.
 //
-// It is deliberately the masthead and nothing else — no chip row, no items, no
+// It is deliberately a masthead and three links — no chip row, no items, no
 // closing mark, no ask button. There is nothing to filter, nothing to end, and
 // the fab's label is "Ask this archive": the two pages that carry it are pages
-// the archive actually has content on. The reference frames this state as a
-// masthead and three links and it is right to.
+// the archive actually has content on. The reference frames this state that way
+// and it is right to.
+//
+// **The sentence and the links are a `<main>`, not part of the header.** They
+// were inside `<header class="masthead">` until an audit read the landmarks
+// back: the page was a banner from its first element to its last, which told a
+// reader navigating by landmark that this page has no content, and left the
+// layout's skip link with nothing to skip to. The masthead is still the header
+// — the wordmark, the date, the word for what happened — and everything that
+// answers *and now what* is the main. It costs nothing visually; `.wayout` in
+// the stylesheet says why, and the two rules there are what hold the page to
+// the pixel it was.
 //
 // Two departures from the reference's markup, both to agree with the components
 // already shipped beside this one:
@@ -114,6 +124,11 @@ export function NoEdition({
             it is the only fact the page has. */}
         <h1 className="editiondate">{editionDate(date)}</h1>
         <p className="promise">{copy.promise}</p>
+      </header>
+
+      {/* `id="results"` is the skip link's destination, which `app/layout.tsx`
+          points at on every route. */}
+      <main className="wayout" id="results">
         {/* `.manifest` is italic because it usually carries the model's
             editorial line. This sentence is the product speaking, so it stands
             upright — the same override `states.html` 03 and `not-found.tsx`
@@ -130,17 +145,23 @@ export function NoEdition({
               // it. Same as `EditionBar`.
               <Link className="day" href={`/day/${prev}`} rel="prev">{`← ${dayMonth(prev)}`}</Link>
             ) : (
-              <a className="day is-off" aria-disabled="true">
+              // A span whose state is a word, not an `<a>` carrying
+              // `aria-disabled`. `EditionBar`'s header comment has the
+              // measurement: the attribute is not supported on the role an
+              // anchor with no href has, so it announced nothing at all.
+              <span className="day is-off">
                 {dayMonth(shiftDays(date, -1))}
-              </a>
+                <span className="sr-only"> (no edition)</span>
+              </span>
             )}
 
             {next ? (
               <Link className="day" href={`/day/${next}`} rel="next">{`${dayMonth(next)} →`}</Link>
             ) : (
-              <a className="day is-off" aria-disabled="true">
+              <span className="day is-off">
                 {dayMonth(shiftDays(date, 1))}
-              </a>
+                <span className="sr-only"> (no edition)</span>
+              </span>
             )}
 
             <Link className="day day-all" href="/">
@@ -148,7 +169,7 @@ export function NoEdition({
             </Link>
           </nav>
         </div>
-      </header>
+      </main>
     </div>
   )
 }

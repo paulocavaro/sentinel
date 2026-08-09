@@ -92,13 +92,40 @@ export const viewport: Viewport = {
   ],
 };
 
+// The skip link, and it is here because this is the only file every route
+// passes through.
+//
+// The bypass it provides is not theoretical: on `/day/2026-08-08` the masthead
+// is followed by twenty item links and then the footer, so a reader on a
+// keyboard reaches the end of the page after twenty presses that all go to
+// other people's websites. `app/components/Edition.tsx` has carried
+// `<main id="results" tabIndex={-1}>` since it was written, described in its own
+// comment as "the target for a future skip link"; the tabindex is what lets
+// focus land on a container that is not itself focusable, and nothing pointed at
+// it until now.
+//
+// **Every `<main>` on the site is `#results`**, which is what makes one link in
+// the layout honest on every route: the archive's month list and the five pages
+// that are not an edition carry the id as well. The design system's own rule
+// about dead controls — a control that goes nowhere is worse than no control —
+// is the reason this could not be a link that only works on two routes.
+//
+// It is a plain `<a>` and not `next/link`. The destination is a fragment of the
+// page already on screen, so there is nothing to prefetch and nothing to route:
+// the browser's own behaviour here — move the viewport, move focus to the
+// target — is the whole feature, and it is the part `next/link` would take over.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${spectral.variable} ${ibmPlexMono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <a className="skip" href="#results">
+          Skip to the content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

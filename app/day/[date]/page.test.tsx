@@ -186,6 +186,21 @@ describe('Day', () => {
     expect(page).toContain('href="/day/2026-08-11"')
   })
 
+  // The masthead says which day and what happened; everything that answers
+  // *and now what* — the sentence and the three links — is the main. The whole
+  // page used to be the header, which told a landmark reader this route has no
+  // content and left the layout's skip link pointing at nothing.
+  it('gives the no-edition page a main to skip to', async () => {
+    await archive.put(edition('2026-08-08', 3))
+    await archive.put(edition('2026-08-11', 3))
+
+    const page = html(await Day(params('2026-08-10')))
+
+    expect(page).toContain('<main class="wayout" id="results">')
+    expect(page.indexOf('</header>')).toBeLessThan(page.indexOf('<main'))
+    expect(page.indexOf('<main')).toBeLessThan(page.indexOf('class="editionbar"'))
+  })
+
   // The regression, end to end and at the size it actually arrives: thirty
   // items on disk, one of them damaged by a merge conflict or by a field that
   // changed shape, the whole file refused under the reader's whole-file-or-

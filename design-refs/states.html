@@ -79,6 +79,30 @@ body {
   clip-path: inset(50%); white-space: nowrap;
 }
 
+/* The skip link: the first focusable thing in the document, and the only way
+   past nineteen item links to the footer that does not cost nineteen presses.
+   It is deliberately not .sr-only. That class clips an element to one pixel,
+   which is right for text that must never be seen and wrong for a control whose
+   whole job is to appear the moment it is reached — unclipping it means putting
+   six properties back. A fixed box translated up by its own height is off the
+   viewport, still focusable, still in the accessible tree, and comes back with
+   one property.
+   :focus, not :focus-visible. The link cannot be clicked while it is off the
+   viewport, so every focus it ever gets is a keyboard's, and the two selectors
+   mean the same thing here — except that :focus-visible is the one that would
+   fail if a screen reader moved focus to it without a key press.
+   The box is paper with the ring drawn inside its own edge rather than a border
+   plus a ring, so the control has one line around it and not two. */
+.skip {
+  position: fixed; top: 0; left: 0; z-index: 30;
+  transform: translateY(-100%);
+  font-family: var(--face-machine);
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  background: var(--paper); padding: 0.875rem 1.25rem;
+}
+.skip:focus { transform: none; outline: 2px solid var(--ink); outline-offset: -2px; }
+
 .page { width: min(100% - 2.5rem, var(--content)); margin-inline: auto; }
 
 .acr { font-variant-caps: all-small-caps; letter-spacing: 0.03em; }
@@ -86,6 +110,23 @@ body {
 /* ─── Masthead ───────────────────────────────────────────────────────────── */
 
 .masthead { padding: 3rem 0 1.5rem; }
+
+/* The body of a page that is not an edition.
+   Five surfaces are a masthead, one sentence saying what happened, and the way
+   out: no such page, this page did not render, a day with no edition, a day
+   whose edition will not read, and an empty archive. All five used to put every
+   one of those elements inside header.masthead, which told a landmark reader
+   the page was a banner from top to bottom, and left the skip link above with
+   nowhere to go. The sentence and the links are a main element now.
+   These two rules are the entire pixel cost of that, and they cancel it. The
+   masthead's 1.5rem of closing space is what separated its last line from the
+   sentence under it; with the header ending early that space would land between
+   the two blocks *and* the sentence's own 1rem margin would follow it, opening
+   a gap the design never had. So the space moves with the content — off the
+   header, onto the end of the main, where it closes the page exactly as it did
+   before. Nothing else about these five pages changes. */
+.masthead:has(+ .wayout) { padding-bottom: 0; }
+.wayout { padding-bottom: 1.5rem; }
 
 .wordmark {
   font-family: var(--face-machine);
@@ -357,6 +398,18 @@ body {
 .brief .dash { color: var(--machine); }
 .brief .run  { font-size: 1.0625rem; line-height: 1.4; color: var(--prose); }
 
+/* The three elements on the page that carry a stranger's words, and the only
+   three that can be handed a string with no legal break point in it.
+   lib/ingest/sanitize.ts permits a single token of 200 characters — a URL in a
+   headline, a hashtag, a compound noun — and a feature column is four 60px
+   tracks wide, so one of those runs out of its column and across the one beside
+   it. Breaking inside a word is worse typography than not breaking; a headline
+   nobody can read is worse than both.
+   break-word rather than anywhere, which additionally shrinks the element's
+   min-content size — the grid would hand that back to the other columns, and
+   how wide a track is has never been the text's business. */
+.head, .dek, .run { overflow-wrap: break-word; }
+
 /* Photographs run in colour. A duotone would unify twenty publishers' colour
    grades into one plate, which is what Espresso does — but Espresso has one
    picture editor and these are twenty strangers' choices, so the cost is that
@@ -491,6 +544,7 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
 </style>
 </head>
 <body>
+<a class="skip" href="#results">Skip to the content</a>
 <div class="cat">
   <p class="cat-title">Sentinel</p>
   <h1 class="editiondate" style="font-size:2.25rem;margin:0 0 1rem">States</h1>
@@ -550,6 +604,8 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         <p class="wordmark">Sentinel</p>
         <h1 class="editiondate">Monday 3 August</h1>
         <p class="promise">No edition</p>
+      </header>
+      <main class="wayout" id="results">
         <p class="manifest" style="font-style:normal">Nothing ran on 3 August. The job did not complete, and an edition is never written after the fact.</p>
         <div class="editionbar">
           <nav class="days" aria-label="Editions">
@@ -558,7 +614,7 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
             <a class="day day-all" href="/">Latest edition</a>
           </nav>
         </div>
-      </header>
+      </main>
     </div></div>
 </section>
 
@@ -574,16 +630,16 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         <span class="plate plate-feature"><img class="art" src="../public/img/7b1fdc1b9514.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="body">
           <p class="byline">The Guardian</p>
-          <h3 class="head"><a class="link" href="https://www.theguardian.com/technology/2026/aug/08/google-demis-hassabis-deepmind-shifts-role" target="_blank" rel="noopener noreferrer">Google DeepMind enters a new era as co-founder Demis Hassabis shifts <span class="acr">AI</span> role<span class="sr-only"> (opens at theguardian.com)</span></a></h3>
-          <p class="dek"><b class="entry">Demis Hassabis</b> is stepping back from Google DeepMind's helm, fueling concern the lab is losing research independence to commercial pressure.</p>
+          <h3 class="head" dir="auto"><a class="link" href="https://www.theguardian.com/technology/2026/aug/08/google-demis-hassabis-deepmind-shifts-role" target="_blank" rel="noopener noreferrer">Google DeepMind enters a new era as co-founder Demis Hassabis shifts <span class="acr">AI</span> role<span class="sr-only"> (opens at theguardian.com)</span></a></h3>
+          <p class="dek" dir="auto"><b class="entry">Demis Hassabis</b> is stepping back from Google DeepMind's helm, fueling concern the lab is losing research independence to commercial pressure.</p>
         </div>
       </article>
       <article class="item feature">
         
         <div class="body">
           <p class="byline">BBC</p>
-          <h3 class="head"><a class="link" href="https://www.bbc.co.uk/news/articles/cz7dy8gq99eo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Child among three killed in Russian missile attacks near Kyiv<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
-          <p class="dek"><b class="entry">Russian missile</b> strikes near Kyiv killed a child and two others, underscoring Ukraine's dwindling air-defence supplies.</p>
+          <h3 class="head" dir="auto"><a class="link" href="https://www.bbc.co.uk/news/articles/cz7dy8gq99eo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">Child among three killed in Russian missile attacks near Kyiv<span class="sr-only"> (opens at bbc.co.uk)</span></a></h3>
+          <p class="dek" dir="auto"><b class="entry">Russian missile</b> strikes near Kyiv killed a child and two others, underscoring Ukraine's dwindling air-defence supplies.</p>
         </div>
       </article>
     </div></div>
@@ -655,6 +711,8 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
         <p class="wordmark">Sentinel</p>
         <h1 class="editiondate">Wednesday 5 August</h1>
         <p class="promise">Unreadable edition</p>
+      </header>
+      <main class="wayout" id="results">
         <p class="manifest" style="font-style:normal">There is a file for 5 August, and it could not be read. The day is in the archive; what that file holds is not an edition this page can print.</p>
         <div class="editionbar">
           <nav class="days" aria-label="Editions">
@@ -663,7 +721,7 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
             <a class="day day-all" href="/">Latest edition</a>
           </nav>
         </div>
-      </header>
+      </main>
     </div></div>
 </section>
 

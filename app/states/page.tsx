@@ -22,6 +22,17 @@
 // behind them yet (see states 05, 06 and 07 below).
 //
 // The data is `./fixtures`, derived from the two committed editions.
+//
+// **The catalogue repeats what a page is only allowed one of, and always has.**
+// Two of the eight frames are whole page bodies rather than components — 03 and
+// 08 are `NoEdition` — so this document carries five `<h1>` elements, four
+// mastheads, and now two `<main id="results">`, which is a duplicate id and one
+// more `<main>` than a document may have. That is the price of the rule at the
+// top of this file: the frames are the real components, and a catalogue that
+// stripped a landmark out of a page body to keep its own markup tidy would stop
+// being a picture of what ships. The consequence is confined here — /states is
+// a development surface, and the layout's skip link lands in frame 03 on it.
+// Nothing on a reading surface is affected.
 
 import type { Metadata } from 'next'
 import { Fragment, type ReactNode } from 'react'

@@ -43,8 +43,8 @@ const feature = (i) => `<article class="item feature">
         ${plate(i, 'plate-feature')}
         <div class="body">
           <p class="byline">${esc(i.publisher)}</p>
-          <h3 class="head">${link(i)}</h3>
-          <p class="dek">${leadIn(i.description)}</p>
+          <h3 class="head" dir="auto">${link(i)}</h3>
+          <p class="dek" dir="auto">${leadIn(i.description)}</p>
         </div>
       </article>`
 
@@ -152,6 +152,7 @@ ${css}
 </style>
 </head>
 <body>
+<a class="skip" href="#results">Skip to the content</a>
 <div class="cat">
   <p class="cat-title">Sentinel</p>
   <h1 class="editiondate" style="font-size:2.25rem;margin:0 0 1rem">States</h1>
@@ -209,11 +210,18 @@ ${state(
   // masthead. The nav sits in `.editionbar` for the same reason: that class is
   // the token for the space under a masthead, and the 1.25rem written here by
   // hand was an approximation of its 1.5rem, four pixels out.
+  //
+  // The sentence and the links are a `<main class="wayout">`: a page whose
+  // every element sits in its header is a page a landmark reader is told has no
+  // content. `.wayout` in the stylesheet moves the masthead's closing space onto
+  // the end of the main, so the frame renders at exactly the height it did.
   `<div class="page">
       <header class="masthead">
         <p class="wordmark">Sentinel</p>
         <h1 class="editiondate">Monday 3 August</h1>
         <p class="promise">No edition</p>
+      </header>
+      <main class="wayout" id="results">
         <p class="manifest" style="font-style:normal">Nothing ran on 3 August. The job did not complete, and an edition is never written after the fact.</p>
         <div class="editionbar">
           <nav class="days" aria-label="Editions">
@@ -222,7 +230,7 @@ ${state(
             <a class="day day-all" href="/">Latest edition</a>
           </nav>
         </div>
-      </header>
+      </main>
     </div>`,
 )}
 
@@ -307,6 +315,8 @@ ${state(
         <p class="wordmark">Sentinel</p>
         <h1 class="editiondate">${weekday(UNREADABLE_DATE)} ${dayMonth(UNREADABLE_DATE)}</h1>
         <p class="promise">Unreadable edition</p>
+      </header>
+      <main class="wayout" id="results">
         <p class="manifest" style="font-style:normal">There is a file for ${dayMonth(UNREADABLE_DATE)}, and it could not be read. The day is in the archive; what that file holds is not an edition this page can print.</p>
         <div class="editionbar">
           <nav class="days" aria-label="Editions">
@@ -315,7 +325,7 @@ ${state(
             <a class="day day-all" href="/">Latest edition</a>
           </nav>
         </div>
-      </header>
+      </main>
     </div>`,
 )}
 

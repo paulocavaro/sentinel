@@ -6,6 +6,11 @@ import Link from "next/link";
 // address that was never part of the site. It borrows the
 // shape of states.html 03 all the same: the masthead says what is true in the
 // place the date normally goes, and the one link points somewhere that exists.
+//
+// The sentence and the link are a `<main class="wayout">`, as they are on every
+// page here that is not an edition. See `NoEdition`, which was the component
+// this shape was taken from, and `.wayout` in the stylesheet for why the split
+// costs no pixels.
 export default function NotFound() {
   return (
     <div className="page">
@@ -13,6 +18,9 @@ export default function NotFound() {
         <p className="wordmark">Sentinel</p>
         <h1 className="editiondate">No such page</h1>
         <p className="promise">Nothing at this address</p>
+      </header>
+
+      <main className="wayout" id="results">
         {/* .manifest is italic because it usually carries the model's editorial
             line. This sentence is the product speaking, so it stands upright —
             the same override states.html 03 makes on the same element. */}
@@ -27,7 +35,7 @@ export default function NotFound() {
             </Link>
           </nav>
         </div>
-      </header>
+      </main>
     </div>
   );
 }

@@ -68,16 +68,23 @@ const dayMonth = fmt(date)
 // half the links at a day the archive never wrote. When a direction has no
 // edition at all the slot still shows the calendar neighbour's date — present,
 // not offered — and it is the absent arrow, not a dimmer grey, that says so.
+//
+// The unavailable slot is a `<span>` and its state is a word, not an attribute.
+// It was an `<a>` with no href and `aria-disabled="true"`, which announces
+// nothing at all: an anchor with no href has role `generic`, `aria-disabled` is
+// not a global attribute, and `generic` does not support it — measured in
+// Chromium, where the whole bar collapsed to one text run. What a reader with a
+// screen reader is owed here is the fact, and the fact is text.
 const idx = dates.indexOf(ed.date)
 const prevDate = idx > 0 ? dates[idx - 1] : null
 const nextDate = idx < dates.length - 1 ? dates[idx + 1] : null
 
 const prevSlot = prevDate
   ? `<a class="day" href="/day/${prevDate}" rel="prev">← ${fmt(atNoon(prevDate))}</a>`
-  : `<a class="day is-off" aria-disabled="true">${fmt(shift(ed.date, -1))}</a>`
+  : `<span class="day is-off">${fmt(shift(ed.date, -1))}<span class="sr-only"> (no edition)</span></span>`
 const nextSlot = nextDate
   ? `<a class="day" href="/day/${nextDate}" rel="next">${fmt(atNoon(nextDate))} →</a>`
-  : `<a class="day is-off" aria-disabled="true">${fmt(shift(ed.date, 1))}</a>`
+  : `<span class="day is-off">${fmt(shift(ed.date, 1))}<span class="sr-only"> (no edition)</span></span>`
 
 const link = (i, cls = '') =>
   `<a class="link ${cls}" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">${smallCaps(esc(i.title))}<span class="sr-only"> (opens at ${esc(host(i.url))})</span></a>`
@@ -86,19 +93,29 @@ const byline = (i) => `<p class="byline">${esc(i.publisher)}</p>`
 const plate = (i, cls) =>
   i.image ? `<span class="plate ${cls}"><img class="art" src="../public${i.image}" alt="" loading="lazy" decoding="async"></span>` : ''
 
+// `dir="auto"` on every element that carries a stranger's words. There is no
+// other `dir` in the document, so the page is `lang="en"` and left-to-right
+// throughout — and a headline that opens with an Arabic or Hebrew name is a
+// right-to-left paragraph inside it. Without this the bidi algorithm resolves
+// that line against the page's direction: the neutral characters between the
+// name and the English that follows it reorder, and the trailing publisher can
+// land at the wrong end of the line. Per element, because the direction is a
+// property of each item's own text and not of the page.
+// (`lib/ingest/sanitize.ts` already strips bidi *controls* at ingest. This is
+// ordinary right-to-left data, not an attack.)
 const leadCard = (i) => `      <article class="item lead">
         ${plate(i, 'plate-lead')}
         <div class="body">${byline(i)}
-          <h2 class="head">${link(i)}</h2>
-          <p class="dek">${leadIn(i.description)}</p>
+          <h2 class="head" dir="auto">${link(i)}</h2>
+          <p class="dek" dir="auto">${leadIn(i.description)}</p>
         </div>
       </article>`
 
 const feature = (i) => `        <article class="item feature">
           ${plate(i, 'plate-feature')}
           <div class="body">${byline(i)}
-            <h3 class="head">${link(i)}</h3>
-            <p class="dek">${leadIn(i.description)}</p>
+            <h3 class="head" dir="auto">${link(i)}</h3>
+            <p class="dek" dir="auto">${leadIn(i.description)}</p>
           </div>
         </article>`
 
@@ -106,7 +123,7 @@ const feature = (i) => `        <article class="item feature">
 // is how Techmeme fits thirty attributed items on a screen without a card.
 const brief = (i) => `        <article class="item brief">
           <div class="body">${byline(i)}
-            <h3 class="head">${link(i)}</h3><span class="dash" aria-hidden="true"> — </span><span class="run">${smallCaps(esc(i.description))}</span>
+            <h3 class="head" dir="auto">${link(i)}</h3><span class="dash" aria-hidden="true"> — </span><span class="run" dir="auto">${smallCaps(esc(i.description))}</span>
           </div>
         </article>`
 
@@ -242,6 +259,30 @@ body {
   clip-path: inset(50%); white-space: nowrap;
 }
 
+/* The skip link: the first focusable thing in the document, and the only way
+   past nineteen item links to the footer that does not cost nineteen presses.
+   It is deliberately not .sr-only. That class clips an element to one pixel,
+   which is right for text that must never be seen and wrong for a control whose
+   whole job is to appear the moment it is reached — unclipping it means putting
+   six properties back. A fixed box translated up by its own height is off the
+   viewport, still focusable, still in the accessible tree, and comes back with
+   one property.
+   :focus, not :focus-visible. The link cannot be clicked while it is off the
+   viewport, so every focus it ever gets is a keyboard's, and the two selectors
+   mean the same thing here — except that :focus-visible is the one that would
+   fail if a screen reader moved focus to it without a key press.
+   The box is paper with the ring drawn inside its own edge rather than a border
+   plus a ring, so the control has one line around it and not two. */
+.skip {
+  position: fixed; top: 0; left: 0; z-index: 30;
+  transform: translateY(-100%);
+  font-family: var(--face-machine);
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  background: var(--paper); padding: 0.875rem 1.25rem;
+}
+.skip:focus { transform: none; outline: 2px solid var(--ink); outline-offset: -2px; }
+
 .page { width: min(100% - 2.5rem, var(--content)); margin-inline: auto; }
 
 .acr { font-variant-caps: all-small-caps; letter-spacing: 0.03em; }
@@ -249,6 +290,23 @@ body {
 /* ─── Masthead ───────────────────────────────────────────────────────────── */
 
 .masthead { padding: 3rem 0 1.5rem; }
+
+/* The body of a page that is not an edition.
+   Five surfaces are a masthead, one sentence saying what happened, and the way
+   out: no such page, this page did not render, a day with no edition, a day
+   whose edition will not read, and an empty archive. All five used to put every
+   one of those elements inside header.masthead, which told a landmark reader
+   the page was a banner from top to bottom, and left the skip link above with
+   nowhere to go. The sentence and the links are a main element now.
+   These two rules are the entire pixel cost of that, and they cancel it. The
+   masthead's 1.5rem of closing space is what separated its last line from the
+   sentence under it; with the header ending early that space would land between
+   the two blocks *and* the sentence's own 1rem margin would follow it, opening
+   a gap the design never had. So the space moves with the content — off the
+   header, onto the end of the main, where it closes the page exactly as it did
+   before. Nothing else about these five pages changes. */
+.masthead:has(+ .wayout) { padding-bottom: 0; }
+.wayout { padding-bottom: 1.5rem; }
 
 .wordmark {
   font-family: var(--face-machine);
@@ -520,6 +578,18 @@ body {
 .brief .dash { color: var(--machine); }
 .brief .run  { font-size: 1.0625rem; line-height: 1.4; color: var(--prose); }
 
+/* The three elements on the page that carry a stranger's words, and the only
+   three that can be handed a string with no legal break point in it.
+   lib/ingest/sanitize.ts permits a single token of 200 characters — a URL in a
+   headline, a hashtag, a compound noun — and a feature column is four 60px
+   tracks wide, so one of those runs out of its column and across the one beside
+   it. Breaking inside a word is worse typography than not breaking; a headline
+   nobody can read is worse than both.
+   break-word rather than anywhere, which additionally shrinks the element's
+   min-content size — the grid would hand that back to the other columns, and
+   how wide a track is has never been the text's business. */
+.head, .dek, .run { overflow-wrap: break-word; }
+
 /* Photographs run in colour. A duotone would unify twenty publishers' colour
    grades into one plate, which is what Espresso does — but Espresso has one
    picture editor and these are twenty strangers' choices, so the cost is that
@@ -629,6 +699,7 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
 </style>
 </head>
 <body>
+<a class="skip" href="#results">Skip to the content</a>
 <button class="ask-fab" type="button" aria-haspopup="dialog" aria-controls="ask" onclick="document.getElementById('ask').showModal()"><span class="ask-fab-word">Ask</span><span class="sr-only"> this archive</span></button>
 
 <div class="page">
@@ -640,7 +711,7 @@ main.is-filtered .feature .head { font-size: 1.1875rem; }
     <div class="editionbar">
       <nav class="days" aria-label="Editions">
         ${prevSlot}
-        <span class="day is-current" aria-current="date">${dayMonth}</span>
+        <span class="day is-current" aria-current="date"><span class="sr-only">Reading </span>${dayMonth}</span>
         ${nextSlot}
         ${arg ? '<a class="day day-all" href="/">Latest edition</a>\n        ' : ''}<a class="day day-all" href="/archive">All editions</a>
       </nav>

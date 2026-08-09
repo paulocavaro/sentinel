@@ -19,10 +19,25 @@
 // recede by opacity: that was the reference's first answer and it composited
 // --machine to 1.84:1, below AA, by the one mechanism the system forbids.
 //
-// It is an `<a>` with no `href` and `aria-disabled="true"`, not a `<span>`.
-// A span carrying aria-disabled announces nothing at all — the attribute is
-// ignored on a role that has no disabled state — where the anchor is at least
-// reached and described.
+// **The unavailable slot is a `<span>`, and what it is comes from its text.**
+// It used to be an `<a>` with no `href` carrying `aria-disabled="true"`, on the
+// argument that a span with that attribute announces nothing while an anchor is
+// at least reached and described. The tone decision was right and the reasoning
+// was wrong: an anchor with no `href` has role `generic` exactly as a span does,
+// `aria-disabled` is not a global ARIA attribute, and `generic` does not support
+// it — so the anchor announced nothing either. Chromium's tree for the bar was
+// one link, one undifferentiated text run holding *both* the current date and
+// the unavailable one, and one more link; `aria-current="date"` on the current
+// slot got no accessible object of its own for the same reason.
+//
+// A generic element with no role to hang state on still has text, and text is
+// the one layer that always survives: the unavailable slot says "no edition"
+// and the current slot says which day is being read, both in `.sr-only`, so the
+// bar's meaning is in the words rather than in an attribute that is discarded
+// before a reader hears it. `aria-current` stays — it *is* global, it is valid
+// on this element, and it costs nothing — but nothing depends on it any more.
+// The visual treatment is untouched: the two slots recede by losing the arrow
+// and the hairline, never by opacity, which composited --machine to 1.84:1.
 
 import Link from 'next/link'
 
@@ -78,21 +93,24 @@ export function EditionBar({
           // streamed HTML, and the arrow would land on the far side of it.
           <Link className="day" href={`/day/${prev}`} rel="prev">{`← ${dayMonth(prev)}`}</Link>
         ) : (
-          <a className="day is-off" aria-disabled="true">
+          <span className="day is-off">
             {dayMonth(shiftDays(date, -1))}
-          </a>
+            <span className="sr-only"> (no edition)</span>
+          </span>
         )}
 
         <span className="day is-current" aria-current="date">
+          <span className="sr-only">Reading </span>
           {dayMonth(date)}
         </span>
 
         {next ? (
           <Link className="day" href={`/day/${next}`} rel="next">{`${dayMonth(next)} →`}</Link>
         ) : (
-          <a className="day is-off" aria-disabled="true">
+          <span className="day is-off">
             {dayMonth(shiftDays(date, 1))}
-          </a>
+            <span className="sr-only"> (no edition)</span>
+          </span>
         )}
 
         {home ? null : (

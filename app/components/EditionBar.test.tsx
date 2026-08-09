@@ -85,8 +85,16 @@ describe('EditionBar', () => {
     expect(both).toContain('>11 August →<')
   })
 
-  it('names the day being read, and does not link it', () => {
-    expect(both).toContain('<span class="day is-current" aria-current="date">9 August</span>')
+  // The prefix is the whole of what makes this slot different from the two
+  // dates beside it once the styling is gone. `aria-current="date"` is valid
+  // here and kept, but it earns no accessible object of its own on a span with
+  // no role, so nothing may depend on it: in Chromium's tree the three slots
+  // are one text run, and a run that opens with "Reading" is the one thing that
+  // tells a reader which of the three dates they are on.
+  it('names the day being read, in words, and does not link it', () => {
+    expect(both).toContain(
+      '<span class="day is-current" aria-current="date"><span class="sr-only">Reading </span>9 August</span>',
+    )
   })
 
   it('offers the whole archive', () => {
@@ -119,15 +127,20 @@ describe('EditionBar', () => {
     // and it recedes by losing the arrow and the hairline. Never by opacity —
     // that composited --machine to 1.84:1, below AA.
     it('still shows the calendar neighbour, with no href and no arrow', () => {
-      expect(earliest).toContain('<a class="day is-off" aria-disabled="true">7 August</a>')
+      expect(earliest).toContain('7 August<span class="sr-only"> (no edition)</span>')
       expect(earliest).not.toContain('href="/day/2026-08-07"')
       expect(earliest).not.toContain('← 7 August')
     })
 
-    // An `<a>` with no href rather than a `<span>`: aria-disabled on a role with
-    // no disabled state announces nothing at all.
-    it('uses an anchor, so the state is announced at all', () => {
-      expect(earliest).not.toContain('<span class="day is-off"')
+    // The state is a word, not an attribute. It was an `<a>` with no href
+    // carrying `aria-disabled="true"`, which announced nothing at all: that
+    // anchor has role `generic`, exactly as the span does, and `generic` does
+    // not support `aria-disabled` — it is not a global ARIA attribute. Measured
+    // in Chromium, where the bar came out as one link, one text run holding
+    // both dates, and one more link.
+    it('says there is no edition in words, not in an attribute', () => {
+      expect(earliest).toContain('<span class="day is-off">')
+      expect(earliest).not.toContain('aria-disabled')
     })
   })
 })

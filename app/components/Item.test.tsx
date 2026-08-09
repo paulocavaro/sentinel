@@ -22,12 +22,12 @@ describe('Item', () => {
     const lead = html(<Item item={item()} tier="lead" />)
 
     it('is an h2, and the only one', () => {
-      expect(lead).toContain('<h2 class="head">')
+      expect(lead).toContain('<h2 class="head" dir="auto">')
     })
 
     it('carries a plate at lead size and a dek with a lead-in', () => {
       expect(lead).toContain('class="plate plate-lead"')
-      expect(lead).toContain('<p class="dek"><b class="entry">Why this</b>')
+      expect(lead).toContain('<p class="dek" dir="auto"><b class="entry">Why this</b>')
     })
   })
 
@@ -35,7 +35,7 @@ describe('Item', () => {
     const feature = html(<Item item={item()} tier="feature" />)
 
     it('is an h3 with a feature-sized plate', () => {
-      expect(feature).toContain('<h3 class="head">')
+      expect(feature).toContain('<h3 class="head" dir="auto">')
       expect(feature).toContain('class="plate plate-feature"')
     })
   })
@@ -51,7 +51,7 @@ describe('Item', () => {
     // own. That is how thirty attributed items fit on a screen without a card.
     it('runs on after a dash instead of opening a dek', () => {
       expect(brief).toContain('<span class="dash" aria-hidden="true"> — </span>')
-      expect(brief).toContain('<span class="run">')
+      expect(brief).toContain('<span class="run" dir="auto">')
       expect(brief).not.toContain('class="dek"')
     })
 
@@ -139,6 +139,30 @@ describe('Item', () => {
         expect(bare).not.toContain('<img')
         expect(bare).toContain('class="head"')
       }
+    })
+  })
+
+  // The page is lang="en" and there is no other `dir` in the document, so a
+  // headline that opens with an Arabic or Hebrew name resolves against the
+  // page's direction: the neutral run between that name and the English after
+  // it reorders, and the publisher at the end of the line can come out at the
+  // wrong end. Every element that carries a stranger's words takes its
+  // direction from its own first strong character instead.
+  describe('right-to-left text', () => {
+    it('lets each of the three carry its own direction', () => {
+      const brief = html(<Item item={item()} tier="brief" />)
+      const feature = html(<Item item={item()} tier="feature" />)
+
+      expect(brief).toContain('<h3 class="head" dir="auto">')
+      expect(brief).toContain('<span class="run" dir="auto">')
+      expect(feature).toContain('<p class="dek" dir="auto">')
+    })
+
+    // The byline is deliberately not in that list, and neither is anything in
+    // the masthead: the publisher is `lib/ingest/publisher.ts`'s, not the
+    // feed's, and the rest of the page is this product's own words.
+    it('leaves the byline alone', () => {
+      expect(html(<Item item={item()} tier="brief" />)).toContain('<p class="byline">')
     })
   })
 })

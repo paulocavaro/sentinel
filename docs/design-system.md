@@ -190,7 +190,7 @@ Three rules, more important than the tokens.
 |---|---|---|
 | `Masthead` | today, archive, no-edition | — |
 | `EditionDate` | today, archive with year | — |
-| `EditionBar` | dates, all-editions | a direction with no edition keeps its tone and loses its arrow and hairline |
+| `EditionBar` | dates, all-editions | a direction with no edition keeps its tone, loses its arrow and hairline, and says so in words |
 | `ThemeNav` | — | derived from the items present, never hardcoded |
 | `Item` | lead, feature, brief | rest, hover, active, focus-visible, **visited**, no-image, forced-colors |
 | `Plate` | lead 16:9, feature 3:2 | image errored → typographic fallback |
@@ -227,6 +227,28 @@ token whose number nobody recomputed, and it was the one token that failed. Two
 independent audits found it on the same afternoon. The values above are measured,
 not asserted, and the ratio comment now sits beside it in the CSS like every
 other token's — its absence there is what let the claim go unchecked.
+
+**State goes in the text layer, not in ARIA that does not apply.** The edition
+bar's unavailable direction was an `<a>` with no `href` carrying
+`aria-disabled="true"`, chosen over a `<span>` on the argument that the anchor is
+at least announced. It is not: an anchor with no `href` has role `generic`
+exactly as a span does, and `aria-disabled` is not a global attribute, so
+`generic` does not support it. Chromium's tree for the bar was one link, then
+`9 August 10 August` as a single undifferentiated text run, then one more link —
+the current date and the unavailable one collapsed into each other, on the one
+navigational control the product has. Both slots now carry a `.sr-only` word:
+*Reading 9 August*, *10 August (no edition)*. The visual treatment is unchanged.
+
+**Every page has a `<main>`, and every `<main>` is the skip link's target.** The
+five surfaces that are not an edition — no such page, the error boundary, a day
+with no edition, an unreadable one, an empty archive — put their sentence and
+their way out inside `<header class="masthead">`, so a landmark reader was told
+each of them is a banner and nothing else. `.wayout` in the stylesheet moves the
+masthead's closing space onto the end of the main, which is what makes that split
+cost nothing in pixels. The skip link is in the root layout, is the first
+focusable element in the document, and points at `#results`, which is the id
+every `<main>` on the site carries — a link that worked on two routes out of
+seven would be the dead control this system refuses everywhere else.
 
 ## Do not build
 
