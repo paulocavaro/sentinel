@@ -160,7 +160,9 @@ function buildItem(source: Source, draft: Draft): RawItem | null {
       kind: source.kind,
       priority: source.priority,
     },
-    lane: source.lane,
+    // The allowed set, not a decision. Which one of them the item is filed
+    // under is curation's call, and validation checks it against this list.
+    themes: source.themes,
     publishedAt,
   }
 }

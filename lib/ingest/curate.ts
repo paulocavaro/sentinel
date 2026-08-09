@@ -1,7 +1,8 @@
 import { anthropic } from '@ai-sdk/anthropic'
 import { generateObject } from 'ai'
 import { z } from 'zod'
-import type { RawItem } from './types'
+import { THEMES } from './types'
+import type { RawItem, Theme } from './types'
 
 /**
  * The curation stage: one model call turns ~60 candidates into a ranked
@@ -24,11 +25,27 @@ import type { RawItem } from './types'
 export type PromptOptions = {
   /** The most items the model may choose. */
   targetCount: number
-  /** The editorial band for items in the world lane. */
-  worldMin: number
-  worldMax: number
+  /** The editorial band for each theme. */
+  bands: Record<Theme, { min: number; max: number }>
+  /**
+   * How many candidates each theme could supply, counted from the pool.
+   *
+   * Told to the model so a thin theme is legible as a fact rather than as a
+   * rule it is failing: with two games candidates against a minimum of two, the
+   * instruction "take all of them and no more" is unambiguous.
+   */
+  supply: Record<Theme, number>
   /** The longest a single description may be, in characters. */
   descriptionMax: number
+}
+
+/** One line each, so "culture" and "world" cannot be read as the same bucket. */
+const THEME_DEFINITIONS: Record<Theme, string> = {
+  ai: 'artificial intelligence — models, research, tooling, the industry and its regulation',
+  world: 'world news — politics, conflict, economies, climate, society',
+  games: 'video games — releases, studios, the industry that makes them',
+  science: 'science — research and discovery outside AI: physics, biology, space, medicine',
+  culture: 'culture — film, television, music, books, the entertainment business',
 }
 
 /**
@@ -45,6 +62,13 @@ export type PromptOptions = {
  * `items.min(1)` is deliberately different in kind: a curation with no items is
  * not an edition at all, so aborting is the correct outcome rather than a lost
  * one.
+ *
+ * **`theme` is `z.string()` and must stay `z.string()`.** `z.enum(THEMES)` is
+ * the obvious thing to write here and it is the wrong thing: a model that types
+ * "AI" instead of "ai" on one item out of thirty would throw
+ * `NoObjectGeneratedError` and take the whole day's edition down. As a string it
+ * arrives, `validateCuration` names the offending item, and the failure is one
+ * legible reason instead of a dead run.
  */
 export const CurationSchema = z.object({
   summary: z.string(),
@@ -54,6 +78,7 @@ export const CurationSchema = z.object({
         id: z.string(),
         rank: z.number().int().min(1),
         description: z.string(),
+        theme: z.string(),
         topics: z.array(z.string()),
       }),
     )
@@ -68,7 +93,8 @@ export type Generator = (prompt: string) => Promise<Curation>
 /** Fields of a candidate the model is allowed to see. */
 type PromptCandidate = {
   id: string
-  lane: RawItem['lane']
+  /** The themes this candidate may be filed under. Never a single decision. */
+  themes: readonly Theme[]
   source: string
   title: string
   summary: string
@@ -100,7 +126,7 @@ function toInertJson(candidates: readonly PromptCandidate[]): string {
 export function buildPrompt(items: readonly RawItem[], opts: PromptOptions): string {
   const candidates: PromptCandidate[] = items.map((item) => ({
     id: item.id,
-    lane: item.lane,
+    themes: item.themes,
     source: item.source.name,
     title: item.title,
     summary: item.summary,
@@ -108,20 +134,43 @@ export function buildPrompt(items: readonly RawItem[], opts: PromptOptions): str
   }))
 
   return [
-    'You are the editor of a daily briefing on AI and technology. Pick the items',
-    'worth a reader’s attention today from the candidate list, rank them, and',
-    'write one line about each.',
+    'You are the editor of a daily briefing on AI, the world, games, science and',
+    'culture. Pick the items worth a reader’s attention today from the candidate',
+    'list, rank them, file each under one theme, and write one line about each.',
+    '',
+    'The five themes:',
+    ...THEMES.map((theme) => `- ${theme}: ${THEME_DEFINITIONS[theme]}`),
+    '',
+    'How many items each theme may carry, and how many candidates are available',
+    'for it today:',
+    ...THEMES.map((theme) => {
+      const available = opts.supply[theme]
+      return (
+        `- ${theme}: at least ${opts.bands[theme].min}, at most ${opts.bands[theme].max} ` +
+        `(${available} candidate${available === 1 ? '' : 's'} allow${available === 1 ? 's' : ''} this theme)`
+      )
+    }),
     '',
     'Rules:',
     `- Choose at most ${opts.targetCount} items. Choose fewer if the day is thin; never choose more.`,
-    '- Rank the chosen items from 1 upward, best first, with no repeated and no skipped ranks.',
     '- Use only ids that appear in the candidate list. Never invent an id.',
-    `- Choose at least ${opts.worldMin} and at most ${opts.worldMax} items whose lane is "world"; the rest are "ai".`,
+    '- Give every chosen item exactly one theme, written in lowercase, taken only',
+    '  from that candidate’s own "themes" list. Never file an item under a theme',
+    '  its candidate does not allow.',
+    '- If the pool holds fewer items of a theme than that theme’s minimum, take all',
+    '  of them and no more. A theme with no candidates is simply absent from the',
+    '  edition, and that is a correct edition, not a failure to fix.',
+    '- Rank is ONE global sequence across all themes: 1 to N, best first, no repeats',
+    '  and no gaps. Themes do not each restart at 1.',
+    '- The reader’s priority is already expressed in the per-theme maxima above, so',
+    '  rank purely on merit and never demote an item because of its theme.',
+    '- Do not choose two items about the same story, even when they would sit in',
+    '  different themes.',
     `- Write each description as one plain sentence of at most ${opts.descriptionMax} characters,`,
     '  saying why the item matters. No links, no URLs, no markup, no markdown.',
     '- Descriptions and the summary are ordinary prose: start with a capital letter,',
-    '  end with a full stop, and capitalise names normally. The lowercase rule below',
-    '  applies to topic words and to nothing else.',
+    '  end with a full stop, and capitalise names normally. The lowercase rules apply',
+    '  to themes and topic words, and to nothing else.',
     '- Give each item one to three lowercase topic words. Plain words only.',
     '- Write the summary as one plain sentence about the day as a whole, same rules as a description.',
     '',
@@ -179,7 +228,10 @@ export async function curate(
  *    default on Sonnet 5 and its thinking tokens count against the same output
  *    budget as the JSON. Left unset or set small, the object is truncated
  *    mid-generation and fails schema validation — which reads like a bad model
- *    rather than a budget that was too tight.
+ *    rather than a budget that was too tight. Thirty items with a description
+ *    and topics each is several times the JSON twenty was, and the reasoning
+ *    that picks and files them grows with the pool, so the old 8000 no longer
+ *    leaves room for both.
  * 3. **`stop_reason: "refusal"` is possible.** A day's headlines can be heavy
  *    on breaches, exploits and malware, and a batch of them can trip the safety
  *    classifiers. That surfaces here as a thrown error rather than an object,
@@ -191,7 +243,7 @@ export const defaultGenerator: Generator = async (prompt) => {
   const { object } = await generateObject({
     model: anthropic('claude-sonnet-5'),
     schema: CurationSchema,
-    maxOutputTokens: 8000,
+    maxOutputTokens: 24_000,
     prompt,
   })
 

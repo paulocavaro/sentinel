@@ -1,13 +1,34 @@
 export type SourceKind = 'blog' | 'press' | 'paper' | 'video' | 'forum'
 export type SourceFormat = 'rss' | 'atom' | 'hn'
-export type Lane = 'ai' | 'world'
+
+/**
+ * The five themes an edition is read through.
+ *
+ * A closed set, not a free tag: the bands in `config.ts` are keyed by it, the
+ * curation is validated against it, and the page's filter row is derived from
+ * the themes actually present in the day's items — never from this list, because
+ * a theme with no supply is a correct edition and a chip that filters to nothing
+ * is a broken one.
+ */
+export type Theme = 'ai' | 'world' | 'games' | 'science' | 'culture'
+
+export const THEMES: readonly Theme[] = ['ai', 'world', 'games', 'science', 'culture']
 
 export type Source = {
   id: string
   name: string
   kind: SourceKind
   format: SourceFormat
-  lane: Lane
+  /**
+   * The themes an item from this source may be assigned.
+   *
+   * An allowlist rather than a label, because a source is not always one thing:
+   * The Guardian's AI section carries policy stories that read as world news,
+   * and Hacker News carries whatever was submitted. Tight where the source is
+   * narrow, wide only where it honestly is — every extra theme here is a theme
+   * the model may put an item in, and validation enforces exactly this set.
+   */
+  themes: readonly Theme[]
   url: string
   /** Lower wins when two sources carry the same story. */
   priority: number
@@ -21,8 +42,29 @@ export type RawItem = {
   url: string
   imageUrl: string | null
   source: { id: string; name: string; kind: SourceKind; priority: number }
-  lane: Lane
+  /** The allowed set, carried from the source. The single theme is chosen by curation. */
+  themes: readonly Theme[]
   publishedAt: string // ISO 8601
+}
+
+/**
+ * How many candidates each theme could possibly supply, counted from the
+ * candidate pool and from nothing else.
+ *
+ * A candidate allowed two themes counts toward both, so these are upper bounds
+ * rather than a partition: the sum can exceed the pool size. That is the right
+ * shape for what it is used for — deciding whether a theme's minimum is
+ * reachable at all — and it is why the effective minimum is
+ * `min(band.min, supply)` rather than the band's own floor.
+ */
+export function themeSupply(candidates: readonly RawItem[]): Record<Theme, number> {
+  const supply = Object.fromEntries(THEMES.map((theme) => [theme, 0])) as Record<Theme, number>
+
+  for (const candidate of candidates) {
+    for (const theme of candidate.themes) supply[theme] += 1
+  }
+
+  return supply
 }
 
 /** One item as published. */
@@ -33,6 +75,8 @@ export type Item = {
   description: string
   url: string
   image: string | null
+  /** One theme, chosen by curation from the source's allowed set. */
+  theme: Theme
   /**
    * Who published the article, derived from `url` — the card's byline.
    *

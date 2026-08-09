@@ -13,7 +13,7 @@ const item = (over: Partial<RawItem> = {}): RawItem => ({
   url: 'https://e.com/article',
   imageUrl: null,
   source: { id: 's', name: 'S', kind: 'press', priority: 1 },
-  lane: 'ai',
+  themes: ['ai'],
   publishedAt: '2026-08-07T10:00:00.000Z',
   ...over,
 })

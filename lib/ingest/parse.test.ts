@@ -6,7 +6,7 @@ import type { Source } from './types'
 
 const fixture = (n: string) => readFileSync(join(__dirname, '__fixtures__', n), 'utf8')
 const src = (format: Source['format'], over: Partial<Source> = {}): Source => ({
-  id: 's', name: 'S', kind: 'press', format, lane: 'ai',
+  id: 's', name: 'S', kind: 'press', format, themes: ['ai'],
   url: 'https://e.com/feed', priority: 1, ...over,
 })
 

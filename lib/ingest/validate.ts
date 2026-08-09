@@ -1,6 +1,7 @@
 import type { Curation } from './curate'
 import { hasMarkupOrUrl } from './sanitize'
-import type { RawItem } from './types'
+import { THEMES, themeSupply } from './types'
+import type { RawItem, Theme } from './types'
 
 /**
  * The last gate before anything is published.
@@ -25,11 +26,14 @@ export type ValidateOptions = {
   targetCount: number
   /** The fewest items that still make an edition worth publishing. */
   minItems: number
-  /** The editorial band for items in the world lane. */
-  worldMin: number
-  worldMax: number
+  /** The editorial band for each theme. */
+  bands: Record<Theme, { min: number; max: number }>
   /** The longest a single description may be, in characters. */
   descriptionMax: number
+}
+
+function isTheme(value: string): value is Theme {
+  return (THEMES as readonly string[]).includes(value)
 }
 
 /**
@@ -114,9 +118,12 @@ export function validateCuration(
 
   const idCounts = new Map<string, number>()
   const rankCounts = new Map<number, number>()
+  const themeCounts = new Map<Theme, number>()
 
   for (const item of items) {
-    if (!byId.has(item.id)) {
+    const candidate = byId.get(item.id)
+
+    if (!candidate) {
       reasons.push(
         `Item ${item.id} is not in the candidate list, so the model invented it.`,
       )
@@ -124,6 +131,30 @@ export function validateCuration(
 
     idCounts.set(item.id, (idCounts.get(item.id) ?? 0) + 1)
     rankCounts.set(item.rank, (rankCounts.get(item.rank) ?? 0) + 1)
+
+    // --- the theme, in two steps ------------------------------------------
+    //
+    // The schema lets any string through on purpose (see `CurationSchema`), so
+    // the enum check is here, where one badly-cased theme is one reported item
+    // rather than a `NoObjectGeneratedError` that costs the whole edition.
+    //
+    // The allowlist check is the one that matters. The theme is the only field
+    // of the published item the model decides for itself, so it is bounded by
+    // the source registry: Eurogamer cannot supply a science item and a model
+    // that says otherwise is overruled here.
+    if (!isTheme(item.theme)) {
+      reasons.push(
+        `Item ${item.id} has the theme "${item.theme}", which is not one of ${THEMES.join(', ')}.`,
+      )
+    } else {
+      themeCounts.set(item.theme, (themeCounts.get(item.theme) ?? 0) + 1)
+
+      if (candidate && !candidate.themes.includes(item.theme)) {
+        reasons.push(
+          `Item ${item.id} is filed under "${item.theme}", which its source does not allow (${candidate.themes.join(', ')}).`,
+        )
+      }
+    }
 
     const description = item.description.trim()
     if (description.length === 0) {
@@ -152,32 +183,66 @@ export function validateCuration(
     }
   }
 
+  let ranksAreUnique = true
   for (const [rank, times] of rankCounts) {
     if (times > 1) {
+      ranksAreUnique = false
       reasons.push(
         `Rank ${rank} is used by ${plural(times, 'item')}, and every rank must be unique.`,
       )
     }
   }
 
-  // --- the world band ------------------------------------------------------
-
-  // Derived from the candidates by looking each chosen id up, never from
-  // anything the model said. The model is not asked which lane an item is in
-  // and would not be believed if it were: a curation that claims compliance is
-  // exactly the output this gate exists to catch. An id with no candidate
-  // counts as nothing here — it is already reported as invented above.
-  const worldCount = items.filter((item) => byId.get(item.id)?.lane === 'world').length
-
-  if (worldCount < opts.worldMin) {
-    reasons.push(
-      `The curation has ${plural(worldCount, 'world item')}, fewer than the minimum of ${opts.worldMin}.`,
+  // Uniqueness alone let `1, 2, 3, 5, 7` through, and the prompt has always
+  // asked for no gaps: rank is the edition's running order, so a hole in it is
+  // either an item the model dropped after ranking it or a ranking it never
+  // really made. `buildEdition` sorts on rank and would publish the sequence
+  // unquestioned.
+  //
+  // Only checked when the ranks are unique. A duplicate necessarily creates a
+  // gap, and reporting both would state one defect twice.
+  if (ranksAreUnique) {
+    const missing = Array.from({ length: items.length }, (_, index) => index + 1).filter(
+      (rank) => !rankCounts.has(rank),
     )
+
+    if (missing.length > 0) {
+      reasons.push(
+        `The curation's ${plural(items.length, 'item')} must be ranked 1 to ${items.length} with no gaps, but ${missing.length === 1 ? 'rank' : 'ranks'} ${missing.join(', ')} ${missing.length === 1 ? 'is' : 'are'} missing.`,
+      )
+    }
   }
-  if (worldCount > opts.worldMax) {
-    reasons.push(
-      `The curation has ${plural(worldCount, 'world item')}, more than the maximum of ${opts.worldMax}.`,
-    )
+
+  // --- the theme bands -----------------------------------------------------
+
+  // The band is checked against the themes the model assigned, which is sound
+  // only because every one of those assignments has just been checked against
+  // the candidate's own allowlist: the model chooses within a set the source
+  // registry decided, and cannot widen it.
+  //
+  // The minimum is softened to what the pool can actually supply, and **supply
+  // is recomputed here from the candidates** rather than taken as an argument.
+  // A caller passing a supply the model influenced is exactly the failure this
+  // gate exists to catch, and the candidates are already in hand. A day with
+  // two games stories publishes both and is a correct edition; a day with none
+  // publishes no games and is also correct.
+  const supply = themeSupply(candidates)
+
+  for (const theme of THEMES) {
+    const band = opts.bands[theme]
+    const count = themeCounts.get(theme) ?? 0
+    const effectiveMin = Math.min(band.min, supply[theme])
+
+    if (count < effectiveMin) {
+      reasons.push(
+        `The curation has ${plural(count, `${theme} item`)}, fewer than the ${effectiveMin} the pool could supply.`,
+      )
+    }
+    if (count > band.max) {
+      reasons.push(
+        `The curation has ${plural(count, `${theme} item`)}, more than the maximum of ${band.max}.`,
+      )
+    }
   }
 
   // --- the edition summary -------------------------------------------------

@@ -2,7 +2,7 @@
  * The numbers the pipeline is tuned by, in one place.
  *
  * **This file exists because the same constants were starting to live in three
- * modules at once.** The world band and the description cap were hard-coded in
+ * modules at once.** The theme bands and the description cap were hard-coded in
  * `curate.ts` (to write the prompt) and again in the validation options (to
  * enforce it). Changing the band in one place would have asked the model for one
  * range while validating against another, and the symptom is not a type error or
@@ -14,25 +14,40 @@
  * reads this file and passes them down.
  */
 
+import type { Theme } from './types'
+
 /** How far back a candidate may have been published. */
 export const WINDOW_HOURS = 48
 
 /** The most items an edition may carry. Fewer is fine; more is a failed run. */
-export const TARGET_COUNT = 20
+export const TARGET_COUNT = 30
 
 /** Below this an edition is not worth publishing, and the run aborts. */
-export const MIN_ITEMS = 8
+export const MIN_ITEMS = 12
 
 /**
- * The editorial band for the world lane.
+ * The editorial band for each theme.
  *
- * A briefing that is only AI news stops being a briefing about the world, and
- * one that is mostly world news stops being this product. Asked for in the
- * prompt, enforced in validation against the **candidates** — never against
- * anything the model claimed about its own output.
+ * Minima guarantee presence; maxima carry the reader's priority. A briefing that
+ * is only AI news stops being a briefing about the world, and one that is mostly
+ * world news stops being this product — the same argument, now in five parts.
+ *
+ * Asked for in the prompt, enforced in validation. A minimum is softened to what
+ * the **candidates** can actually supply, so a day with no games news is a
+ * shorter edition rather than an aborted one.
+ *
+ * `config.test.ts` asserts `sum(min) <= MIN_ITEMS <= TARGET_COUNT <= sum(max)`.
+ * Bands whose minima summed above `TARGET_COUNT` would abort every run forever,
+ * with a reason that never mentions this file; that has to fail at test time,
+ * not at 09:00.
  */
-export const WORLD_MIN = 3
-export const WORLD_MAX = 6
+export const THEME_BANDS: Record<Theme, { min: number; max: number }> = {
+  ai: { min: 4, max: 14 },
+  world: { min: 2, max: 8 },
+  games: { min: 2, max: 6 },
+  science: { min: 1, max: 5 },
+  culture: { min: 1, max: 4 },
+}
 
 /** The longest a single item description may be, in characters. */
 export const DESCRIPTION_MAX = 200
@@ -42,11 +57,16 @@ export const DESCRIPTION_MAX = 200
  *
  * Not zero: feeds 404, time out and rate-limit routinely, and Hacker News
  * applies its point and time filters server-side, so on a quiet day it can
- * legitimately answer with no hits at all and count as one failure. Two is the
- * line between "the internet was flaky" and "something is actually broken" —
- * past it the candidate pool is too thin to make an honest edition from.
+ * legitimately answer with no hits at all and count as one failure. The number
+ * is the line between "the internet was flaky" and "something is actually
+ * broken" — past it the candidate pool is too thin to make an honest edition
+ * from.
+ *
+ * Raised from two with the registry at eighteen sources: two of eighteen is a
+ * far stricter tolerance than two of eleven was, and tightening the gate was not
+ * the point of adding sources.
  */
-export const MAX_SOURCE_FAILURES = 2
+export const MAX_SOURCE_FAILURES = 3
 
 /** In-flight requests, everywhere in the pipeline. */
 export const CONCURRENCY = 6

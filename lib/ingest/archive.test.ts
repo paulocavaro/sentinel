@@ -34,7 +34,7 @@ function candidate(over: Partial<RawItem> = {}): RawItem {
     url: 'https://e.com/1',
     imageUrl: 'https://e.com/1.jpg',
     source: { id: 's1', name: 'Source One', kind: 'press', priority: 1 },
-    lane: 'ai',
+    themes: ['ai'],
     publishedAt: '2026-08-07T10:00:00.000Z',
     ...over,
   }
@@ -57,6 +57,7 @@ function edition(over: Partial<Edition> = {}): Edition {
         publisher: 'E',
         feed: { name: 'Source One', kind: 'press' },
         publishedAt: '2026-08-07T10:00:00.000Z',
+        theme: 'ai',
         topics: ['models'],
       },
     ],
@@ -212,9 +213,9 @@ describe('buildEdition', () => {
     const curation: Curation = {
       summary: 'A day.',
       items: [
-        { id: id(3), rank: 3, description: 'Third.', topics: ['a'] },
-        { id: id(1), rank: 1, description: 'First.', topics: ['a'] },
-        { id: id(2), rank: 2, description: 'Second.', topics: ['a'] },
+        { id: id(3), rank: 3, description: 'Third.', theme: 'ai', topics: ['a'] },
+        { id: id(1), rank: 1, description: 'First.', theme: 'ai', topics: ['a'] },
+        { id: id(2), rank: 2, description: 'Second.', theme: 'ai', topics: ['a'] },
       ],
     }
 
@@ -232,8 +233,8 @@ describe('buildEdition', () => {
     const curation: Curation = {
       summary: 'A day.',
       items: [
-        { id: id(1), rank: 1, description: 'First.', topics: ['a'] },
-        { id: id(2), rank: 2, description: 'Second.', topics: ['a'] },
+        { id: id(1), rank: 1, description: 'First.', theme: 'ai', topics: ['a'] },
+        { id: id(2), rank: 2, description: 'Second.', theme: 'ai', topics: ['a'] },
       ],
     }
 
@@ -251,7 +252,7 @@ describe('buildEdition', () => {
     const pool = [candidate()]
     const curation: Curation = {
       summary: 'A thin day.',
-      items: [{ id: id(1), rank: 1, description: 'Only one.', topics: ['a'] }],
+      items: [{ id: id(1), rank: 1, description: 'Only one.', theme: 'ai', topics: ['a'] }],
     }
 
     const built = buildEdition(curation, pool, opts({ targetCount: 20 }))
@@ -279,6 +280,7 @@ describe('buildEdition', () => {
           rank: 1,
           description: 'Why it matters.',
           topics: ['models'],
+          theme: 'ai',
           title: 'A FORGED HEADLINE',
           url: 'https://evil.com/phish',
           publisher: 'Evil',
@@ -296,10 +298,33 @@ describe('buildEdition', () => {
     expect(item.publisher).toBe('The Verge')
     expect(item.feed).toEqual({ name: 'The Real Feed', kind: 'blog' })
     expect(item.publishedAt).toBe('2026-08-07T10:00:00.000Z')
-    // The model authors only these three.
+    // The model authors only these four.
     expect(item.description).toBe('Why it matters.')
     expect(item.topics).toEqual(['models'])
+    expect(item.theme).toBe('ai')
     expect(item.rank).toBe(1)
+  })
+
+  it('copies the theme the curation chose onto the published item', () => {
+    // The theme is the one field of a published item the model decides, and the
+    // page's filter row is built from the themes actually present — so losing it
+    // here would silently produce an edition that cannot be filtered at all.
+    const pool = [
+      candidate({ id: id(1), url: 'https://e.com/1', themes: ['ai', 'world'] }),
+      candidate({ id: id(2), url: 'https://e.com/2', themes: ['games'] }),
+    ]
+    const curation: Curation = {
+      summary: 'A day.',
+      items: [
+        { id: id(1), rank: 1, description: 'One.', theme: 'world', topics: ['a'] },
+        { id: id(2), rank: 2, description: 'Two.', theme: 'games', topics: ['a'] },
+      ],
+    }
+
+    expect(buildEdition(curation, pool, opts()).items.map((item) => item.theme)).toEqual([
+      'world',
+      'games',
+    ])
   })
 
   it('bylines the publisher of the article, not the feed that found it', () => {
@@ -315,7 +340,7 @@ describe('buildEdition', () => {
     ]
     const curation: Curation = {
       summary: 'A day.',
-      items: [{ id: id(1), rank: 1, description: 'Found on HN, published by Reuters.', topics: ['a'] }],
+      items: [{ id: id(1), rank: 1, description: 'Found on HN, published by Reuters.', theme: 'ai', topics: ['a'] }],
     }
 
     const item = buildEdition(curation, pool, opts()).items[0]
@@ -337,9 +362,9 @@ describe('buildEdition', () => {
     const curation: Curation = {
       summary: 'A day.',
       items: [
-        { id: id(1), rank: 1, description: 'One.', topics: ['a'] },
-        { id: id(2), rank: 2, description: 'Two.', topics: ['a'] },
-        { id: id(3), rank: 3, description: 'Three.', topics: ['a'] },
+        { id: id(1), rank: 1, description: 'One.', theme: 'ai', topics: ['a'] },
+        { id: id(2), rank: 2, description: 'Two.', theme: 'ai', topics: ['a'] },
+        { id: id(3), rank: 3, description: 'Three.', theme: 'ai', topics: ['a'] },
       ],
     }
 
@@ -353,7 +378,7 @@ describe('buildEdition', () => {
     const pool = [candidate()]
     const curation: Curation = {
       summary: 'A quiet day.',
-      items: [{ id: id(1), rank: 1, description: 'One.', topics: ['a'] }],
+      items: [{ id: id(1), rank: 1, description: 'One.', theme: 'ai', topics: ['a'] }],
     }
 
     const built = buildEdition(
@@ -372,8 +397,8 @@ describe('buildEdition', () => {
     const curation: Curation = {
       summary: 'A day.',
       items: [
-        { id: id(1), rank: 1, description: 'First.', topics: ['a'] },
-        { id: 'ffffffffffff', rank: 2, description: 'Invented.', topics: ['a'] },
+        { id: id(1), rank: 1, description: 'First.', theme: 'ai', topics: ['a'] },
+        { id: 'ffffffffffff', rank: 2, description: 'Invented.', theme: 'ai', topics: ['a'] },
       ],
     }
 

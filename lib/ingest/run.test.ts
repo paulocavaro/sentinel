@@ -2,11 +2,11 @@ import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promis
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { MAX_SOURCE_FAILURES, TARGET_COUNT, WORLD_MIN } from './config'
+import { MAX_SOURCE_FAILURES, TARGET_COUNT, THEME_BANDS } from './config'
 import type { Curation } from './curate'
 import { runIngest } from './run'
 import type { IngestDeps } from './run'
-import type { Edition, Source } from './types'
+import type { Edition, Source, Theme } from './types'
 
 /**
  * The orchestrator's contract, end to end, with nothing real behind it.
@@ -49,25 +49,41 @@ const PNG = Buffer.from(
  * item whose feed had no picture.
  */
 const SOURCES: Source[] = [
-  { id: 'spare1', name: 'Spare One', kind: 'blog', format: 'rss', lane: 'ai', url: 'https://spare1.example.com/feed', priority: 3 },
-  { id: 'spare2', name: 'Spare Two', kind: 'blog', format: 'rss', lane: 'ai', url: 'https://spare2.example.com/feed', priority: 3 },
-  { id: 'spare3', name: 'Spare Three', kind: 'blog', format: 'rss', lane: 'ai', url: 'https://spare3.example.com/feed', priority: 3 },
-  { id: 'ai1', name: 'Outlet One', kind: 'press', format: 'rss', lane: 'ai', url: 'https://ai1.example.com/feed', priority: 1 },
-  { id: 'ai2', name: 'Outlet Two', kind: 'press', format: 'rss', lane: 'ai', url: 'https://ai2.example.com/feed', priority: 2 },
-  { id: 'world1', name: 'World Desk', kind: 'press', format: 'rss', lane: 'world', url: 'https://world1.example.com/feed', priority: 2 },
+  { id: 'spare1', name: 'Spare One', kind: 'blog', format: 'rss', themes: ['ai'], url: 'https://spare1.example.com/feed', priority: 3 },
+  { id: 'spare2', name: 'Spare Two', kind: 'blog', format: 'rss', themes: ['ai'], url: 'https://spare2.example.com/feed', priority: 3 },
+  { id: 'spare3', name: 'Spare Three', kind: 'blog', format: 'rss', themes: ['ai'], url: 'https://spare3.example.com/feed', priority: 3 },
+  { id: 'ai1', name: 'Outlet One', kind: 'press', format: 'rss', themes: ['ai'], url: 'https://ai1.example.com/feed', priority: 1 },
+  { id: 'ai2', name: 'Outlet Two', kind: 'press', format: 'rss', themes: ['ai'], url: 'https://ai2.example.com/feed', priority: 2 },
+  { id: 'world1', name: 'World Desk', kind: 'press', format: 'rss', themes: ['world'], url: 'https://world1.example.com/feed', priority: 2 },
+  { id: 'games1', name: 'Games Desk', kind: 'press', format: 'rss', themes: ['games'], url: 'https://games1.example.com/feed', priority: 2 },
+  { id: 'science1', name: 'Science Desk', kind: 'press', format: 'rss', themes: ['science'], url: 'https://science1.example.com/feed', priority: 2 },
+  { id: 'culture1', name: 'Culture Desk', kind: 'press', format: 'rss', themes: ['culture'], url: 'https://culture1.example.com/feed', priority: 2 },
 ]
 
+/** Comfortably more than every band's maximum, so the pool is never the limit. */
 const DEFAULT_COUNTS: Record<string, number> = {
   spare1: 2,
   spare2: 2,
   spare3: 2,
   ai1: 12,
   ai2: 12,
-  world1: 6,
+  world1: 12,
+  games1: 10,
+  science1: 4,
+  culture1: 4,
 }
 
 /** Sources whose feed carries a picture. `world1` deliberately does not. */
-const WITH_IMAGE = new Set(['spare1', 'spare2', 'spare3', 'ai1', 'ai2'])
+const WITH_IMAGE = new Set([
+  'spare1',
+  'spare2',
+  'spare3',
+  'ai1',
+  'ai2',
+  'games1',
+  'science1',
+  'culture1',
+])
 
 function feed(sourceId: string, count: number): string {
   const items = Array.from({ length: count }, (_, index) => {
@@ -114,34 +130,86 @@ const OPEN = '<candidates>'
 const CLOSE = '</candidates>'
 
 /** The candidate block, read back out of the prompt exactly as the model sees it. */
-function candidatesInPrompt(prompt: string): Array<{ id: string; lane: string }> {
+function candidatesInPrompt(prompt: string): Array<{ id: string; themes: Theme[] }> {
   const open = prompt.indexOf(OPEN)
   const close = prompt.indexOf(CLOSE)
   expect(open).toBeGreaterThanOrEqual(0)
   expect(close).toBeGreaterThan(open)
 
-  return JSON.parse(prompt.slice(open + OPEN.length, close)) as Array<{ id: string; lane: string }>
+  return JSON.parse(prompt.slice(open + OPEN.length, close)) as Array<{
+    id: string
+    themes: Theme[]
+  }>
 }
+
+const THEME_ORDER: Theme[] = ['ai', 'world', 'games', 'science', 'culture']
+
+/**
+ * How many items of each theme a compliant curation carries: every minimum
+ * first, then the remaining slots poured into each theme's headroom in order.
+ *
+ * Derived rather than written down, so the assertions further down stay true
+ * when a band in `config.ts` moves. `supply` is what the pool actually offers,
+ * because a minimum is only owed up to what exists.
+ */
+function composition(supply: Record<Theme, number>): Record<Theme, number> {
+  const take = Object.fromEntries(THEME_ORDER.map((theme) => [theme, 0])) as Record<Theme, number>
+  let left = TARGET_COUNT
+
+  for (const theme of THEME_ORDER) {
+    const n = Math.min(THEME_BANDS[theme].min, supply[theme], left)
+    take[theme] = n
+    left -= n
+  }
+  for (const theme of THEME_ORDER) {
+    const n = Math.min(THEME_BANDS[theme].max - take[theme], supply[theme] - take[theme], left)
+    take[theme] += n
+    left -= n
+  }
+
+  return take
+}
+
+/** The composition the default registry produces: every band saturated in order. */
+const PLAN = composition(
+  Object.fromEntries(
+    THEME_ORDER.map((theme) => [theme, Number.POSITIVE_INFINITY]),
+  ) as Record<Theme, number>,
+)
 
 /**
  * A generator that plays by the rules: it reads the candidates out of the
  * prompt and returns a curation that satisfies every constraint validation
- * enforces. `mutate` is how a test breaks exactly one of them.
+ * enforces — one theme per item drawn from that candidate's own allowlist, one
+ * global rank sequence with no gaps. `mutate` is how a test breaks exactly one
+ * of them.
  */
 function makeGenerator(mutate: (curation: Curation) => Curation = (curation) => curation) {
   return vi.fn(async (prompt: string): Promise<Curation> => {
     const all = candidatesInPrompt(prompt)
-    const world = all.filter((candidate) => candidate.lane === 'world').slice(0, WORLD_MIN)
-    const ai = all
-      .filter((candidate) => candidate.lane === 'ai')
-      .slice(0, TARGET_COUNT - world.length)
+
+    const byTheme = Object.fromEntries(
+      THEME_ORDER.map((theme) => [theme, all.filter((candidate) => candidate.themes.includes(theme))]),
+    ) as Record<Theme, Array<{ id: string; themes: Theme[] }>>
+
+    const take = composition(
+      Object.fromEntries(THEME_ORDER.map((theme) => [theme, byTheme[theme].length])) as Record<
+        Theme,
+        number
+      >,
+    )
+
+    const chosen = THEME_ORDER.flatMap((theme) =>
+      byTheme[theme].slice(0, take[theme]).map((candidate) => ({ candidate, theme })),
+    )
 
     return mutate({
       summary: 'A quiet day, with one model release worth reading about.',
-      items: [...world, ...ai].map((candidate, index) => ({
+      items: chosen.map(({ candidate, theme }, index) => ({
         id: candidate.id,
         rank: index + 1,
         description: 'Why this matters, in one plain sentence.',
+        theme,
         topics: ['models'],
       })),
     })
@@ -211,6 +279,7 @@ async function writeStaleEdition(): Promise<void> {
         feed: { name: 'Stale Wire', kind: 'press' },
         publishedAt: '2026-08-07T10:00:00.000Z',
         topics: ['archive'],
+        theme: 'ai',
       },
     ],
   }
@@ -431,7 +500,7 @@ describe('runIngest', () => {
 
     // The world band, counted from the feed each item actually came from.
     const worldItems = written.items.filter((item) => item.feed.name === 'World Desk')
-    expect(worldItems).toHaveLength(WORLD_MIN)
+    expect(worldItems).toHaveLength(PLAN.world)
 
     // Title, url and date come off the feed, never off the model.
     for (const item of written.items) {
@@ -448,7 +517,7 @@ describe('runIngest', () => {
     // Images were re-encoded and written for the items whose feed carried one;
     // the world items had none, so they are null rather than missing.
     const files = await readdir(imageDir)
-    expect(files.length).toBe(TARGET_COUNT - WORLD_MIN)
+    expect(files.length).toBe(TARGET_COUNT - PLAN.world)
     expect(files.every((file) => file.endsWith('.webp'))).toBe(true)
     for (const item of written.items) {
       const expected = item.feed.name === 'World Desk' ? null : `/img/${item.id}.webp`
@@ -481,8 +550,8 @@ describe('runIngest', () => {
 
     // Tighter than the ceiling: exactly the chosen items, split by whether their
     // feed already carried a picture.
-    expect(fetchImage).toHaveBeenCalledTimes(TARGET_COUNT - WORLD_MIN)
-    expect(fetchHtml).toHaveBeenCalledTimes(WORLD_MIN)
+    expect(fetchImage).toHaveBeenCalledTimes(TARGET_COUNT - PLAN.world)
+    expect(fetchHtml).toHaveBeenCalledTimes(PLAN.world)
   })
 
   // -------------------------------------------------------------------------
@@ -508,6 +577,7 @@ describe('runIngest', () => {
           feed: { name: 'Outlet One', kind: 'press' },
           publishedAt: '2026-08-07T10:00:00.000Z',
           topics: ['models'],
+          theme: 'ai',
         },
       ],
     }

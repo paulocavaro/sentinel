@@ -5,9 +5,8 @@ import {
   MAX_SOURCE_FAILURES,
   MIN_ITEMS,
   TARGET_COUNT,
+  THEME_BANDS,
   WINDOW_HOURS,
-  WORLD_MAX,
-  WORLD_MIN,
 } from './config'
 import { curate } from './curate'
 import type { Curation, Generator, PromptOptions } from './curate'
@@ -17,6 +16,7 @@ import { downloadImages, resolveImages } from './images'
 import type { BytesFetcher, HtmlFetcher } from './images'
 import { selectCandidates } from './select'
 import { SOURCES } from './sources'
+import { themeSupply } from './types'
 import type { Edition, RawItem, Source } from './types'
 import { validateCuration } from './validate'
 import type { ValidateOptions } from './validate'
@@ -110,15 +110,27 @@ export type IngestResult = {
  * `validateCuration` keeps a copy: the prompt has to ask for exactly what the
  * gate enforces, and two drifting sets of numbers would abort every run with no
  * explanation anywhere in the output.
+ *
+ * The bands are constant; the supply is not, so the options are assembled once
+ * the candidates are known and the same object feeds the prompt and the gate.
  */
-const PROMPT_OPTIONS: PromptOptions = {
+const VALIDATE_OPTIONS: ValidateOptions = {
   targetCount: TARGET_COUNT,
-  worldMin: WORLD_MIN,
-  worldMax: WORLD_MAX,
+  minItems: MIN_ITEMS,
+  bands: THEME_BANDS,
   descriptionMax: DESCRIPTION_MAX,
 }
 
-const VALIDATE_OPTIONS: ValidateOptions = { ...PROMPT_OPTIONS, minItems: MIN_ITEMS }
+function promptOptions(candidates: readonly RawItem[]): PromptOptions {
+  return {
+    targetCount: TARGET_COUNT,
+    bands: THEME_BANDS,
+    // Counted from the candidates, so the prompt tells the model what today's
+    // pool actually holds rather than what the bands wish it held.
+    supply: themeSupply(candidates),
+    descriptionMax: DESCRIPTION_MAX,
+  }
+}
 
 /** Editions are named by the UTC date they cover, everywhere and always. */
 function utcDate(now: Date): string {
@@ -223,7 +235,7 @@ export async function runIngest(
     let curation: Curation
     try {
       // `curate` already retries once. Reaching this catch means two failures.
-      curation = await curate(candidates, PROMPT_OPTIONS, deps.generate)
+      curation = await curate(candidates, promptOptions(candidates), deps.generate)
     } catch (error) {
       return done({
         code: 1,

@@ -29,7 +29,7 @@ function item(over: Partial<RawItem> & { title: string }): RawItem {
       priority: 2,
       ...over.source,
     },
-    lane: over.lane ?? 'ai',
+    themes: over.themes ?? ['ai'],
     publishedAt: over.publishedAt ?? hoursFromNow(-1),
   }
 }
@@ -205,7 +205,7 @@ describe('dedupe', () => {
   it('leaves genuinely different items alone', () => {
     const items = [
       item({ title: 'Anthropic ships Claude Opus 5', url: 'https://e.com/1' }),
-      item({ title: 'Flooding displaces thousands in Pakistan', url: 'https://e.com/2', lane: 'world' }),
+      item({ title: 'Flooding displaces thousands in Pakistan', url: 'https://e.com/2', themes: ['world'] }),
       item({ title: 'OpenAI hires a new head of policy', url: 'https://e.com/3' }),
     ]
     expect(dedupe(items)).toHaveLength(3)
@@ -273,7 +273,7 @@ describe('selectCandidates', () => {
         publishedAt: hoursFromNow(-4),
         source: { id: 'arstechnica', name: 'Ars Technica AI', kind: 'press', priority: 2 },
       }),
-      item({ title: 'Flooding displaces thousands in Pakistan', url: 'https://e.com/flood', lane: 'world' }),
+      item({ title: 'Flooding displaces thousands in Pakistan', url: 'https://e.com/flood', themes: ['world'] }),
     ]
 
     const { candidates, unparseable } = selectCandidates(items, {

@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import type { Curation } from './curate'
 import { publisherFromUrl } from './publisher'
 import { normalizeTitle } from './select'
-import type { Edition, Item, RawItem } from './types'
+import type { Edition, Item, RawItem, Theme } from './types'
 
 /**
  * The archive: the only part of the pipeline that reads and writes the
@@ -51,7 +51,7 @@ function readableItem(value: unknown): { id: string; title: string } | null {
  * nothing would report it.
  *
  * **This re-reads the whole archive on every run, and that is intentional.** At
- * twenty items a day an edition file is a few kilobytes; a decade of them is
+ * thirty items a day an edition file is a few kilobytes; a decade of them is
  * single-digit megabytes read once, in a job that spends most of its time
  * waiting on the network. An incremental index would be a second source of
  * truth that can silently fall out of step with the files actually committed —
@@ -132,8 +132,8 @@ export type BuildEditionOptions = {
 /**
  * Assemble the edition from the curation and the candidates.
  *
- * **The model contributes exactly three things per item: the rank, the
- * description and the topics.** Title, URL, feed and publish date are read off
+ * **The model contributes exactly four things per item: the rank, the theme,
+ * the description and the topics.** Title, URL, feed and publish date are read off
  * the candidate, which came from the feed, and the publisher is computed from
  * the candidate's URL. That split is the whole point of
  * this function. The model never sees a reason to restate a title and is never
@@ -189,6 +189,12 @@ export function buildEdition(
         // From the model.
         description: chosen.description,
         topics: chosen.topics,
+        // Also from the model, and the only model-authored field with a closed
+        // set of legal values. `CurationSchema` types it as a plain string so a
+        // mis-cased theme costs one reported item instead of the whole
+        // generation; `validateCuration` runs before this and rejects anything
+        // that is not one of the five, which is what makes the assertion sound.
+        theme: chosen.theme as Theme,
         // A missing image is a designed state — the SSRF guard fired, the host
         // was down, or the feed simply carried no picture.
         image: opts.images.get(candidate.id) ?? null,

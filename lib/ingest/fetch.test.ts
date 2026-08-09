@@ -6,8 +6,8 @@ const rss = `<rss><channel><item><title>A</title><link>https://a.com/1</link>
   <pubDate>Fri, 07 Aug 2026 10:00:00 GMT</pubDate></item></channel></rss>`
 
 const sources: Source[] = [
-  { id: 'a', name: 'A', kind: 'press', format: 'rss', lane: 'ai', url: 'https://a.com/f', priority: 1 },
-  { id: 'b', name: 'B', kind: 'press', format: 'rss', lane: 'world', url: 'https://b.com/f', priority: 2 },
+  { id: 'a', name: 'A', kind: 'press', format: 'rss', themes: ['ai'], url: 'https://a.com/f', priority: 1 },
+  { id: 'b', name: 'B', kind: 'press', format: 'rss', themes: ['world'], url: 'https://b.com/f', priority: 2 },
 ]
 const opts = { since: new Date('2026-08-06T09:00:00Z'), concurrency: 4 }
 
@@ -34,9 +34,9 @@ describe('collect', () => {
     expect(failures).toHaveLength(2)
   })
 
-  it('tags each item with its source lane and priority', async () => {
+  it('tags each item with its source themes and priority', async () => {
     const { items } = await collect(sources, async () => rss, opts)
-    expect(items.some((i) => i.lane === 'world')).toBe(true)
+    expect(items.some((i) => i.themes.includes('world'))).toBe(true)
     expect(items[0].source.priority).toBe(1)
   })
 })
