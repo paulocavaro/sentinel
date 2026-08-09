@@ -264,9 +264,15 @@ replacement. The cheapest option was chosen on purpose.
 
 ## Stack
 
-Next.js 16 (App Router, static by default), React 19, TypeScript, Tailwind 4,
-Vercel AI SDK, MiniSearch, deployed on Vercel. GitHub Actions runs the daily
-pipeline. One secret: the model API key.
+Next.js 16 (App Router, static by default), React 19, TypeScript, plain CSS in
+one stylesheet, Vercel AI SDK, MiniSearch, deployed on Vercel. GitHub Actions
+runs the daily pipeline. One secret: the model API key.
+
+There is no CSS framework. The design system is eight colours, two typefaces and
+one interaction, and `app/globals.css` is the design reference's own stylesheet
+ported with its class names intact — so the implementation and the visual gate's
+reference are the same document in two places rather than two dialects of one
+design.
 
 The site has exactly one runtime route. Everything else is generated at build
 time from files in this repository.

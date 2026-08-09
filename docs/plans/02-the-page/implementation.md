@@ -41,21 +41,21 @@ places rather than two dialects of one design.
 - Delete: `postcss.config.mjs`, `public/next.svg`, `public/vercel.svg`,
   `public/window.svg`, `public/file.svg`, `public/globe.svg`
 
-- [ ] **Step 1 — Remove.** `pnpm remove tailwindcss @tailwindcss/postcss`, delete
+- [x] **Step 1 — Remove.** `pnpm remove tailwindcss @tailwindcss/postcss`, delete
   `postcss.config.mjs`, delete the scaffold's SVGs. Reduce `app/page.tsx` to a
   minimal valid placeholder with **no `next/image` import** — it is refused by
   `design-system.md`, and an unused import fails lint once the body is gutted.
   Commit the regenerated lockfile: `daily.yml` runs `--frozen-lockfile`, so a
   `package.json` without it breaks the pipeline, not the site.
-- [ ] **Step 2 — Port both style blocks.** `app/globals.css` becomes the `<style>`
+- [x] **Step 2 — Port both style blocks.** `app/globals.css` becomes the `<style>`
   block from `design-refs/home.html` **plus** the promoted-components block at
   the bottom of `design-refs/states.html`. The stale banner, the ask answer and
   the citation only exist in the second file; porting only the first leaves
   Task 5's banner with no CSS. Drop `.toggle` (see Task 1c). Keep every comment.
-- [ ] **Step 3 — Update `docs/spec.md`**, which still names Tailwind 4 in its
+- [x] **Step 3 — Update `docs/spec.md`**, which still names Tailwind 4 in its
   stack section and is fed to the visual gate as a spec doc.
-- [ ] **Step 4 — Gate**
-- [ ] **Step 5 — Commit:** `feat(02): the stylesheet`
+- [x] **Step 4 — Gate**
+- [x] **Step 5 — Commit:** `feat(02): the stylesheet`
 
 ---
 

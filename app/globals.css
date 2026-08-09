@@ -1,26 +1,370 @@
-@import "tailwindcss";
+/* ─── Sentinel · design reference ───────────────────────────────────────────
+   Direction: "the record". Closed at 09:23, dated, never rewritten.
+
+   The desktop grid is measured off real newspapers rather than invented:
+
+   · Fix the gutter, fix the column, change only the count. The Guardian holds a
+     20px gutter at every width and moves its column from 60 to 40 exactly once;
+     the Washington Post holds 34/32 and only drops columns 20 → 16 → 12 → 10.
+   · One aspect ratio, four image sizes. The Guardian runs 1.25 at 620/460/220/98,
+     The Athletic 1.50 at 600/453/162/118. A single thumbnail size across three
+     tiers reads as a list of favicons.
+   · Lead-to-tail type ratio never exceeds 2.0 anywhere in the sample, and line
+     height stays a near-constant ratio. The previous draft was at 2.35 with the
+     leading moving 1.06 → 1.22 → 1.40, which is a third variable changing for
+     no reason.
+   · No right rail. Every rail in the sample carries a second content type or a
+     second sort of a much larger corpus. This product has one type, one sort,
+     and it fits on the page — Techmeme's rail is a verbatim copy of its own left
+     column, and the Economist's is a promo and an advertisement. The width goes
+     to more columns of the same list and to a real lead photograph.
+   ────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light dark;
+
+  --paper:   light-dark(#F2F0EB, #16171A);
+  --ink:     light-dark(#17171A, #ECEAE4);  /* 15.71 / 14.90 */
+  --prose:   light-dark(#3D3B36, #B8B4AC);  /*  9.82 /  8.67 */
+  --machine: light-dark(#6B6862, #8A867E);  /*  4.88 /  4.94 */
+  --accent:  light-dark(#8A5D0F, #B07E28);  /*  5.05 /  5.00 — isoluminant with --machine */
+  --read:    light-dark(#7C786F, #7B776F);
+
+  --rule-hair:   light-dark(#DAD7D0, #2E2F33);
+  --rule-strong: light-dark(#17171A, #ECEAE4);
+  --edge:        light-dark(#C9C5BC, #3B3D42);
+
+  --col: 60px;
+  --gap: 20px;
+  --tracks: 16;
+  --content: calc(var(--tracks) * var(--col) + (var(--tracks) - 1) * var(--gap));
+
+  --ratio: 3 / 2;                 /* one aspect ratio, held everywhere */
+  --dur-tap: 120ms;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark;  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Spectral, Georgia, serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+.page { width: min(100% - 2.5rem, var(--content)); margin-inline: auto; }
+
+.acr { font-variant-caps: all-small-caps; letter-spacing: 0.03em; }
+
+/* ─── Masthead ───────────────────────────────────────────────────────────── */
+
+.masthead { padding: 3rem 0 1.5rem; }
+
+.wordmark {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
+  text-transform: uppercase; color: var(--machine); margin: 0;
+}
+
+.editiondate {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2.5rem, 7vw, 3.75rem);
+  font-weight: 400; line-height: 0.98; letter-spacing: -0.035em;
+  color: var(--ink); margin: 0.75rem 0 0 -0.055em;
+}
+.editiondate .weekday { color: var(--machine); }
+
+.manifest {
+  font-size: 1.0625rem; font-style: italic; line-height: 1.45;
+  color: var(--prose); margin: 1rem 0 0; max-width: 30em;
+}
+
+.promise {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--machine); margin: 0.875rem 0 0;
+}
+
+/* Section headings are the navigation. Selected state on two visual channels
+   plus aria-current, which is the cheapest correct version in the sample. */
+.themes { list-style: none; display: flex; flex-wrap: wrap; gap: 1.5rem;
+          margin: 1.75rem 0 0; padding: 0 0 1.25rem; }
+.chip {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
+  text-transform: uppercase; color: var(--machine); text-decoration: none;
+  padding-bottom: 0.25rem; border-bottom: 2px solid transparent;
+}
+.chip:hover { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* The edition bar: which day you are reading, and the one control the product
+   has. World in Brief puts its date and pager in a full-width bar above the
+   column; this is the same idea with the archive's own vocabulary — dates, not
+   Previous and Next, which are ambiguous under a date (later in time, or
+   further back into the archive?). */
+.editionbar { margin-top: 1.5rem; }
+.days { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: baseline; }
+.day {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
+  text-transform: uppercase; color: var(--machine); text-decoration: none;
+}
+.day:hover { color: var(--ink); }
+.day.is-current { color: var(--ink); }
+.day.is-off { opacity: 0.45; }              /* present, not offered — never removed */
+.day-all { border-bottom: 1px solid var(--rule-hair); padding-bottom: 1px; }
+
+/* The one round thing in a system whose form language is pinned at zero radius.
+   A newspaper has no rounded corners, so this reads as arriving from somewhere
+   else — which is the point: it is the only element on the page that is software
+   rather than paper, and the only one that opens. Its word is set in the machine
+   face for the same reason. */
+.ask-fab {
+  position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 20;
+  width: 3.5rem; height: 3.5rem; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--ink); color: var(--paper);
+  border: 0; cursor: pointer;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.28), 0 8px 24px rgb(0 0 0 / 0.18);
+  transition: transform var(--dur-tap) var(--ease-out), background-color var(--dur-tap) var(--ease-out);
+}
+.ask-fab-word {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.ask-fab:hover { background: var(--accent); }
+.ask-fab:active { transform: scale(0.96); transition: none; }
+.ask-fab:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .ask-fab { transition: none; } }
+
+/* <dialog> + showModal gives Escape, a focus trap, an inert background and a
+   real backdrop for free — the four things that made the FT's drawer the only
+   unbroken one in the sample, none of them hand-written here. */
+.panel {
+  position: fixed; inset: 0 0 0 auto; margin: 0;
+  width: min(26rem, 100%); max-width: none; height: 100dvh; max-height: none;
+  background: var(--paper); color: var(--ink);
+  border: 0; border-left: 1px solid var(--rule-strong); padding: 0;
+}
+/* Scoped to [open]. A bare display:flex on the dialog overrides the UA's
+   display:none for the closed state, so the panel is open from page load and
+   never closes — which is what happened the first time this was written. */
+.panel[open] { display: flex; flex-direction: column; }
+.panel::backdrop { background: rgb(0 0 0 / 0.5); }
+
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--rule-hair);
+}
+.panel-title, .panel-x {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em; text-transform: uppercase;
+}
+.panel-title { color: var(--ink); margin: 0; }
+.panel-x { color: var(--machine); background: none; border: 0; cursor: pointer;
+           padding: 0.625rem; margin: -0.625rem; min-height: 44px; }
+.panel-x:hover { color: var(--ink); }
+
+.panel-body { padding: 1.5rem; overflow-y: auto; }
+.panel-label { display: block; font-size: 1rem; line-height: 1.5; color: var(--prose); margin: 0 0 0.875rem; }
+.panel-input {
+  width: 100%; font-family: Spectral, Georgia, serif; font-size: 1.0625rem;
+  color: var(--ink); background: transparent;
+  border: 0; border-bottom: 1px solid var(--rule-strong); border-radius: 0;
+  padding: 0.625rem 0; min-height: 44px;
+}
+.panel-input::placeholder { color: var(--machine); }
+.panel-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.panel-note { font-size: 0.875rem; line-height: 1.55; color: var(--machine); margin: 1rem 0 0; }
+.panel-examples { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+.example {
+  width: 100%; text-align: left; font-family: Spectral, Georgia, serif;
+  font-size: 0.9375rem; line-height: 1.45; color: var(--prose);
+  background: transparent; border: 0; border-top: 1px solid var(--rule-hair);
+  padding: 0.75rem 0; cursor: pointer; min-height: 44px;
+}
+.example:hover { color: var(--ink); }
+
+/* ─── The lead ───────────────────────────────────────────────────────────── */
+
+.lead {
+  display: grid; gap: var(--gap);
+  grid-template-columns: repeat(var(--tracks), minmax(0, 1fr));
+  align-items: start;
+  padding: 1.75rem 0 2.5rem;
+  border-top: 1px solid var(--rule-strong);
+  position: relative;
+}
+.plate-lead { grid-column: span 10; }
+.lead .body { grid-column: span 6; }
+/* The one place the ratio breaks. The Economist does this exactly once, for its
+   cover, which is what makes the break read as a signal rather than an accident:
+   at 3/2 the lead plate stands taller than the column beside it and leaves the
+   text hanging over dead space. */
+.plate-lead .art { aspect-ratio: 16 / 9; }
+.lead .head { font-size: clamp(1.875rem, 3.2vw, 2.125rem); line-height: 1.12; letter-spacing: -0.02em; text-wrap: balance; }
+.lead .dek  { font-size: 1.0625rem; }
+
+/* ─── Sections ───────────────────────────────────────────────────────────── */
+
+.section { padding-top: 2.25rem; }
+
+.section-name {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink);
+  margin: 0; padding-top: 0.75rem;
+  border-top: 1px solid var(--rule-strong);
+}
+
+.features {
+  display: grid; gap: var(--gap) var(--gap);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 1.5rem;
+}
+
+.briefs {
+  display: grid; gap: 0 calc(var(--gap) * 2);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1.75rem;
+  border-top: 1px solid var(--rule-hair);
+}
+
+/* ─── Items ──────────────────────────────────────────────────────────────── */
+
+.item { position: relative; min-width: 0; }
+.feature { padding-bottom: 0.5rem; }
+.brief { padding: 1rem 0; border-top: 1px solid var(--rule-hair); }
+.briefs .brief:first-child, .briefs .brief:nth-child(2) { border-top: 0; }
+
+.byline {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.6875rem; font-weight: 500; line-height: 1.4;
+  letter-spacing: 0.083em; text-transform: uppercase;
+  color: var(--machine); margin: 0 0 0.3125rem;
+}
+
+.head { margin: 0; font-weight: 600; }
+.feature .head { font-size: 1.3125rem; line-height: 1.2; letter-spacing: -0.012em; }
+.brief .head   { font-size: 1.0625rem; line-height: 1.4; display: inline; }
+
+.link { color: inherit; text-decoration: none; }
+.link::after { content: ""; position: absolute; inset: 0; }
+.link:visited { color: var(--read); }
+
+.dek {
+  font-size: 0.9375rem; line-height: 1.6; color: var(--prose);
+  margin: 0.4375rem 0 0; max-width: 46ch;      /* the measure never follows the grid */
+  text-wrap: pretty;
+}
+.entry { font-weight: 600; color: var(--ink); }
+.brief .dash { color: var(--machine); }
+.brief .run  { font-size: 1.0625rem; line-height: 1.4; color: var(--prose); }
+
+/* Photographs run in colour. A duotone would unify twenty publishers' colour
+   grades into one plate, which is what Espresso does — but Espresso has one
+   picture editor and these are twenty strangers' choices, so the cost is that
+   every photograph stops being a photograph. The 1px edge is what keeps a light
+   image from bleeding into the paper. */
+.plate { position: relative; display: block; }
+.art { display: block; width: 100%; aspect-ratio: var(--ratio); object-fit: cover;
+       border: 1px solid var(--edge); }
+.plate-feature { margin-bottom: 0.75rem; }
+
+.item:hover  { background: color-mix(in oklab, var(--ink) 3%, transparent); }
+.item:active { background: color-mix(in oklab, var(--ink) 6%, transparent); }
+@media (hover: hover) {
+  .item { transition: background-color var(--dur-tap) var(--ease-out); }
+  .item:active { transition: none; }
+}
+.item:has(.link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+/* ─── The end ────────────────────────────────────────────────────────────── */
+
+.close { padding: 6rem 0 5rem; }
+.close-mark {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(3.25rem, 9vw, 4.5rem); line-height: 0.9; letter-spacing: 0.02em;
+  color: var(--accent); margin: 0 0 1.25rem -0.11em;
+}
+.close-sentence { font-size: 1.0625rem; line-height: 1.5; color: var(--ink); margin: 0; }
+.close-next {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--machine); margin: 0.625rem 0 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .close-mark { animation: settle 1ms linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+}
+@keyframes settle { from { opacity: 0; } to { opacity: 1; } }
+
+/* ─── Only the count changes ─────────────────────────────────────────────── */
+
+@media (max-width: 81rem)  { :root { --tracks: 12; } .plate-lead { grid-column: span 7; } .lead .body { grid-column: span 5; } }
+@media (max-width: 61rem)  { :root { --col: 40px; }
+  .features { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 41rem)  {
+  .page { width: calc(100% - 2.5rem); }
+  .lead { grid-template-columns: 1fr; }
+  .plate-lead, .lead .body { grid-column: 1; }
+  .features { grid-template-columns: 1fr; gap: 1.75rem; }
+  .briefs { grid-template-columns: 1fr; }
+  .briefs .brief:nth-child(2) { border-top: 1px solid var(--rule-hair); }
+  .feature .head { font-size: 1.1875rem; }
+  .dek { max-width: none; }
+}
+
+@media (forced-colors: active) {
+  .brief, .briefs { border-top: 1px solid CanvasText; }
+  .section-name, .lead { border-top: 2px solid CanvasText; }
+  .byline { color: GrayText; }
+}
+
+/* ─── Components introduced by the states, promoted into the system on
+       approval. Ported from the second style block of
+       design-refs/states.html. ─────────────────────────────────────────── */
+.stale-banner { border: 1px solid var(--accent); border-left-width: 3px; padding: 0.875rem 1.125rem; }
+.stale-what { font-size: 1.0625rem; font-weight: 600; color: var(--ink); margin: 0; }
+.stale-why { font-size: 0.9375rem; line-height: 1.5; color: var(--prose); margin: 0.25rem 0 0; }
+
+.panel-static { max-width: 34em; }
+.ask-line { display: flex; align-items: baseline; gap: 0.75rem; border-bottom: 1px solid var(--rule-strong); padding-bottom: 0.625rem; }
+.ask-q { font-size: 1.0625rem; color: var(--ink); }
+.ask-bar { flex: 1; height: 2px; background: var(--accent); opacity: 0.55; }
+.ask-a { font-size: 1.0625rem; line-height: 1.6; color: var(--ink); margin: 0.5rem 0 0; }
+.cite { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.6875rem;
+        letter-spacing: 0.083em; text-transform: uppercase; color: var(--accent);
+        white-space: nowrap; margin-left: 0.25rem; }
+
+/* ─── Catalogue chrome. Not part of the system. ──────────────────────────
+       This belongs to /states alone — the states page frames each condition
+       in a numbered card so it can be read as a catalogue. It is the states
+       route's own furniture and no product surface may use it. It lives here
+       rather than in a route-scoped file so that the stylesheet and
+       design-refs/states.html stay one document in two places, which is the
+       whole reason the visual gate is worth anything. ────────────────────── */
+.cat { width: min(100% - 2.5rem, 60rem); margin-inline: auto; padding: 3rem 0 6rem; }
+.cat-title { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.75rem;
+             font-weight: 500; letter-spacing: 0.083em; text-transform: uppercase;
+             color: var(--machine); margin: 0 0 0.75rem; }
+.cat-lede { font-size: 1.0625rem; line-height: 1.55; color: var(--prose); margin: 0 0 3rem; max-width: 34em; }
+.state { padding-top: 3.5rem; }
+.state-head { border-top: 1px solid var(--rule-strong); padding-top: 0.875rem; margin-bottom: 1.5rem; }
+.state-n { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.6875rem;
+           letter-spacing: 0.09em; color: var(--accent); margin: 0 0 0.5rem; }
+.state-title { font-size: 1.25rem; font-weight: 600; margin: 0; }
+.state-why { font-size: 0.9375rem; line-height: 1.55; color: var(--prose); margin: 0.5rem 0 0; max-width: 46em; }
+.state-frame { border: 1px solid var(--rule-hair); padding: 1.75rem; }
