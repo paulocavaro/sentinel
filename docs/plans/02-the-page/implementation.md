@@ -264,7 +264,7 @@ modify `lib/ingest/config.ts`
 > a compact view rather than the brief markup. That is the deviation, and it is
 > the only one that satisfies everything else.
 
-- [ ] **Step 1 — Implement.**
+- [x] **Step 1 — Implement.**
   - The chips are `<a href="?theme=ai#ai">`: with no script they scroll to the
     section, with script they filter. One href, both behaviours, degrades.
   - The active theme is **derived from the URL, never mirrored into state**, or
@@ -283,8 +283,16 @@ modify `lib/ingest/config.ts`
   - An `aria-live="polite"` node beside the chips: *"Showing 8 items in
     Artificial intelligence."* Without it the list is replaced and a screen
     reader is told nothing.
-- [ ] **Step 2 — Gate**
-- [ ] **Step 3 — Commit:** `feat(02): the theme filter`
+  - Two decisions the plan did not settle, both taken by looking at the rendered
+    page. **The selected chip's href is `?#ai`** — the parameter dropped, the
+    fragment kept — because otherwise a filtered URL has no exit but the back
+    button, and both hrefs degrade to a link to a section that is still there.
+    **The briefs block keeps its two columns**: collapsing it as well runs a
+    compact item's line to 1260px at desktop, three times the measure the deks
+    beside it are capped at, and two columns is where a compact item already
+    reads on this page.
+- [x] **Step 2 — Gate**
+- [x] **Step 3 — Commit:** `feat(02): the theme filter`
 
 ---
 

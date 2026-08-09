@@ -71,8 +71,14 @@ export function Edition({ edition }: { edition: EditionModel }) {
   const lead = leadOf(edition)
   const sections = sectionsOf(edition)
 
+  // `id` and `tabIndex` are the results container's, and they are static: the
+  // id is what `ThemeFilter` puts its two classes on — `results`, written there
+  // too, because a constant exported from a `'use client'` module is a client
+  // reference on the server rather than a string — and the tabindex makes the
+  // container a focus target without taking focus, since a chip click leaves
+  // focus on the chip.
   return (
-    <main>
+    <main id="results" tabIndex={-1}>
       {lead === null ? null : <Item item={lead} tier="lead" />}
       {sections.map((section) => (
         <Section key={section.theme ?? 'rest'} section={section} />

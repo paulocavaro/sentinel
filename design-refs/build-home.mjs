@@ -136,12 +136,20 @@ const present = THEMES.filter(([k]) => rest.some((i) => i.theme === k))
 // The theme row is derived from the items present. An edition with no themes
 // produces no row at all rather than five chips that filter to nothing — a dead
 // control is worse than an absent one.
+//
+// One href, two behaviours. `?theme=ai#ai` is a link to a section for a reader
+// with no script — which is all this file ever is — and the instruction to
+// filter for one with script; the app reads the parameter and puts two classes
+// on <main>, and the stylesheet below does the rest. The live region is here
+// for the same reason the query is: this document and the app are one design in
+// two places, and a difference that is invisible is still a difference.
 const themeNav = present.length
   ? `
     <nav aria-label="Themes">
       <ul class="themes">
-        ${present.map(([k, label]) => `<li><a class="chip" href="#${k}">${label}</a></li>`).join('\n        ')}
+        ${present.map(([k, label]) => `<li><a class="chip" href="?theme=${k}#${k}">${label}</a></li>`).join('\n        ')}
       </ul>
+      <p class="sr-only" role="status" aria-live="polite">Showing the whole edition.</p>
     </nav>`
   : ''
 
@@ -537,6 +545,50 @@ body {
 }
 .item:has(.link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; }
 
+/* ─── The filtered view ──────────────────────────────────────────────────────
+   A selected chip is a filter, and the filter is two classes on <main>:
+   is-filtered, which is the mode, and filter-<theme>, which is the one
+   section that stays. Nothing else on the page knows. The DOM underneath is the
+   same server-rendered edition either way, which is what keeps the route
+   prerendered and keeps the no-script path — an anchor to a section that is
+   still there — working. The reference never carries the classes and neither
+   file needs to: they carry the rules, and they are one stylesheet in two
+   places. app/components/ThemeFilter.tsx is what puts the classes on.
+
+   The visible section goes compact rather than re-tiered. A brief is a
+   different shape — no plate, an inline headline, a dash and a run — so
+   re-tiering means re-rendering every item, on the client or at request time,
+   and both were refused. What the eye reads as compact is three differences and
+   all three are CSS: the plates go, the features grid goes to one column, and
+   the headline steps down. The step is the one the narrow width already takes,
+   1.3125 → 1.1875rem, rather than a fourth size invented for the occasion.
+
+   It deliberately also overrides the no-photograph promotion. With every plate
+   hidden, a promoted headline would be the only line in the list set larger for
+   a reason that is no longer on the screen. It wins on specificity rather than
+   on order — main.is-filtered .feature .head is (0,3,1) against the
+   promotion's (0,3,0) — so it holds inside the width queries below as well.
+
+   The briefs block is deliberately left alone. Collapsing it too was tried and
+   looked worse at 1440: two columns is where a compact item already reads on
+   this page, and one column runs the same line to 1260px, three times the
+   measure the deks beside it are capped at. The section still reads as one list
+   because the step from a one-column run of features into a two-column run of
+   briefs is the step the unfiltered page makes as well. */
+
+main.is-filtered > .lead,
+main.is-filtered > .section { display: none; }
+
+main.filter-ai      > #ai,
+main.filter-world   > #world,
+main.filter-games   > #games,
+main.filter-science > #science,
+main.filter-culture > #culture { display: block; }
+
+main.is-filtered .plate { display: none; }
+main.is-filtered .features { grid-template-columns: 1fr; gap: 1.75rem; }
+main.is-filtered .feature .head { font-size: 1.1875rem; }
+
 /* ─── The end ────────────────────────────────────────────────────────────── */
 
 .close { padding: 6rem 0 5rem; }
@@ -602,7 +654,7 @@ body {
     </div>${themeNav}
   </header>
 
-  <main>
+  <main id="results" tabindex="-1">
 ${leadCard(lead)}
 ${sections}
   </main>
