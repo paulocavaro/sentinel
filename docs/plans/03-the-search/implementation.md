@@ -115,8 +115,8 @@ when `source` had to become `feed`.
   `searchNews(index: MiniSearch<Hit>, query: string, limit?: number): Hit[]`,
   `archiveIndex(): Promise<MiniSearch<Hit>>`, `MAX_HITS = 8`
 
-- [ ] **Step 1 — Install:** `pnpm add minisearch` (7.2.0 at time of writing).
-- [ ] **Step 2 — Failing test:** `lib/search/corpus.test.ts`.
+- [x] **Step 1 — Install:** `pnpm add minisearch` (7.2.0 at time of writing).
+- [x] **Step 2 — Failing test:** `lib/search/corpus.test.ts`.
 
   ```ts
   import { describe, expect, it } from 'vitest'
@@ -148,8 +148,8 @@ when `source` had to become `feed`.
 
   Each case is written out in full by the maker with real titles — no
   placeholders reach the committed file.
-- [ ] **Step 3 — Run, confirm failure:** `pnpm vitest run lib/search`
-- [ ] **Step 4 — Implement.** `id` is the item's id, which is unique across the
+- [x] **Step 3 — Run, confirm failure:** `pnpm vitest run lib/search`
+- [x] **Step 4 — Implement.** `id` is the item's id, which is unique across the
   archive by construction (`canonicalUrl` hash) — so a story that ran twice
   cannot produce two documents. Fields indexed: `title`, `description`,
   `topics`. Stored: everything the answer needs to cite, plus `date`.
@@ -175,7 +175,7 @@ when `source` had to become `feed`.
       .slice(0, limit) as unknown as Hit[]
   }
   ```
-- [ ] **Step 5 — Build it once per instance, not once per request.**
+- [x] **Step 5 — Build it once per instance, not once per request.**
 
   ```ts
   let cached: Promise<MiniSearch<Hit>> | null = null
@@ -197,8 +197,8 @@ when `source` had to become `feed`.
 
   The test resets `cached` through an exported `resetIndexForTests()` rather than
   reaching into module state, so the reset is a named, greppable thing.
-- [ ] **Step 6 — Gate**
-- [ ] **Step 7 — Commit:** `feat(03): a search index over every edition`
+- [x] **Step 6 — Gate**
+- [x] **Step 7 — Commit:** `feat(03): a search index over every edition`
 
 ---
 
