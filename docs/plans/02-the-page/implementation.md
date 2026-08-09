@@ -129,7 +129,7 @@ regenerate both HTML files; create `design-refs/day.html`
 
 **Files:** create `lib/date.ts`, `lib/date.test.ts`, `lib/typeset.tsx`, `lib/typeset.test.tsx`
 
-- [ ] **Step 1 — Failing tests.**
+- [x] **Step 1 — Failing tests.**
   - `lib/date.ts`: `editionDate('2026-08-09')` must give `Sunday 9 August` **in
     every timezone**. Verified on this machine: without the fix,
     `America/Recife` returns `Saturday 8 August` — a day wrong. The generator
@@ -139,10 +139,10 @@ regenerate both HTML files; create `design-refs/day.html`
   - `lib/typeset.tsx`: `smallCaps` wraps two-to-four-letter uppercase runs and
     **returns React nodes, never a string**; `leadIn` bolds the first two words;
     both leave the rest untouched; neither is applied to a byline.
-- [ ] **Step 2 — Run, confirm failure**
-- [ ] **Step 3 — Implement**
-- [ ] **Step 4 — Gate**
-- [ ] **Step 5 — Commit:** `feat(02): dates and typesetting`
+- [x] **Step 2 — Run, confirm failure**
+- [x] **Step 3 — Implement**
+- [x] **Step 4 — Gate**
+- [x] **Step 5 — Commit:** `feat(02): dates and typesetting`
 
 ---
 
