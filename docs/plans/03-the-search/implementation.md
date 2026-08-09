@@ -469,7 +469,7 @@ code path production runs.
   `listEditionDates`, `readEdition`
 - Produces: `POST(request: Request): Promise<Response>`
 
-- [ ] **Step 1 — Failing test:** `app/api/ask/route.test.ts`, calling `POST`
+- [x] **Step 1 — Failing test:** `app/api/ask/route.test.ts`, calling `POST`
   with a real `Request` and a temp archive from `app/__fixtures__/archive.ts`.
   The generator is stubbed through the module's exported deps object.
 
@@ -486,8 +486,8 @@ code path production runs.
     it('never echoes the question back in an error body', () => {})
   })
   ```
-- [ ] **Step 2 — Run, confirm failure:** `pnpm vitest run app/api`
-- [ ] **Step 3 — Implement.**
+- [x] **Step 2 — Run, confirm failure:** `pnpm vitest run app/api`
+- [x] **Step 3 — Implement.**
 
   ```ts
   export const runtime = 'nodejs'   // reads content/days from the filesystem
@@ -513,11 +513,11 @@ code path production runs.
   The body is `{ question: string; previous?: string[] }`, validated with zod
   before anything else runs. Errors are shaped, never raw: the reader gets a
   sentence, the log gets the cause.
-- [ ] **Step 4 — Run tests, confirm green:** `pnpm vitest run app/api`
-- [ ] **Step 5 — Gate.** `pnpm build` must show `/api/ask` as a runtime route,
+- [x] **Step 4 — Run tests, confirm green:** `pnpm vitest run app/api`
+- [x] **Step 5 — Gate.** `pnpm build` must show `/api/ask` as a runtime route,
   and the four static routes must stay static. A route that turned `/` dynamic
   is a failure of this task.
-- [ ] **Step 6 — Commit:** `feat(03): the one runtime route`
+- [x] **Step 6 — Commit:** `feat(03): the one runtime route`
 
 ---
 
