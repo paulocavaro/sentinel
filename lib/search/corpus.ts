@@ -124,8 +124,11 @@ export function searchNews(index: MiniSearch<Hit>, query: string, limit = MAX_HI
  * `listEditionDates` has already parsed each file to decide it is readable, so
  * the null filter below is a type obligation rather than a real branch. Both
  * readers swallow their own I/O failures — a missing directory is a fresh
- * clone, not an error — which is what keeps `archiveIndex` from ever caching a
- * rejected promise.
+ * clone, not an error — so nothing in *this* function rejects.
+ *
+ * That is not the same as `archiveIndex` never caching a rejection, which is
+ * what this comment used to claim. `buildIndex` runs inside the cached chain and
+ * `addAll` throws on a duplicate id; see the note there.
  */
 async function readArchive(): Promise<Edition[]> {
   const dates = await listEditionDates()
@@ -147,9 +150,24 @@ let cached: Promise<MiniSearch<Hit>> | null = null
  *
  * The *promise* is cached rather than the resolved value, so two questions
  * arriving at a cold instance at once build one index rather than two.
+ *
+ * **A failure is not cached, and that took a review to notice.** `??=` reassigns
+ * on null and undefined only, and a rejected promise is neither — so without the
+ * `catch` below, one throw out of `buildIndex` would be handed to every later
+ * question for the life of the instance. It is reachable: `addAll` throws on a
+ * duplicate id, which is a bad edition rather than a bad request, and the reader
+ * would get a 500 on every question until the instance recycled. Clearing the
+ * slot makes that a per-request failure that the next deploy or the next request
+ * can recover from. The error is rethrown, so this call still fails.
  */
 export function archiveIndex(): Promise<MiniSearch<Hit>> {
-  cached ??= readArchive().then(buildIndex)
+  cached ??= readArchive()
+    .then(buildIndex)
+    .catch((error: unknown) => {
+      cached = null
+      throw error
+    })
+
   return cached
 }
 

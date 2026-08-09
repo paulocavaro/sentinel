@@ -74,9 +74,29 @@ let lastSweep = Number.NEGATIVE_INFINITY
  * reader, an entry held for the lifetime of the instance. So the map is swept
  * whole, and throttled to once per window because a sweep is O(keys) and the
  * oldest thing it could possibly find is one window old anyway.
+ *
+ * **Time alone is not a bound on size.** The header the key comes from is
+ * client-settable, so a caller sending a different one every request gets a
+ * fresh entry every request — and the time throttle means nothing is reclaimed
+ * until the burst is a full window old. That is a burst of held keys, not a
+ * steady state, and the test that "proves the map does not grow forever" only
+ * ever proved the steady state. `CEILING` is the other half: past it, the sweep
+ * runs whatever the clock says. The keys it can free are still only the expired
+ * ones, so a burst inside one window is bounded by memory rather than erased —
+ * but the model calls those same requests buy cost more than their keys do, and
+ * the limiter has never claimed to be the thing standing in front of that.
+ *
+ * **Exported for its test and nothing else**, the way `bucketCount` is. A test
+ * has to write *past* this number for the ceiling to do anything at all, so it
+ * needs to know it; and one that hard-coded `10_000` would still pass against a
+ * `CEILING` of five and against one of fifty thousand — it would be asserting
+ * its own literal rather than the module's bound. Nothing in the running product
+ * reads this.
  */
+export const CEILING = 10_000
+
 function sweep(now: number): void {
-  if (now - lastSweep < WINDOW_MS) return
+  if (now - lastSweep < WINDOW_MS && buckets.size < CEILING) return
   lastSweep = now
 
   for (const [key, times] of buckets) {

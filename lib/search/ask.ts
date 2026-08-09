@@ -30,6 +30,29 @@ import type { Hit } from './corpus'
  * outage, an object that fails validation, a model that answered without
  * looking — comes back as `{ kind: 'failed' }`, because the reader is told the
  * same sentence for all of them and the route has nothing to decide.
+ *
+ * ─── What the fence buys, and what it does not ──────────────────────────────
+ *
+ * `curate.ts` can say the worst case of a hostile feed title is a manipulated
+ * ranking, because its output is a set of ids and themes checked against a
+ * closed allowlist — there is no free text in it for an attacker to reach.
+ *
+ * **That sentence does not transfer to this module, and it would be comfortable
+ * to assume it did.** Half of it holds: a title cannot forge a fence and cannot
+ * become a citation, because `inert` strips the structural characters and
+ * `validateAnswer` only accepts ids the tool returned. But an answer *is* free
+ * text. `sentence.text` is written by the model and is never compared against
+ * the item it cites, and nothing mechanical could compare them. So a Hacker News
+ * submitter whose story reaches an edition controls a few hundred characters
+ * that arrive here as quoted material, and the ceiling on that is not a
+ * reordered list: it is a sentence in Sentinel's own voice, carrying a real
+ * citation and a working link, saying something the cited item does not say.
+ *
+ * The honest statement of the guarantee is therefore narrower than the
+ * pipeline's: **an invented citation is impossible; a misattributed sentence
+ * over an earned id is not.** The defences that remain are the system prompt,
+ * the fence, and the fact that every claim is anchored to a dated item a reader
+ * can open. Writing the weaker claim down is the only way it stays true.
  */
 
 /**

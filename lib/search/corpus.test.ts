@@ -183,4 +183,33 @@ describe('archiveIndex', () => {
     expect(second).toBe(first)
     expect(searchNews(second, 'undersea')).toEqual([])
   })
+
+  it('forgets a build that failed, so one bad edition does not outlive itself', async () => {
+    // The duplicate has to be *across* editions, because that is the only way it
+    // can happen: a document is an item keyed by the item's own id, and
+    // `excludePublished` is what normally stops one story running on two days.
+    // When that guarantee breaks, `addAll` throws — inside the very promise the
+    // cache is holding.
+    await archive.put(NEWEST)
+    await archive.put(
+      day('2026-08-08', [item({ id: OPUS, title: 'Anthropic ships Claude Opus 5, again' })]),
+    )
+
+    await expect(archiveIndex()).rejects.toThrow(/duplicate ID/i)
+
+    // The archive is repaired: a corrected edition lands, and on Vercel that is
+    // a fresh deploy — but not necessarily a fresh instance for every reader
+    // mid-flight, and not at all in `next dev`, where the same process serves
+    // the file before and after it is fixed.
+    await archive.put(MIDDLE)
+
+    // The line the fix is about. `??=` assigns on null and undefined only, and a
+    // rejected promise is neither — so without the `catch` that clears the slot,
+    // this is the *same rejected promise* as above, and every question for the
+    // life of the instance gets a 500 sourced from an edition that no longer
+    // exists on disk.
+    const index = await archiveIndex()
+    expect(ids(searchNews(index, 'undersea'))).toEqual([CABLE])
+    expect(ids(searchNews(index, 'quantum'))).toEqual([QUANTUM])
+  })
 })

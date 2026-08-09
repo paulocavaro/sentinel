@@ -14,6 +14,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import {
+  CEILING,
   MAX_IN_WINDOW,
   SHARED_BUCKET,
   WINDOW_MS,
@@ -127,6 +128,51 @@ describe('takeToken', () => {
     // exist. A sweep that quietly reset live counters would read as generous
     // rather than as broken.
     expect(takeToken('5.6.7.8', WINDOW_MS + 1)).toMatchObject({ ok: false })
+  })
+
+  it('sweeps once the map passes CEILING, even though the clock says not to yet', () => {
+    // Time bounds retention; it does not bound cardinality. The key comes off a
+    // client-settable header, so a caller inventing a new value per request gets
+    // a fresh entry per request — and while the sweep is throttled to once per
+    // window, none of them are reclaimed until the burst is a full window old.
+    // The test above proves the steady state and cannot see this at all: it
+    // waits for the clock, which is the very thing that is not going to save us.
+    //
+    // Everything below happens inside one throttle period, so the ceiling is the
+    // only thing that can make a sweep run.
+
+    // Three instants, arranged so that at `WINDOW_MS + 1` the map holds one
+    // expired key, one live key, and a throttle that was reset a millisecond
+    // ago. The two stamps one apart are the whole trick: the sweep at
+    // `WINDOW_MS` may free the key stamped 0 and may not free the key stamped 1,
+    // so the second one goes on to expire *while the throttle is still closed* —
+    // which is the only window in which the ceiling has anything to free.
+    takeToken('9.10.11.12', 0) // the first call ever, so it sweeps: lastSweep = 0
+    takeToken('1.2.3.4', 1) // a millisecond later, and no sweep travels with it
+    drain('5.6.7.8', MAX_IN_WINDOW, WINDOW_MS) // due on time: sweeps, lastSweep = WINDOW_MS
+
+    // `9.10.11.12` was dropped by that sweep and `1.2.3.4` survived it.
+    expect(bucketCount()).toBe(2)
+
+    // A burst of invented keys, all at one instant. Not addresses: an attacker
+    // spending this site's model budget is making header values up, not cycling
+    // real hosts, and the module treats a key as an opaque string either way.
+    const now = WINDOW_MS + 1
+    for (let i = 0; i < CEILING; i += 1) takeToken(`spoofed-${i}`, now)
+
+    // The burst plus `5.6.7.8`, and *not* `1.2.3.4`. Under the time throttle
+    // alone nothing would have been reclaimed and this would read `CEILING + 2`
+    // — one key's worth of difference, because that is all there was to free
+    // inside a single window. The size of the number is not the point; that a
+    // sweep ran at all with the clock refusing to authorise one is.
+    expect(bucketCount()).toBe(CEILING + 1)
+
+    // And it is still a memory measure rather than a second limiter: the live
+    // key kept all ten of its questions rather than being emptied on the way
+    // past. A ceiling sweep that reset live counters would hand every caller in
+    // the map a fresh allowance the moment an attacker filled it — which is a
+    // way of making a flood *profitable*.
+    expect(takeToken('5.6.7.8', now)).toMatchObject({ ok: false })
   })
 
   it('reads the wall clock when no instant is given', () => {

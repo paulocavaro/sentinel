@@ -117,6 +117,35 @@ function ask(body: unknown, ip = '203.0.113.1'): Promise<Response> {
   )
 }
 
+/**
+ * The same request, with the content type the caller chose — or with none.
+ *
+ * The body is encoded rather than handed over as a string, and that is the load
+ * bearing part: `new Request` stamps `text/plain;charset=UTF-8` on a string body
+ * all by itself, so passing `null` here with a string body would quietly mean
+ * `text/plain` and delete the no-header case while appearing to test it. A
+ * `BufferSource` body carries no type of its own, which leaves the header above
+ * as the only source of one — and is also exactly what `sendBeacon` puts on the
+ * wire for an `ArrayBufferView`, so the shape is the attack's rather than the
+ * test's.
+ */
+function askWithType(
+  contentType: string | null,
+  body: unknown,
+  ip = '203.0.113.1',
+): Promise<Response> {
+  const headers = new Headers({ 'x-real-ip': ip })
+  if (contentType !== null) headers.set('content-type', contentType)
+
+  return POST(
+    new Request('https://sentinel.test/api/ask', {
+      method: 'POST',
+      headers,
+      body: new TextEncoder().encode(JSON.stringify(body)),
+    }),
+  )
+}
+
 let archive: TempArchive
 const real = deps.generate
 
@@ -180,6 +209,61 @@ describe('POST /api/ask', () => {
     // answered with the status the request deserves.
     expect((await ask('not json at all')).status).toBe(400)
     expect((await ask('')).status).toBe(400)
+  })
+
+  it('415s a text/plain beacon carrying a body it would otherwise have answered', async () => {
+    const generate = vi.fn<Generator>(answers)
+    deps.generate = generate
+
+    // The exact shape of `sendBeacon(url, new Blob([json], { type: 'text/plain' }))`
+    // from any page on the internet: `text/plain` is CORS-safelisted, so there is
+    // no preflight to fail, and the bytes are a body `request.json()` parses
+    // without a murmur. The attacker never reads the answer — no CORS header
+    // lets them — and does not need to, because the damage is that the call
+    // happened at all.
+    const question = { question: 'What did Anthropic ship?' }
+    const beacon = await askWithType('text/plain', question)
+
+    expect(beacon.status).toBe(415)
+    expect(await beacon.json()).toMatchObject({ kind: 'invalid' })
+
+    // The status is the smaller half. Nothing downstream ran: no archive read,
+    // and — the part that is billed — no model call. A 415 that still spent a
+    // Sonnet call would turn the attacker away and pay their bill on the way
+    // out, which is the entire cost this guard exists to refuse.
+    expect(archiveIndex).not.toHaveBeenCalled()
+    expect(generate).not.toHaveBeenCalled()
+
+    // And the refusal is the header's doing rather than anything about the body:
+    // the same bytes, declared as JSON, are answered.
+    expect((await askWithType('application/json', question)).status).toBe(200)
+    expect(generate).toHaveBeenCalledTimes(1)
+  })
+
+  it('415s a request that declares no content type at all', async () => {
+    const generate = vi.fn<Generator>(answers)
+    deps.generate = generate
+
+    // Absent, not empty — `sendBeacon` with an `ArrayBufferView` sends it this
+    // way. The `?? ''` in the guard is what makes a missing header a string the
+    // check can refuse instead of a `TypeError` that becomes a 500.
+    const response = await askWithType(null, { question: 'What did Anthropic ship?' })
+
+    expect(response.status).toBe(415)
+    expect(archiveIndex).not.toHaveBeenCalled()
+    expect(generate).not.toHaveBeenCalled()
+  })
+
+  it('accepts a content type that carries a charset, because the check is a substring', async () => {
+    // The other direction, and the one that decides whether the guard is
+    // shippable. `application/json; charset=utf-8` is what a `fetch` with a JSON
+    // body routinely puts on the wire, and the media type is case-insensitive by
+    // spec — so an equality check against `'application/json'` would refuse the
+    // panel, which is the only client this route has.
+    const question = { question: 'What did Anthropic ship?' }
+
+    expect((await askWithType('application/json; charset=utf-8', question)).status).toBe(200)
+    expect((await askWithType('APPLICATION/JSON', question)).status).toBe(200)
   })
 
   it('400s a missing or empty question', async () => {
@@ -327,6 +411,13 @@ describe('POST /api/ask', () => {
     // some client will render. Every failure path is checked, not the
     // convenient one.
     const MARKER = '<img src=x onerror=alert(1)> zqx-marker'
+
+    // The 415 is the newest of the failure paths and the one most likely to be
+    // reached by something that is not a browser, so it is checked here too
+    // rather than left to the claim above.
+    const wrongType = await askWithType('text/plain', { question: MARKER })
+    expect(wrongType.status).toBe(415)
+    expect(await wrongType.text()).not.toContain('zqx-marker')
 
     const tooLong = await ask({ question: `${MARKER} ${'q'.repeat(MAX_QUESTION_CHARS)}` })
     expect(tooLong.status).toBe(400)

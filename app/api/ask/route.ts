@@ -123,6 +123,20 @@ export async function POST(request: Request): Promise<Response> {
 
   // 2. The body, before the archive.
   //
+  // **The content type is checked, and it is a real control rather than
+  // tidiness.** Without it any page on the internet can spend this site's model
+  // budget: `sendBeacon` with a `text/plain` blob is a CORS-safelisted request,
+  // so it skips the preflight entirely and arrives here as a perfectly valid
+  // body — `request.json()` does not care what the header said. The attacker
+  // cannot read the answer, because no CORS header lets them, but they do not
+  // need to. Every visitor to their page buys a Sonnet 5 call on our account and
+  // burns *their own* ten-question allowance, since the bucket key is the
+  // visitor's IP. Requiring `application/json` forces a preflight that never
+  // succeeds, and the panel's own `fetch` already sends it.
+  if (!(request.headers.get('content-type') ?? '').toLowerCase().includes('application/json')) {
+    return refuse(415, 'invalid', 'That request could not be read.')
+  }
+
   // `request.json()` throws on anything that is not JSON, and a throw out of a
   // route handler is a 500 with a stack in it. Catching it here is what turns
   // a malformed body into the status it deserves.
