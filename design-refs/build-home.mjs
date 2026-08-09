@@ -23,6 +23,9 @@ const date = new Date(`${ed.date}T12:00:00Z`)
 const weekday = date.toLocaleDateString('en-GB', { weekday: 'long' })
 const dayMonth = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
 
+const prev = new Date(date); prev.setUTCDate(prev.getUTCDate() - 1)
+const prevLabel = prev.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
+
 const link = (i, cls = '') =>
   `<a class="link ${cls}" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">${smallCaps(esc(i.title))}<span class="sr-only"> (opens at ${esc(host(i.url))})</span></a>`
 
@@ -199,6 +202,84 @@ body {
 }
 .chip:hover { color: var(--ink); border-bottom-color: var(--accent); }
 
+/* The edition bar: which day you are reading, and the one control the product
+   has. World in Brief puts its date and pager in a full-width bar above the
+   column; this is the same idea with the archive's own vocabulary — dates, not
+   Previous and Next, which are ambiguous under a date (later in time, or
+   further back into the archive?). */
+.editionbar {
+  display: flex; flex-wrap: wrap; gap: 1rem 1.5rem;
+  align-items: baseline; justify-content: space-between;
+  margin-top: 1.5rem;
+}
+.days { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: baseline; }
+.day {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
+  text-transform: uppercase; color: var(--machine); text-decoration: none;
+}
+.day:hover { color: var(--ink); }
+.day.is-current { color: var(--ink); }
+.day.is-off { opacity: 0.45; }              /* present, not offered — never removed */
+.day-all { border-bottom: 1px solid var(--rule-hair); padding-bottom: 1px; }
+
+.ask-open {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em;
+  text-transform: uppercase; color: var(--ink);
+  background: transparent; border: 1px solid var(--rule-strong); border-radius: 0;
+  padding: 0.6875rem 1rem; cursor: pointer; min-height: 44px;
+}
+.ask-open:hover { background: var(--ink); color: var(--paper); }
+
+/* <dialog> + showModal gives Escape, a focus trap, an inert background and a
+   real backdrop for free — the four things that made the FT's drawer the only
+   unbroken one in the sample, none of them hand-written here. */
+.panel {
+  position: fixed; inset: 0 0 0 auto; margin: 0;
+  width: min(26rem, 100%); max-width: none; height: 100dvh; max-height: none;
+  background: var(--paper); color: var(--ink);
+  border: 0; border-left: 1px solid var(--rule-strong); padding: 0;
+}
+/* Scoped to [open]. A bare display:flex on the dialog overrides the UA's
+   display:none for the closed state, so the panel is open from page load and
+   never closes — which is what happened the first time this was written. */
+.panel[open] { display: flex; flex-direction: column; }
+.panel::backdrop { background: rgb(0 0 0 / 0.5); }
+
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--rule-hair);
+}
+.panel-title, .panel-x {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.083em; text-transform: uppercase;
+}
+.panel-title { color: var(--ink); margin: 0; }
+.panel-x { color: var(--machine); background: none; border: 0; cursor: pointer;
+           padding: 0.625rem; margin: -0.625rem; min-height: 44px; }
+.panel-x:hover { color: var(--ink); }
+
+.panel-body { padding: 1.5rem; overflow-y: auto; }
+.panel-label { display: block; font-size: 1rem; line-height: 1.5; color: var(--prose); margin: 0 0 0.875rem; }
+.panel-input {
+  width: 100%; font-family: Spectral, Georgia, serif; font-size: 1.0625rem;
+  color: var(--ink); background: transparent;
+  border: 0; border-bottom: 1px solid var(--rule-strong); border-radius: 0;
+  padding: 0.625rem 0; min-height: 44px;
+}
+.panel-input::placeholder { color: var(--machine); }
+.panel-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.panel-note { font-size: 0.875rem; line-height: 1.55; color: var(--machine); margin: 1rem 0 0; }
+.panel-examples { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+.example {
+  width: 100%; text-align: left; font-family: Spectral, Georgia, serif;
+  font-size: 0.9375rem; line-height: 1.45; color: var(--prose);
+  background: transparent; border: 0; border-top: 1px solid var(--rule-hair);
+  padding: 0.75rem 0; cursor: pointer; min-height: 44px;
+}
+.example:hover { color: var(--ink); }
+
 /* ─── The lead ───────────────────────────────────────────────────────────── */
 
 .lead {
@@ -275,12 +356,14 @@ body {
 .brief .dash { color: var(--machine); }
 .brief .run  { font-size: 1.0625rem; line-height: 1.4; color: var(--prose); }
 
-/* Twenty publishers ship twenty colour grades. A duotone in the accent's own
-   family makes foreign photographs read as this edition's plates. */
+/* Photographs run in colour. A duotone would unify twenty publishers' colour
+   grades into one plate, which is what Espresso does — but Espresso has one
+   picture editor and these are twenty strangers' choices, so the cost is that
+   every photograph stops being a photograph. The 1px edge is what keeps a light
+   image from bleeding into the paper. */
 .plate { position: relative; display: block; }
-.plate::after { content: ""; position: absolute; inset: 0; background: var(--accent); mix-blend-mode: color; opacity: 0.3; }
 .art { display: block; width: 100%; aspect-ratio: var(--ratio); object-fit: cover;
-       filter: grayscale(1) contrast(1.06); border: 1px solid var(--edge); }
+       border: 1px solid var(--edge); }
 .plate-feature { margin-bottom: 0.75rem; }
 
 .item:hover  { background: color-mix(in oklab, var(--ink) 3%, transparent); }
@@ -352,6 +435,15 @@ body {
     <h1 class="editiondate"><span class="weekday">${weekday}</span> ${dayMonth}</h1>
     <p class="manifest">${esc(ed.summary)}</p>
     <p class="promise">${ed.items.length} items · closed 09:23</p>
+    <div class="editionbar">
+      <nav class="days" aria-label="Editions">
+        <a class="day" href="#" rel="prev">← ${prevLabel}</a>
+        <span class="day is-current" aria-current="date">${dayMonth}</span>
+        <span class="day is-off" aria-disabled="true">Tomorrow →</span>
+        <a class="day day-all" href="#">All editions</a>
+      </nav>
+      <button class="ask-open" type="button" onclick="document.getElementById('ask').showModal()">Ask this archive</button>
+    </div>
     <nav aria-label="Themes">
       <ul class="themes">
         ${nav}
@@ -363,6 +455,23 @@ body {
 ${leadCard(lead)}
 ${sections}
   </main>
+
+  <dialog class="panel" id="ask" aria-label="Ask this archive">
+    <form method="dialog" class="panel-head">
+      <p class="panel-title">Ask this archive</p>
+      <button class="panel-x" aria-label="Close">Close</button>
+    </form>
+    <div class="panel-body">
+      <label class="panel-label" for="q">Ask about anything that has run in an edition.</label>
+      <input class="panel-input" id="q" type="text" placeholder="What did OpenAI ship this week?" autocomplete="off">
+      <p class="panel-note">Answers cite the item and the day it ran. If nothing here matches, it says so rather than inventing one.</p>
+      <ul class="panel-examples">
+        <li><button type="button" class="example">Everything about the Strait of Hormuz</button></li>
+        <li><button type="button" class="example">What has DeepMind announced?</button></li>
+        <li><button type="button" class="example">Games news from this week</button></li>
+      </ul>
+    </div>
+  </dialog>
 
   <footer class="close">
     <p class="close-mark" aria-hidden="true">-${ed.items.length}-</p>
