@@ -1,13 +1,16 @@
 // /states — the catalogue of every condition the edition can be in that is not
 // an ordinary day.
 //
-// It exists so those states cannot rot unseen. Four of the seven are reachable
+// It exists so those states cannot rot unseen. Five of the eight are reachable
 // in production only when something goes wrong — the job fails, the window is
-// thin, a day was never written, an item arrives without a picture — which
-// means they are the four nobody looks at until the morning they are the only
-// thing on the site. Here they are all on one page, at 390 and at 1100, in both
-// schemes, and `design-refs/states.html` is the document they are compared
-// against.
+// thin, a day was never written, an item arrives without a picture, a day's
+// file will not read — which means they are the five nobody looks at until the
+// morning they are the only thing on the site. State 08 is the argument for
+// this page written out: it was reachable and had no frame, so the copy that
+// covered it went on saying nothing ran on a day the archive was holding, and
+// there was nowhere that put the sentence next to the state it was for. Here
+// they are all on one page, at 390 and at 1100, in both schemes, and
+// `design-refs/states.html` is the document they are compared against.
 //
 // **The frames are the real components.** `StaleBanner`, `Masthead`,
 // `CloseBlock`, `NoEdition` and `Item` are the same imports the two edition
@@ -36,6 +39,7 @@ import {
   photographFixture,
   staleFixture,
   thinFixture,
+  unreadableFixture,
 } from './fixtures'
 import type { Cite } from './fixtures'
 
@@ -51,7 +55,7 @@ export const metadata: Metadata = {
  *
  * `.state-why` is prose about the design rather than product copy, which is why
  * it is written here in full and not derived from anything. The visual gate
- * compares text, so these seven paragraphs are `design-refs/build-states.mjs`'s,
+ * compares text, so these eight paragraphs are `design-refs/build-states.mjs`'s,
  * word for word.
  */
 function State({
@@ -147,7 +151,7 @@ export default async function States() {
         title="A day with no edition"
         why="An archive date the pipeline never wrote. Not a 404 — the date is a real day and the reader asked for it by name. It says what is true and offers the nearest thing that exists."
       >
-        <NoEdition date={missingFixture.date} dates={missingFixture.dates} />
+        <NoEdition date={missingFixture.date} dates={missingFixture.dates} record="absent" />
       </State>
 
       <State
@@ -252,6 +256,25 @@ export default async function States() {
           </div>
           <p className="panel-note">Reading 2 editions</p>
         </div>
+      </State>
+
+      <State
+        n="08"
+        title="A day whose edition cannot be read"
+        why="The file is on disk and did not survive validation — a merge conflict in a committed edition, a published field that changed shape, one item of thirty that no longer parses. It gets a frame of its own because the alternative is state 03 telling a reader nothing ran on a day the archive is holding thirty items for. The page says the record is there and could not be read, and stops: it cannot see a cause, so it does not name one."
+      >
+        {/* The same component as 03 and the same markup — the two frames differ
+            by the two lines of copy and by nothing else, which is exactly what
+            has to be visible here. `record` is what `lib/edition.ts` hands the
+            route; the catalogue passes it by hand because there is no damaged
+            edition in the repository and there must not be one: writing a broken
+            file into `content/days/` to make this page look right would put a
+            fault in the archive to illustrate a fault in the archive. */}
+        <NoEdition
+          date={unreadableFixture.date}
+          dates={unreadableFixture.dates}
+          record="unreadable"
+        />
       </State>
     </div>
   )

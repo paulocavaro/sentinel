@@ -90,6 +90,15 @@ export type TempArchive = {
   dir: string
   /** Write an edition into it. The file is named by `edition.date`, as the pipeline names it. */
   put: (value: Edition) => Promise<void>
+  /**
+   * Write a file for a date by hand.
+   *
+   * For the damaged editions, which `put` cannot express: the whole point of a
+   * file the reader refuses is that it is not an `Edition`, and a merge conflict
+   * or a field that changed shape does not arrive as a typed value. The reader's
+   * unreadable state is only reachable through this.
+   */
+  putRaw: (date: string, contents: string) => Promise<void>
   /** Remove it, and give `process.cwd()` back. */
   drop: () => Promise<void>
 }
@@ -111,6 +120,9 @@ export async function tempArchive(): Promise<TempArchive> {
     dir,
     put: async (value: Edition) => {
       await writeFile(join(dir, CONTENT_DIR, `${value.date}.json`), JSON.stringify(value))
+    },
+    putRaw: async (date: string, contents: string) => {
+      await writeFile(join(dir, CONTENT_DIR, `${date}.json`), contents)
     },
     drop: async () => {
       cwd.mockRestore()

@@ -1,6 +1,6 @@
 // The data behind the catalogue.
 //
-// Five of the seven frames on `/states` need an edition, and the archive holds
+// Five of the eight frames on `/states` need an edition, and the archive holds
 // two: a complete twenty-item day and a complete thirty-item day, contiguous,
 // every item photographed. None of the four conditions the catalogue has to
 // show is in there as it stands — there is no thin edition, no gap in the
@@ -53,6 +53,24 @@ const THIN_COUNT = 17
  */
 const MISSING_DATE = '2026-08-03'
 const MISSING_ARCHIVE = ['2026-08-02', '2026-08-04'] as const
+
+/**
+ * State 08's day, and the two editions either side of it.
+ *
+ * A different day from state 03's, and deliberately: the two frames are the same
+ * component and the same markup, and the only thing that separates them is what
+ * the page says. On one date they would read as one frame drawn twice, and the
+ * sentence that is the entire subject of 08 would look like a variant of 03's
+ * rather than a correction of it.
+ *
+ * The archive holds nothing like this either — an unreadable edition is a file
+ * that failed validation, and the two committed files are both fine. Writing a
+ * damaged one to demonstrate it would put a broken edition in the repository to
+ * make a page look right, so the frame is told which state it is instead, the
+ * same way the route tells it.
+ */
+const UNREADABLE_DATE = '2026-08-05'
+const UNREADABLE_ARCHIVE = ['2026-08-04', '2026-08-06'] as const
 
 /** The two items state 04 frames — `build-states.mjs`'s `ed.items[3]` and `ed.items[1]`. */
 const WITH_PHOTO = 3
@@ -131,6 +149,12 @@ export async function thinFixture(): Promise<Edition> {
 export const missingFixture: { date: string; dates: readonly string[] } = {
   date: MISSING_DATE,
   dates: MISSING_ARCHIVE,
+}
+
+/** State 08 — a day whose file is on disk and could not be read as an edition. */
+export const unreadableFixture: { date: string; dates: readonly string[] } = {
+  date: UNREADABLE_DATE,
+  dates: UNREADABLE_ARCHIVE,
 }
 
 /**

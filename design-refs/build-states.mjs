@@ -60,6 +60,14 @@ const weekday = (d) => atNoon(d).toLocaleDateString('en-GB', { timeZone: 'UTC', 
 const THIN_DATE = '2026-08-11'
 const thin = { ...ed, date: THIN_DATE, items: ed.items.slice(0, 17) }
 
+// State 08's day, and the two editions either side of it. A different day from
+// state 03's, and deliberately: the two frames sit on the same page and the only
+// thing that separates them is what the page says, so drawing them on one date
+// would read as the same frame printed twice.
+const UNREADABLE_DATE = '2026-08-05'
+const UNREADABLE_PREV = '2026-08-04'
+const UNREADABLE_NEXT = '2026-08-06'
+
 // State 04's pair: a real card, and a real card with its photograph removed.
 const withPhoto = ed.items[3]
 const withoutPhoto = { ...ed.items[1], image: null }
@@ -286,6 +294,31 @@ ${state(
     </div>`,
 )}
 
+${state(
+  '08',
+  'A day whose edition cannot be read',
+  'The file is on disk and did not survive validation — a merge conflict in a committed edition, a published field that changed shape, one item of thirty that no longer parses. It gets a frame of its own because the alternative is state 03 telling a reader nothing ran on a day the archive is holding thirty items for. The page says the record is there and could not be read, and stops: it cannot see a cause, so it does not name one.',
+  // Same component as 03, same markup, two different lines of copy — which is
+  // the point of framing it. The promise line names the state and the manifest
+  // says only what is observable from the reader's side: a file exists, and it
+  // is not an edition this page can print.
+  `<div class="page">
+      <header class="masthead">
+        <p class="wordmark">Sentinel</p>
+        <h1 class="editiondate">${weekday(UNREADABLE_DATE)} ${dayMonth(UNREADABLE_DATE)}</h1>
+        <p class="promise">Unreadable edition</p>
+        <p class="manifest" style="font-style:normal">There is a file for ${dayMonth(UNREADABLE_DATE)}, and it could not be read. The day is in the archive; what that file holds is not an edition this page can print.</p>
+        <div class="editionbar">
+          <nav class="days" aria-label="Editions">
+            <a class="day" href="/day/${UNREADABLE_PREV}" rel="prev">&larr; ${dayMonth(UNREADABLE_PREV)}</a>
+            <a class="day" href="/day/${UNREADABLE_NEXT}" rel="next">${dayMonth(UNREADABLE_NEXT)} &rarr;</a>
+            <a class="day day-all" href="/">Latest edition</a>
+          </nav>
+        </div>
+      </header>
+    </div>`,
+)}
+
 </div>
 
 <style>
@@ -322,4 +355,4 @@ ${state(
 `
 
 writeFileSync(`${ROOT}/design-refs/states.html`, html)
-console.log('written: design-refs/states.html — 7 states')
+console.log('written: design-refs/states.html — 8 states')

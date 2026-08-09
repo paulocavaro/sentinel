@@ -15,6 +15,17 @@
 //   - `dir` as an argument with a real default, so tests never touch
 //     `content/days/` and the two committed editions are not load-bearing.
 //
+// Both conventions still hold. What changed is that the two ways of failing
+// used to be **one answer**: a day with no file and a day whose file failed
+// validation both came back as null, and `NoEdition` then told the reader
+// nothing ran on a day with thirty items sitting on disk. An ordinary merge
+// conflict in a committed edition is enough to reach it, and so is any change
+// to the shape of a published field. Forgiveness is still the rule — this
+// module does not throw at a damaged file — but the load now answers with which
+// of the two happened, so a caller that has a reader in front of it can say the
+// true thing. `readEdition` keeps its `Edition | null`, because most callers
+// (the search corpus, the states fixtures) only ever want the edition.
+//
 // What is different is the type. The pipeline's `Item.theme` is required — it
 // has been since the field was added — but `content/days/2026-08-08.json` was
 // written before it existed and has twenty items with no theme at all. That
@@ -37,6 +48,23 @@ export type EditionItem = Omit<PublishedItem, 'theme'> & { theme?: Theme }
 
 /** An edition as the page reads it. */
 export type Edition = Omit<PublishedEdition, 'items'> & { items: EditionItem[] }
+
+/**
+ * What a date actually has behind it: nothing, something that is not an
+ * edition, or an edition.
+ *
+ * The three are one type because they are one question asked once, and because
+ * the difference between the first two is a difference the reader can see.
+ * `absent` is an ordinary designed outcome — the pipeline never wrote that day.
+ * `unreadable` is a file on disk that `toEdition` refused: a merge conflict in
+ * a committed edition, a published field that changed shape, one bad item under
+ * the whole-file-or-nothing rule below. Collapsing them is how the page ends up
+ * saying "nothing ran" over a day the archive is holding.
+ */
+export type EditionRecord =
+  | { state: 'absent' }
+  | { state: 'unreadable' }
+  | { state: 'edition'; edition: Edition }
 
 /** Editions are named by the UTC date they cover. `archive.ts` writes the name. */
 const EDITION_FILE = /^(\d{4}-\d{2}-\d{2})\.json$/
@@ -140,22 +168,45 @@ function toEdition(value: unknown, date: string): Edition | null {
   return { date, generatedAt, summary, targetCount, items: readable }
 }
 
-async function loadEdition(dir: string, date: string): Promise<Edition | null> {
-  if (!isCalendarDate(date)) return null
+const ABSENT: EditionRecord = { state: 'absent' }
+const UNREADABLE: EditionRecord = { state: 'unreadable' }
+
+/** Whether the read failed because there is nothing there, as opposed to failing. */
+function isMissing(error: unknown): boolean {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    (error as NodeJS.ErrnoException).code === 'ENOENT'
+  )
+}
+
+async function loadEdition(dir: string, date: string): Promise<EditionRecord> {
+  // Not `unreadable`: a string that is not a calendar day has no day behind it
+  // to hold a record, so there is nothing for the archive to be holding. It also
+  // must not become a path — the disk is never touched here. `2026-02-29.json`
+  // is the case with teeth: the file exists, and the day does not.
+  if (!isCalendarDate(date)) return ABSENT
 
   let raw: string
   try {
     raw = await readFile(join(dir, `${date}.json`), 'utf8')
-  } catch {
+  } catch (error) {
     // No file for that day. On a route this is `NoEdition`, not a 404 and not
-    // a build failure.
-    return null
+    // a build failure. Only ENOENT means that, though: a permission error or a
+    // directory sitting where the file should be is a day the archive has and
+    // cannot open, which is the reader's `unreadable`, not its `absent`.
+    return isMissing(error) ? ABSENT : UNREADABLE
   }
 
+  // Everything past the read is the file failing to be an edition, whether it
+  // failed as JSON or failed validation. The reader is told the same thing
+  // either way, because the same thing is true either way — the day has a
+  // record here and it could not be read.
   try {
-    return toEdition(JSON.parse(raw), date)
+    const edition = toEdition(JSON.parse(raw), date)
+    return edition === null ? UNREADABLE : { state: 'edition', edition }
   } catch {
-    return null
+    return UNREADABLE
   }
 }
 
@@ -186,23 +237,42 @@ export const listEditionDates = cache(async (dir: string = editionsDir()): Promi
     .reverse()
 
   const readable = await Promise.all(
-    dates.map(async (date) => ((await loadEdition(dir, date)) === null ? null : date)),
+    dates.map(async (date) => ((await loadEdition(dir, date)).state === 'edition' ? date : null)),
   )
 
   return readable.filter((date): date is string => date !== null)
 })
 
 /**
- * One edition by date, or null when there is no readable file for it.
+ * What one date has behind it, told apart.
+ *
+ * For the one caller that renders the answer to a reader. `/day/[date]` prints
+ * a different sentence for `absent` than for `unreadable`, and it is the only
+ * surface that can: it is the page a reader lands on when they ask for a day by
+ * name.
  *
  * `date` arrives from a route segment, so it is matched against a calendar
  * shape before it is allowed to become a path. Task 10 validates the segment
  * too; this is the copy that is next to the `join`.
  */
-export const readEdition = cache(
-  async (date: string, dir: string = editionsDir()): Promise<Edition | null> =>
+export const readEditionRecord = cache(
+  async (date: string, dir: string = editionsDir()): Promise<EditionRecord> =>
     loadEdition(dir, date),
 )
+
+/**
+ * One edition by date, or null when there is no readable file for it.
+ *
+ * Both failures are null here, deliberately: the corpus builder and the states
+ * fixtures want an edition or nothing, and a caller with no reader in front of
+ * it has no use for the distinction. It goes through `readEditionRecord` rather
+ * than around it so a route that asks both questions still reads the file once
+ * — `cache` keys on the argument list, and both calls pass the same one.
+ */
+export const readEdition = cache(async (date: string, dir?: string): Promise<Edition | null> => {
+  const record = await readEditionRecord(date, dir ?? editionsDir())
+  return record.state === 'edition' ? record.edition : null
+})
 
 /**
  * The newest readable edition, or null.
@@ -214,7 +284,14 @@ export const readEdition = cache(
 export const readLatestEdition = cache(
   async (dir: string = editionsDir()): Promise<Edition | null> => {
     const [latest] = await listEditionDates(dir)
-    return latest === undefined ? null : loadEdition(dir, latest)
+    if (latest === undefined) return null
+
+    // `listEditionDates` has already parsed this file to decide it is readable,
+    // so the record is an edition here in every case but a file changed between
+    // the two reads. Null rather than a throw for it, the same forgiveness the
+    // rest of this module gives.
+    const record = await loadEdition(dir, latest)
+    return record.state === 'edition' ? record.edition : null
   },
 )
 

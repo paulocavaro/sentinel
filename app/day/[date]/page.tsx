@@ -45,7 +45,7 @@ import { notFound } from 'next/navigation'
 import { EditionPage } from '@/app/components/EditionPage'
 import { NoEdition } from '@/app/components/NoEdition'
 import { editionDate, isCalendarDate, shiftDays } from '@/lib/date'
-import { listEditionDates, readEdition } from '@/lib/edition'
+import { listEditionDates, readEditionRecord } from '@/lib/edition'
 
 /**
  * Every calendar date the archive spans, oldest first — the real editions and
@@ -89,15 +89,24 @@ export async function generateStaticParams() {
  *
  * Both readers are `React.cache`-wrapped, so this and the page below read
  * `content/days` once between them.
+ *
+ * The three titles are the page's three states, and the tab is a place the
+ * "nothing ran" lie is just as reachable as the masthead — a bookmark, a search
+ * result and a browser history entry all carry it, and all three outlive the
+ * render.
  */
+const TITLE = {
+  absent: (date: string) => `No edition, ${editionDate(date)}`,
+  unreadable: (date: string) => `Unreadable edition, ${editionDate(date)}`,
+  edition: (date: string) => editionDate(date),
+} as const
+
 export async function generateMetadata({ params }: PageProps<'/day/[date]'>): Promise<Metadata> {
   const { date } = await params
   if (!isCalendarDate(date)) return {}
 
-  const edition = await readEdition(date)
-  return {
-    title: edition === null ? `No edition, ${editionDate(date)}` : editionDate(date),
-  }
+  const record = await readEditionRecord(date)
+  return { title: TITLE[record.state](date) }
 }
 
 export default async function Day({ params }: PageProps<'/day/[date]'>) {
@@ -111,12 +120,17 @@ export default async function Day({ params }: PageProps<'/day/[date]'>) {
   // join two calls later.
   if (!isCalendarDate(date) || !archiveRange(dates).includes(date)) notFound()
 
-  const edition = await readEdition(date)
+  const record = await readEditionRecord(date)
 
-  // A real day with no edition. Not `notFound()`: see `NoEdition`.
-  if (edition === null) return <NoEdition date={date} dates={dates} />
+  // A real day with no edition to show, in either of the two ways that happens.
+  // Not `notFound()`: see `NoEdition`, which is also where the difference
+  // between the two is spent — the day was never written, or the day is on disk
+  // and could not be read, and the page says which.
+  if (record.state !== 'edition') {
+    return <NoEdition date={date} dates={dates} record={record.state} />
+  }
 
   // `today` is null, so no stale banner: an archive day is not out of date, it
   // is the date. See `EditionPage`'s parameter documentation.
-  return <EditionPage edition={edition} dates={dates} today={null} />
+  return <EditionPage edition={record.edition} dates={dates} today={null} />
 }

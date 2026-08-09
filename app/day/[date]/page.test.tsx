@@ -130,6 +130,17 @@ describe('generateMetadata', () => {
     })
   })
 
+  // A bookmark, a search result and a history entry all outlive the render, so
+  // "No edition" on a day the archive is holding is the same lie the masthead
+  // used to tell, in a place that keeps it longer.
+  it('does not call a day that published something a day with no edition', async () => {
+    await archive.putRaw('2026-08-07', '{ not an edition')
+
+    expect(await generateMetadata(params('2026-08-07'))).toEqual({
+      title: 'Unreadable edition, Friday 7 August',
+    })
+  })
+
   // The shape test alone accepts these; the round trip through UTC is what
   // rejects them, whether the engine returns an invalid Date or rolls the
   // overflow forward into March.
@@ -173,6 +184,45 @@ describe('Day', () => {
     expect(page).toContain('No edition')
     expect(page).toContain('href="/day/2026-08-08"')
     expect(page).toContain('href="/day/2026-08-11"')
+  })
+
+  // The regression, end to end and at the size it actually arrives: thirty
+  // items on disk, one of them damaged by a merge conflict or by a field that
+  // changed shape, the whole file refused under the reader's whole-file-or-
+  // nothing rule. The page it produces must not tell the reader nothing ran —
+  // there is a record for that day and the archive is holding it.
+  it('says the day’s record could not be read, not that nothing ran', async () => {
+    await archive.put(edition('2026-08-08', 3))
+    await archive.put(edition('2026-08-11', 3))
+
+    const damaged = edition('2026-08-10', 30)
+    await archive.putRaw(
+      '2026-08-10',
+      JSON.stringify({
+        ...damaged,
+        items: damaged.items.map((entry, n) => (n === 17 ? { ...entry, title: null } : entry)),
+      }),
+    )
+
+    const page = html(await Day(params('2026-08-10')))
+
+    expect(page).toContain('Unreadable edition')
+    expect(page).toContain('There is a file for 10 August, and it could not be read.')
+    expect(page).not.toContain('Nothing ran')
+    expect(page).not.toContain('No edition')
+  })
+
+  // The two states are one component and it must keep both sentences: a day
+  // with no file is still a day that never ran, and the damaged-file copy would
+  // be a guess about it.
+  it('still says nothing ran for a day with no file at all', async () => {
+    await archive.put(edition('2026-08-08', 3))
+    await archive.put(edition('2026-08-11', 3))
+
+    const page = html(await Day(params('2026-08-10')))
+
+    expect(page).toContain('Nothing ran on 10 August')
+    expect(page).not.toContain('could not be read')
   })
 
   // An archive day asked for by name is never stale, it is simply that day.

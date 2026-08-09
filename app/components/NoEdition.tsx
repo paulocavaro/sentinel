@@ -1,4 +1,20 @@
-// A day the pipeline never wrote. `states.html` 03.
+// A day with no edition to show. `states.html` 03 and 08.
+//
+// **Two states, not one.** A day whose file was never written and a day whose
+// file is on disk and failed validation both arrive here, and both used to be
+// told "nothing ran". For the second that is false in the one way this product
+// may never be false: thirty items are sitting in `content/days/` and the page
+// is denying its own record. It is not exotic either — a merge conflict in a
+// committed edition does it, and so does any change to the shape of a published
+// field. `lib/edition.ts` now says which of the two happened, and the only job
+// left here is to not claim more than that.
+//
+// What the unreadable copy may say is what is observable from here: there is a
+// file for the day, and it could not be read as an edition. **It may not name a
+// cause.** "Corrupted", "the job failed", "the file is damaged" are all guesses
+// — the load knows that `toEdition` refused and nothing whatever about why —
+// and a guess printed in the masthead is the same failure as the sentence it
+// replaced, one degree quieter.
 //
 // **This is not a 404.** A 404 is an address that was never part of the site;
 // this is a real date inside the archive's own range, asked for by name, that
@@ -43,12 +59,49 @@ import { dayMonth, editionDate, shiftDays } from '@/lib/date'
 import { neighbours } from './EditionBar'
 
 /**
+ * The two lines that differ between the states. Everything else on the page —
+ * the masthead, the neighbours, the way back — is the same page either way,
+ * because the reader's situation is the same either way: they asked for a day
+ * and there is no edition to give them.
+ *
+ * Written as data rather than as two branches in the markup so the difference
+ * between the states is one place to read and one place to change, and so a
+ * later state cannot be added by tacking a ternary onto a ternary.
+ */
+const COPY = {
+  absent: {
+    promise: 'No edition',
+    manifest: (day: string) =>
+      `Nothing ran on ${day}. The job did not complete, and an edition is never written after the fact.`,
+  },
+  unreadable: {
+    promise: 'Unreadable edition',
+    manifest: (day: string) =>
+      `There is a file for ${day}, and it could not be read. The day is in the archive; what that file holds is not an edition this page can print.`,
+  },
+} as const
+
+/**
  * @param date   the day that was asked for. A calendar date, already validated
  *   by the route.
  * @param dates  every date the archive can render — `listEditionDates()`.
+ * @param record which of the two states this is — `lib/edition.ts`'s, minus the
+ *   `edition` case, which is not this component's page. Required rather than
+ *   defaulted to `absent`: the default would be the honest sentence exactly
+ *   until someone adds a third caller, and the failure mode of getting it wrong
+ *   is the page lying about the archive.
  */
-export function NoEdition({ date, dates }: { date: string; dates: readonly string[] }) {
+export function NoEdition({
+  date,
+  dates,
+  record,
+}: {
+  date: string
+  dates: readonly string[]
+  record: 'absent' | 'unreadable'
+}) {
   const { prev, next } = neighbours(date, dates)
+  const copy = COPY[record]
 
   return (
     <div className="page">
@@ -60,13 +113,13 @@ export function NoEdition({ date, dates }: { date: string; dates: readonly strin
             subject and the date labels it, and here the date *is* the subject —
             it is the only fact the page has. */}
         <h1 className="editiondate">{editionDate(date)}</h1>
-        <p className="promise">No edition</p>
+        <p className="promise">{copy.promise}</p>
         {/* `.manifest` is italic because it usually carries the model's
             editorial line. This sentence is the product speaking, so it stands
             upright — the same override `states.html` 03 and `not-found.tsx`
             make on the same element. */}
         <p className="manifest" style={{ fontStyle: 'normal' }}>
-          {`Nothing ran on ${dayMonth(date)}. The job did not complete, and an edition is never written after the fact.`}
+          {copy.manifest(dayMonth(date))}
         </p>
         <div className="editionbar">
           <nav className="days" aria-label="Editions">

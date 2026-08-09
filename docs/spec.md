@@ -262,10 +262,18 @@ Dark and light from the first version, not a later toggle. The design system is
 produced before implementation and documented in `docs/design-system.md`, with
 every value traceable to the approved screens.
 
-Ten states are designed, not improvised: full edition, yesterday's edition
-(pipeline failed), an edition missing one or more themes, item without an image,
-search idle, search running, search answering with citations, search with no
-result, a question after a question, archive navigation.
+Twelve states are designed, not improvised: full edition, yesterday's edition
+(pipeline failed), a day the pipeline never wrote, a day whose edition is on
+disk and cannot be read, an edition missing one or more themes, item without an
+image, search idle, search running, search answering with citations, search with
+no result, a question after a question, archive navigation.
+
+The two no-edition days are two states and not one. A day that was never
+written and a day whose file failed validation look identical to the loader
+unless it is asked to tell them apart, and the sentence that fits the first —
+nothing ran — is a lie about the second, told over a record the archive is
+holding. `/states` frames both, 03 and 08, so the pair is comparable on one
+page.
 
 The missing-theme state is the one most easily got wrong. A theme with no supply
 is a correct edition, so the filter row is built from the themes present in the

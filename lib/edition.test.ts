@@ -7,6 +7,7 @@ import {
   isThin,
   listEditionDates,
   readEdition,
+  readEditionRecord,
   readLatestEdition,
   themesOf,
 } from './edition'
@@ -215,6 +216,102 @@ describe('readEdition', () => {
     await writeEdition(dir, published)
 
     expect(await readEdition('2026-08-08', dir)).toEqual(published)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// readEditionRecord
+// ---------------------------------------------------------------------------
+
+// The distinction `readEdition` cannot make, and the reason it exists: a day
+// with no file and a day whose file failed validation are two different facts
+// about the archive, and the page that renders them says two different things.
+// Every case below is one `readEdition` answers with the same null.
+describe('readEditionRecord', () => {
+  it('is absent for a date with no file', async () => {
+    await write('2026-08-08', edition())
+
+    expect(await readEditionRecord('2026-08-07', dir)).toEqual({ state: 'absent' })
+  })
+
+  it('is absent when the directory does not exist', async () => {
+    // A fresh clone before the first ingest. Every day is absent, and none of
+    // them is a day the archive is failing to read.
+    expect(await readEditionRecord('2026-08-08', join(dir, 'never-created'))).toEqual({
+      state: 'absent',
+    })
+  })
+
+  it('is absent for a segment that is not a calendar date, without touching the disk', async () => {
+    // `2026-02-29.json` is the one with teeth: the file is there and the day is
+    // not, so there is no day for the archive to be holding a record for.
+    await write('2026-02-29', edition({ date: '2026-02-29' }))
+
+    expect(await readEditionRecord('2026-02-29', dir)).toEqual({ state: 'absent' })
+    expect(await readEditionRecord('../../package', dir)).toEqual({ state: 'absent' })
+    expect(await readEditionRecord('banana', dir)).toEqual({ state: 'absent' })
+  })
+
+  it('is unreadable for a file that is not JSON', async () => {
+    await writeFile(join(dir, '2026-08-08.json'), '{ not json at all', 'utf8')
+
+    expect(await readEditionRecord('2026-08-08', dir)).toEqual({ state: 'unreadable' })
+  })
+
+  it('is unreadable for JSON that is not an edition', async () => {
+    await write('2026-08-08', { items: 'not an array' })
+
+    expect(await readEditionRecord('2026-08-08', dir)).toEqual({ state: 'unreadable' })
+  })
+
+  it('is unreadable for an edition whose date disagrees with its name', async () => {
+    await write('2026-08-08', edition({ date: '1999-01-01' }))
+
+    expect(await readEditionRecord('2026-08-08', dir)).toEqual({ state: 'unreadable' })
+  })
+
+  // The regression, at the level it starts: whole-file-or-nothing means one bad
+  // item costs the day, and the day then has to be reported as a day the archive
+  // is holding rather than as a day that never ran.
+  it('is unreadable for an edition with one unreadable item among good ones', async () => {
+    const good = edition({
+      items: [item({ id: id(1), theme: 'ai' }), item({ id: id(2), rank: 2, theme: 'ai' })],
+    })
+    await write('2026-08-08', { ...good, items: [good.items[0], { ...good.items[1], title: 42 }] })
+
+    expect(await readEditionRecord('2026-08-08', dir)).toEqual({ state: 'unreadable' })
+  })
+
+  // Not absent. The day has a file and the archive cannot open it, which is the
+  // reader's unreadable — ENOENT is the only failure that means nothing is
+  // there. A directory standing where the file goes is the cheapest way to
+  // produce a non-ENOENT read error without changing permissions.
+  it('is unreadable when the file cannot be opened at all', async () => {
+    await mkdir(join(dir, '2026-08-08.json'))
+
+    expect(await readEditionRecord('2026-08-08', dir)).toEqual({ state: 'unreadable' })
+  })
+
+  it('is the edition when the file is one', async () => {
+    const written = edition()
+    await write('2026-08-08', written)
+
+    expect(await readEditionRecord('2026-08-08', dir)).toEqual({
+      state: 'edition',
+      edition: written,
+    })
+  })
+
+  // `readEdition` is this, minus the distinction. Both failures are null there
+  // on purpose: the corpus builder and the states fixtures want an edition or
+  // nothing.
+  it('agrees with readEdition about which files are editions', async () => {
+    await write('2026-08-08', edition())
+    await writeFile(join(dir, '2026-08-09.json'), '{ not json at all', 'utf8')
+
+    expect(await readEdition('2026-08-08', dir)).not.toBeNull()
+    expect(await readEdition('2026-08-09', dir)).toBeNull()
+    expect(await readEdition('2026-08-10', dir)).toBeNull()
   })
 })
 
