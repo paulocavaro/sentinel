@@ -225,24 +225,24 @@ modify `lib/ingest/config.ts`
 
 **Files:** create `lib/themes.ts`, `lib/themes.test.ts`, `app/components/Edition.tsx`
 
-- [ ] **Step 1 — Failing test.** Grouping preserves the canonical theme order;
+- [x] **Step 1 — Failing test.** Grouping preserves the canonical theme order;
   a theme with no items produces no group; **an edition whose items have no
   `theme` produces one unlabelled group**; the lead is excluded from its section.
   `THEME_LABELS` is exactly `Artificial intelligence`, `The world`, `Games`,
   `Science`, `Culture` — the reference's strings, not `AI` or `World`.
-- [ ] **Step 2 — Run, confirm failure**
-- [ ] **Step 3 — Implement.** `Edition` renders the lead, then a section per
+- [x] **Step 2 — Run, confirm failure**
+- [x] **Step 3 — Implement.** `Edition` renders the lead, then a section per
   theme with `h2.section-name` and a `div.features` of up to four, then
   `div.briefs`. Sections keep their `id` and `aria-labelledby` — the no-script
   path depends on the ids.
-- [ ] **Step 4 — Look at the ungrouped case.** With no themes the 8 August
+- [x] **Step 4 — Look at the ungrouped case.** With no themes the 8 August
   edition is one lead, four features and **fifteen briefs under a single
   hairline**, with no `--rule-strong` anywhere — which is the twenty-identical-
   bands failure the rule ladder exists to prevent. Decide what breaks that run:
   the honest options are a plain rule every N items, or accepting it because the
   archive holds exactly one such edition and will never hold another.
-- [ ] **Step 5 — Gate**
-- [ ] **Step 6 — Commit:** `feat(02): sections`
+- [x] **Step 5 — Gate**
+- [x] **Step 6 — Commit:** `feat(02): sections`
 
 ---
 

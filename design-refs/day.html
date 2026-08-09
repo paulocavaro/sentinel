@@ -291,6 +291,28 @@ body {
   margin-top: 1.5rem;
 }
 
+/* A section with no name still opens.
+   The token table's job for --rule-strong is "opens a section", but the rule
+   that does it is attached to .section-name — so the one edition whose items
+   carry no theme renders a section with no name, no rule and therefore no
+   opening at all: the lead stops, and four features begin an inch and a half
+   later with nothing in between. It reads as a gap rather than as a
+   transition, and a page whose only strong rule is the one above the lead is
+   the twenty-identical-bands failure the ladder exists to prevent, arrived at
+   from the other side.
+   So when the name is absent the rule hangs on the features block instead, at
+   exactly the offset the name's own border occupies — the section's 2.25rem of
+   padding — and the labelled page is untouched to the pixel. Nothing is
+   invented for the occasion: same token, same weight, same position, minus the
+   word. What is deliberately *not* done is a rhythm rule every N briefs; every
+   mark in this system stands for something (this is the lead, this is a
+   section, this is where one item ends), and a divider placed by counting would
+   be the first one on the page that means nothing. */
+.section:not(:has(.section-name)) > .features {
+  border-top: 1px solid var(--rule-strong);
+  margin-top: 0; padding-top: 1.5rem;
+}
+
 .briefs {
   display: grid; gap: 0 calc(var(--gap) * 2);
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -404,7 +426,8 @@ body {
 
 @media (forced-colors: active) {
   .brief, .briefs { border-top: 1px solid CanvasText; }
-  .section-name, .lead { border-top: 2px solid CanvasText; }
+  .section-name, .lead,
+  .section:not(:has(.section-name)) > .features { border-top: 2px solid CanvasText; }
   .byline { color: GrayText; }
 }
 </style>
