@@ -373,16 +373,16 @@ modify `lib/ingest/config.ts`
 > in production, permanently. The design's own sentence about the state being
 > impossible to forget is what made it impossible to reach.
 
-- [ ] **Step 1 — Implement.** A Vercel Deploy Hook called from `daily.yml` under
+- [x] **Step 1 — Implement.** A Vercel Deploy Hook called from `daily.yml` under
   `if: always()`, so the site rebuilds whether or not an edition was written.
   Store the hook URL as a repository secret. **(human — creating the hook needs
   your Vercel account)**
-- [ ] **Step 2 — Prove it.** Dispatch the workflow with an invalid key, confirm
+- [ ] **Step 2 — Prove it (POST-MERGE).** Dispatch the workflow with an invalid key, confirm
   no commit lands, confirm a Vercel deployment runs anyway, and confirm the
   stale banner appears on the deployed site.
-- [ ] **Step 3 — Record it in `docs/spec.md`**: the site rebuilds daily
+- [x] **Step 3 — Record it in `docs/spec.md`**: the site rebuilds daily
   regardless of ingest outcome, and why.
-- [ ] **Step 4 — Commit:** `feat(02): rebuild daily so a stale edition can say so`
+- [x] **Step 4 — Commit:** `feat(02): rebuild daily so a stale edition can say so`
 
 ---
 
