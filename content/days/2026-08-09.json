@@ -1,0 +1,583 @@
+{
+  "date": "2026-08-09",
+  "generatedAt": "2026-08-09T03:19:11.798Z",
+  "summary": "AI safety dominates the day as OpenAI halts a risky model and DeepMind's founder steps back, while war, disaster and industry news round out a busy news cycle.",
+  "targetCount": 30,
+  "items": [
+    {
+      "id": "07c8fd08b015",
+      "rank": 1,
+      "title": "OpenAI says it slowed Astra model development over security concerns",
+      "url": "https://techcrunch.com/2026/08/07/openai-says-it-slowed-astra-model-development-over-security-concerns/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T22:48:24.000Z",
+      "description": "OpenAI paused development of its Astra model after finding it could independently launch cyberattacks, a stark warning about AI's offensive potential.",
+      "topics": [
+        "safety",
+        "cybersecurity",
+        "openai"
+      ],
+      "theme": "ai",
+      "image": "/img/07c8fd08b015.webp"
+    },
+    {
+      "id": "14cbb727ee27",
+      "rank": 2,
+      "title": "Child among three killed in Russian missile attacks near Kyiv",
+      "url": "https://www.bbc.co.uk/news/articles/cz7dy8gq99eo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T18:06:25.000Z",
+      "description": "Russian missile strikes near Kyiv killed a child and two others, underscoring Ukraine's dwindling air-defence supplies.",
+      "topics": [
+        "ukraine",
+        "war"
+      ],
+      "theme": "world",
+      "image": "/img/14cbb727ee27.webp"
+    },
+    {
+      "id": "87fd73108bda",
+      "rank": 3,
+      "title": "Besieged Sudanese city faces relentless drone strikes and risk of mass atrocities, U.N. warns",
+      "url": "https://www.npr.org/2026/08/07/nx-s1-5921212/el-obeid-sudan-war",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T09:00:00.000Z",
+      "description": "The U.N. warns that drone strikes and disease are pushing Sudan's besieged el-Obeid toward mass atrocities.",
+      "topics": [
+        "sudan",
+        "conflict",
+        "humanitarian"
+      ],
+      "theme": "world",
+      "image": "/img/87fd73108bda.webp"
+    },
+    {
+      "id": "7b1fdc1b9514",
+      "rank": 4,
+      "title": "Google DeepMind enters a new era as co-founder Demis Hassabis shifts AI role",
+      "url": "https://www.theguardian.com/technology/2026/aug/08/google-demis-hassabis-deepmind-shifts-role",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T12:00:45.000Z",
+      "description": "Demis Hassabis is stepping back from Google DeepMind's helm, fueling concern the lab is losing research independence to commercial pressure.",
+      "topics": [
+        "deepmind",
+        "leadership"
+      ],
+      "theme": "ai",
+      "image": "/img/7b1fdc1b9514.webp"
+    },
+    {
+      "id": "a73be5838e2d",
+      "rank": 5,
+      "title": "New Mexico court orders Meta to pay additional $567M in child safety case",
+      "url": "https://techcrunch.com/2026/08/07/new-mexico-court-orders-meta-to-pay-additional-567m-in-child-safety-case/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T11:40:37.000Z",
+      "description": "A New Mexico court hit Meta with another $567 million penalty in a child-safety case, pushing its total fine past $900 million.",
+      "topics": [
+        "meta",
+        "regulation",
+        "children"
+      ],
+      "theme": "ai",
+      "image": "/img/a73be5838e2d.webp"
+    },
+    {
+      "id": "bcbeb063c2d9",
+      "rank": 6,
+      "title": "Hormuz talks positive, Oman says, as Iran warns deal would not open strait",
+      "url": "https://www.bbc.co.uk/news/articles/c934j5y2lq9o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T19:18:57.000Z",
+      "description": "Oman says talks over the Strait of Hormuz are moving positively, though Iran still won't guarantee the waterway stays open.",
+      "topics": [
+        "hormuz",
+        "iran",
+        "shipping"
+      ],
+      "theme": "world",
+      "image": "/img/bcbeb063c2d9.webp"
+    },
+    {
+      "id": "50d8c339199a",
+      "rank": 7,
+      "title": "ByteDance trains massive AI model in bid to rival Anthropic",
+      "url": "https://arstechnica.com/ai/2026/08/bytedance-trains-massive-ai-model-in-bid-to-rival-anthropic/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T13:29:22.000Z",
+      "description": "ByteDance is training a 10-trillion-parameter model as it races to challenge Anthropic in the frontier AI arms race.",
+      "topics": [
+        "bytedance",
+        "models"
+      ],
+      "theme": "ai",
+      "image": "/img/50d8c339199a.webp"
+    },
+    {
+      "id": "3c9131230eb4",
+      "rank": 8,
+      "title": "Saudi Arabia, Turkey and Pakistan sign defence pact",
+      "url": "https://www.bbc.co.uk/news/articles/c30418m4mj4o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T17:42:54.000Z",
+      "description": "Saudi Arabia, Turkey and Pakistan signed a mutual-defence pact treating an attack on one as an attack on all, amid Middle East tensions.",
+      "topics": [
+        "defense",
+        "middleeast"
+      ],
+      "theme": "world",
+      "image": "/img/3c9131230eb4.webp"
+    },
+    {
+      "id": "9e6e054c7d44",
+      "rank": 9,
+      "title": "Why Google DeepMind broke up the AlphaFold team",
+      "url": "https://www.scientificamerican.com/article/why-google-deepmind-broke-up-the-alphafold-team/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T13:00:00.000Z",
+      "description": "Google DeepMind disbanded its AlphaFold team after largely solving protein structure prediction, handing the torch to outside researchers.",
+      "topics": [
+        "alphafold",
+        "biology"
+      ],
+      "theme": "science",
+      "image": "/img/9e6e054c7d44.webp"
+    },
+    {
+      "id": "f3240bd4ea3d",
+      "rank": 10,
+      "title": "AI just created a virus not found in nature, and scientists are worried",
+      "url": "https://www.scientificamerican.com/article/ai-just-created-a-virus-not-found-in-nature-and-scientists-are-worried/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T15:30:00.000Z",
+      "description": "Scientists used AI to design a virus not found in nature, raising hope for new antibiotics and fears of misuse.",
+      "topics": [
+        "biosecurity",
+        "virus"
+      ],
+      "theme": "science",
+      "image": "/img/f3240bd4ea3d.webp"
+    },
+    {
+      "id": "e919ebec9745",
+      "rank": 11,
+      "title": "Take-Two boss \"not in the least\" concerned bad press around Rockstar's employment tribunal will affect GTA 6 launch",
+      "url": "https://www.eurogamer.net/take-two-strauss-zelnick-not-concerned-rockstar-union-busting-gta-6",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T16:22:27.000Z",
+      "description": "Take-Two's CEO says bad press over Rockstar's labor tribunal won't dent the marketing push toward GTA 6's launch.",
+      "topics": [
+        "gta6",
+        "rockstar"
+      ],
+      "theme": "games",
+      "image": "/img/e919ebec9745.webp"
+    },
+    {
+      "id": "3fa81885b902",
+      "rank": 12,
+      "title": "Planned Amazon data center could become the biggest climate polluter in the U.S.",
+      "url": "https://techcrunch.com/2026/08/08/planned-amazon-data-center-could-become-the-biggest-climate-polluter-in-the-u-s/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T21:24:02.000Z",
+      "description": "A planned Amazon data center in Texas could become the single largest source of climate pollution in the U.S.",
+      "topics": [
+        "amazon",
+        "climate",
+        "datacenter"
+      ],
+      "theme": "ai",
+      "image": "/img/3fa81885b902.webp"
+    },
+    {
+      "id": "d2c9a3f148a7",
+      "rank": 13,
+      "title": "Fast-moving Canada wildfire doubles in size forcing thousands to flee homes",
+      "url": "https://www.bbc.co.uk/news/articles/cx25dkwk3e3o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T22:01:54.000Z",
+      "description": "A fast-moving wildfire in British Columbia has doubled in size, forcing thousands to flee as it remains out of control.",
+      "topics": [
+        "wildfire",
+        "canada"
+      ],
+      "theme": "world",
+      "image": "/img/d2c9a3f148a7.webp"
+    },
+    {
+      "id": "7263367b5a25",
+      "rank": 14,
+      "title": "Sony appears to be putting labels on PS5 console boxes to warn people it's ending disc production",
+      "url": "https://www.eurogamer.net/ps5-boxes-labels-physical-media-2028",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T12:01:00.000Z",
+      "description": "Sony is now warning buyers on PS5 boxes that the console will stop supporting physical discs starting in 2028.",
+      "topics": [
+        "sony",
+        "playstation"
+      ],
+      "theme": "games",
+      "image": "/img/7263367b5a25.webp"
+    },
+    {
+      "id": "4ed005afc016",
+      "rank": 15,
+      "title": "Typhoon Dolphin batters Japan's Okinawa before bearing down on China",
+      "url": "https://www.bbc.co.uk/news/articles/cvglp2zlvrlo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T15:15:17.000Z",
+      "description": "Typhoon Dolphin has cut power to tens of thousands in Okinawa before turning toward China.",
+      "topics": [
+        "typhoon",
+        "japan"
+      ],
+      "theme": "world",
+      "image": "/img/4ed005afc016.webp"
+    },
+    {
+      "id": "b6e6256a5ca5",
+      "rank": 16,
+      "title": "The White House’s plan to vet potentially dangerous AI is cloaked in secrecy",
+      "url": "https://www.theguardian.com/technology/2026/aug/07/white-house-ai",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T13:00:18.000Z",
+      "description": "The Trump administration finalized a secretive framework for vetting AI models' safety and cybersecurity risks, drawing transparency concerns.",
+      "topics": [
+        "regulation",
+        "safety"
+      ],
+      "theme": "ai",
+      "image": "/img/b6e6256a5ca5.webp"
+    },
+    {
+      "id": "4156665e59da",
+      "rank": 17,
+      "title": "NASA’s Voyager 2 survives daring ‘big bang’ maneuver",
+      "url": "https://www.scientificamerican.com/article/nasas-voyager-2-survives-daring-big-bang-maneuver/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T12:00:00.000Z",
+      "description": "NASA pulled off a daring maneuver to keep Voyager 2 running nearly 49 years after launch despite fading power.",
+      "topics": [
+        "voyager",
+        "space"
+      ],
+      "theme": "science",
+      "image": "/img/4156665e59da.webp"
+    },
+    {
+      "id": "3832a13c07c3",
+      "rank": 18,
+      "title": "Thai PM vows to introduce stricter gun laws after eight killed in shooting",
+      "url": "https://www.bbc.co.uk/news/articles/cdewx6rew04o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T21:19:27.000Z",
+      "description": "Thailand's prime minister promised stricter gun laws after a 14-year-old killed eight people in a shooting spree.",
+      "topics": [
+        "thailand",
+        "shooting"
+      ],
+      "theme": "world",
+      "image": "/img/3832a13c07c3.webp"
+    },
+    {
+      "id": "39b28d95fcba",
+      "rank": 19,
+      "title": "OpenAI acquires presentation startup NextSlide",
+      "url": "https://techcrunch.com/2026/08/08/openai-acquires-presentation-startup-nextslide/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T19:41:13.000Z",
+      "description": "OpenAI acquired presentation startup NextSlide, folding its team into ChatGPT's product work.",
+      "topics": [
+        "openai",
+        "acquisition"
+      ],
+      "theme": "ai",
+      "image": "/img/39b28d95fcba.webp"
+    },
+    {
+      "id": "a8eef7dec7b3",
+      "rank": 20,
+      "title": "Indie game publisher Devolver Digital wants to go private",
+      "url": "https://www.eurogamer.net/devolver-digital-goes-private",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T14:36:16.000Z",
+      "description": "Indie publisher Devolver Digital is seeking to go private after a rocky stretch as a public company.",
+      "topics": [
+        "devolver",
+        "publishing"
+      ],
+      "theme": "games",
+      "image": "/img/a8eef7dec7b3.webp"
+    },
+    {
+      "id": "81699bf62a28",
+      "rank": 21,
+      "title": "Did life on Earth only arise once? Perhaps not",
+      "url": "https://www.scientificamerican.com/article/life-on-earth-emerged-twice-study/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T13:00:00.000Z",
+      "description": "New research suggests the last common ancestor of life on Earth may not have been alive at all, challenging assumptions about life's origin.",
+      "topics": [
+        "origin",
+        "biology"
+      ],
+      "theme": "science",
+      "image": "/img/81699bf62a28.webp"
+    },
+    {
+      "id": "8415d3b25b0c",
+      "rank": 22,
+      "title": "DeepMind’s hurricane breakthrough has surprised weather scientists",
+      "url": "https://arstechnica.com/science/2026/08/deepminds-hurricane-model-bought-forecasters-an-extra-day/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T11:05:50.000Z",
+      "description": "DeepMind's open WeatherNext model is surprising scientists with accurate hurricane forecasts from lower-resolution data.",
+      "topics": [
+        "weather",
+        "deepmind"
+      ],
+      "theme": "ai",
+      "image": "/img/8415d3b25b0c.webp"
+    },
+    {
+      "id": "bb82863bdbe2",
+      "rank": 23,
+      "title": "Neutrinos From Deep Inside Earth Provide a New Picture of the Mantle",
+      "url": "https://www.quantamagazine.org/neutrinos-from-deep-inside-earth-provide-a-new-picture-of-the-mantle-20260807/",
+      "publisher": "Quantamagazine",
+      "feed": {
+        "name": "Quanta Magazine",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T13:55:32.000Z",
+      "description": "A global network of neutrino detectors is giving scientists a new view of the radioactive elements powering Earth's mantle.",
+      "topics": [
+        "neutrinos",
+        "geology"
+      ],
+      "theme": "science",
+      "image": "/img/bb82863bdbe2.webp"
+    },
+    {
+      "id": "f48a8eb25592",
+      "rank": 24,
+      "title": "Extraction shooter BR1 Infinite is paying players for every in-game kill, drawing concerns about gambling and cheating",
+      "url": "https://www.eurogamer.net/br1-infinite-extraction-pays-for-kills",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T16:56:11.000Z",
+      "description": "New extraction shooter BR1 Infinite pays players for every kill, sparking worries about gambling incentives and cheating.",
+      "topics": [
+        "shooter",
+        "gambling"
+      ],
+      "theme": "games",
+      "image": "/img/f48a8eb25592.webp"
+    },
+    {
+      "id": "4fad8f89db5e",
+      "rank": 25,
+      "title": "AI chatbots have failed people in crisis. Can that be fixed?",
+      "url": "https://arstechnica.com/ai/2026/08/ai-chatbots-have-failed-people-in-crisis-can-that-be-fixed/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T13:49:37.000Z",
+      "description": "Clinicians say AI chatbots have repeatedly failed people in mental-health crises, and want companies to open up safety data.",
+      "topics": [
+        "mentalhealth",
+        "chatbots"
+      ],
+      "theme": "ai",
+      "image": "/img/4fad8f89db5e.webp"
+    },
+    {
+      "id": "c0a91e2017e6",
+      "rank": 26,
+      "title": "Gears of War: E-Day multiplayer beta blows past series' records on Steam",
+      "url": "https://www.eurogamer.net/gears-of-war-multiplayer-beta-popular-steam",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T13:10:07.000Z",
+      "description": "Gears of War: E-Day's open beta has already shattered the series' concurrent-player records on Steam.",
+      "topics": [
+        "gearsofwar",
+        "steam"
+      ],
+      "theme": "games",
+      "image": "/img/c0a91e2017e6.webp"
+    },
+    {
+      "id": "793b48fdfba7",
+      "rank": 27,
+      "title": "The Witcher season 5 delayed on Netflix, new report says",
+      "url": "https://www.polygon.com/the-witcher-season-5-has-been-quietly-delayed/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T22:19:04.000Z",
+      "description": "Netflix has quietly pushed The Witcher's fifth and final season back to 2027.",
+      "topics": [
+        "witcher",
+        "netflix"
+      ],
+      "theme": "culture",
+      "image": "/img/793b48fdfba7.webp"
+    },
+    {
+      "id": "53398e47de57",
+      "rank": 28,
+      "title": "Tripledot Studios acquires Supersonic from Unity for $40m",
+      "url": "https://www.gamesindustry.biz/tripledot-studios-acquires-supersonic-from-unity-for-40m",
+      "publisher": "Gamesindustry",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-07T10:04:32.000Z",
+      "description": "Tripledot Studios bought mobile publisher Supersonic from Unity for $40 million, consolidating mobile game publishing.",
+      "topics": [
+        "mobile",
+        "acquisition"
+      ],
+      "theme": "games",
+      "image": "/img/53398e47de57.webp"
+    },
+    {
+      "id": "2bf158788315",
+      "rank": 29,
+      "title": "Andrew Lloyd Webber Is ‘Gutted’ on ‘Cats: The Jellicle Ball’ Closing Night: Producing on Broadway Is ‘Unsustainable’",
+      "url": "https://variety.com/2026/legit/news/andrew-lloyd-webber-cats-the-jellicle-ball-closing-night-1236830708/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T23:54:28.000Z",
+      "description": "Andrew Lloyd Webber says he's 'gutted' as Cats: The Jellicle Ball closes, calling Broadway production economics unsustainable.",
+      "topics": [
+        "broadway",
+        "theatre"
+      ],
+      "theme": "culture",
+      "image": "/img/2bf158788315.webp"
+    },
+    {
+      "id": "f930645e5371",
+      "rank": 30,
+      "title": "Matt Damon’s 113-Minute 10/10 Action Thriller Officially Crowned as Netflix’s Biggest Movie of 2026",
+      "url": "https://www.polygon.com/matt-damon-action-thriller-netflix-biggest-streaming-hit-of-2026/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T21:00:12.000Z",
+      "description": "Matt Damon's action thriller has been crowned Netflix's most-streamed movie of 2026 with over 4.4 billion minutes watched.",
+      "topics": [
+        "netflix",
+        "film"
+      ],
+      "theme": "culture",
+      "image": "/img/f930645e5371.webp"
+    }
+  ]
+}
