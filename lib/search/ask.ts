@@ -228,6 +228,24 @@ export type AskDeps = {
   dates: readonly string[]
   /** The model call. `defaultGenerator` in production, a fake in every test. */
   generate: Generator
+  /**
+   * Called when a rejected draft is about to be drawn again. Optional, and it
+   * returns nothing — this is a counter, not a hook.
+   *
+   * **It exists because a retry that works is otherwise invisible.** Only a
+   * final failure reaches a log, so the safety net added on 10 August could
+   * carry the product for a month without leaving one line of evidence that it
+   * had ever been needed. That is a bad trade for something the whole search
+   * leans on: the difference between *knowing* the redraw earns its seconds and
+   * *assuming* it does is this one call.
+   *
+   * It is a callback rather than a `console` in this module, and rather than a
+   * field on the result. A `console` here would make a pure, network-free module
+   * noisy in the suite; a field would ride out to the reader, because the route
+   * sends a successful result verbatim. The seam stays where every other
+   * dependency of this module already is.
+   */
+  onRedraw?: () => void
 }
 
 /** What the reader asked, and what they had asked before it. */
@@ -371,7 +389,7 @@ function buildPrompt(question: string, previous: readonly string[]): string {
  *    was never shown discards the answer whole.
  */
 export async function askArchive(
-  { index, dates, generate }: AskDeps,
+  { index, dates, generate, onRedraw }: AskDeps,
   { question, previous = [] }: AskQuestion,
 ): Promise<AskResult> {
   const asked = question.trim()
@@ -407,10 +425,20 @@ export async function askArchive(
   // the reader's own retry is the better instrument. `unsearched` is the model
   // declining to look at material that exists, which is a judgement it will
   // repeat. `invalid` never reaches here.
-  const outcome =
-    first.kind === 'failed' && first.why === 'rejected'
-      ? await attempt({ index, generate }, asked, previous)
-      : first
+  let outcome = first
+  if (first.kind === 'failed' && first.why === 'rejected') {
+    // Before the second call rather than after it. **That ordering is free
+    // today and it is not load-bearing** — `attempt` catches its own throws and
+    // returns `provider` rather than propagating, so a counter on either side of
+    // this line records the same number. A mutation moving it below fails
+    // nothing, which is how that was established rather than assumed.
+    //
+    // It stays above because the day `attempt` grows a path that does throw, the
+    // count above stays right and the count below silently loses exactly the
+    // cases worth investigating.
+    onRedraw?.()
+    outcome = await attempt({ index, generate }, asked, previous)
+  }
 
   return outcome.kind === 'nothing' ? refusal() : outcome
 }

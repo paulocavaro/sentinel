@@ -208,7 +208,25 @@ export async function POST(request: Request): Promise<Response> {
     const [index, dates] = await Promise.all([archiveIndex(), listEditionDates()])
 
     // 4. The question.
-    result = await askArchive({ index, dates, generate: deps.generate }, parsed.data)
+    //
+    // `onRedraw` is the only telemetry this route emits on a path that
+    // *succeeds*, and it is here because the alternative is a blind spot: a
+    // rejected draft that the second draw rescues leaves no other trace, so the
+    // retry could be carrying the search — or never firing at all — and the logs
+    // would read identically. One line per redraw turns ordinary traffic into
+    // the measurement, which beats any number of probes run by hand.
+    //
+    // `warn`, not `error`: nothing is wrong. This is the safety net catching
+    // something, which is the net working.
+    result = await askArchive(
+      {
+        index,
+        dates,
+        generate: deps.generate,
+        onRedraw: () => console.warn('[api/ask] first draw rejected, drawing again'),
+      },
+      parsed.data,
+    )
   } catch (cause) {
     // `askArchive` catches the model's own failures and does not throw, so
     // arriving here means the archive itself could not be read — a real
