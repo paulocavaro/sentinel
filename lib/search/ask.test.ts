@@ -232,7 +232,7 @@ describe('askArchive', () => {
         { question: 'What did Anthropic ship?' },
       )
 
-      expect(result).toEqual({ kind: 'failed' })
+      expect(result).toEqual({ kind: 'failed', why: 'rejected' })
     }
   })
 
@@ -246,13 +246,102 @@ describe('askArchive', () => {
       { question: 'What did Anthropic ship?' },
     )
 
-    expect(result).toEqual({ kind: 'failed' })
+    expect(result).toEqual({ kind: 'failed', why: 'provider' })
+  })
+
+  // ── The one retry ─────────────────────────────────────────────────────────
+  //
+  // Measured in production on 10 August: the same question, three times, eight
+  // seconds apart — two answers and one rejection. Identical input, different
+  // outcome, so the variable is the draw and not the archive. A second draw is
+  // worth its seconds; a third would be the module arguing with a model that has
+  // twice failed to cite what it was shown.
+  describe('a rejected draft is drawn once more', () => {
+    it('answers when the second draw cites what it was shown', async () => {
+      let call = 0
+      const flaky: Generator = async ({ tools }) => {
+        await search(tools, 'Opus')
+        call += 1
+        return call === 1
+          ? { kind: 'answer', sentences: [{ text: 'It shipped.', ids: [UNSEEN] }] }
+          : { kind: 'answer', sentences: [{ text: 'Anthropic shipped Opus 5.', ids: [OPUS] }] }
+      }
+
+      expect(await askArchive(deps(flaky), { question: 'What did Anthropic ship?' })).toEqual({
+        kind: 'answer',
+        sentences: [{ text: 'Anthropic shipped Opus 5.', cites: [CITE[OPUS]] }],
+      })
+      expect(call).toBe(2)
+    })
+
+    it('gives up after the second draw, rather than drawing again', async () => {
+      const generate = vi.fn<Generator>(async ({ tools }) => {
+        await search(tools, 'Opus')
+        return { kind: 'answer', sentences: [{ text: 'It shipped.', ids: [UNSEEN] }] }
+      })
+
+      expect(await askArchive(deps(generate), { question: 'What did Anthropic ship?' })).toEqual({
+        kind: 'failed',
+        why: 'rejected',
+      })
+      expect(generate).toHaveBeenCalledTimes(2)
+    })
+
+    it("gives the second draw its own seen, so it cannot cite the first draw's hits", async () => {
+      // The reason the retry is a whole attempt and not a second `generate`.
+      // Draw one searches for Opus and is rejected; draw two searches for the
+      // cable and cites Opus — an id **this** conversation was never given. A
+      // shared map would let that through, and it is exactly the forgery `seen`
+      // exists to make impossible.
+      let call = 0
+      const crossCiting: Generator = async ({ tools }) => {
+        call += 1
+        await search(tools, call === 1 ? 'Opus' : 'cable')
+        return call === 1
+          ? { kind: 'answer', sentences: [{ text: 'It shipped.', ids: [UNSEEN] }] }
+          : { kind: 'answer', sentences: [{ text: 'Anthropic shipped.', ids: [OPUS] }] }
+      }
+
+      expect(await askArchive(deps(crossCiting), { question: 'What happened?' })).toEqual({
+        kind: 'failed',
+        why: 'rejected',
+      })
+    })
+
+    it('does not draw again when the provider threw', async () => {
+      // An outage is not a bad draw. Asking twice turns a fast failure into a
+      // slow one and buys nothing the reader's own retry does not.
+      const generate = vi.fn<Generator>(async () => {
+        throw new Error('529 overloaded')
+      })
+
+      expect(await askArchive(deps(generate), { question: 'What did Anthropic ship?' })).toEqual({
+        kind: 'failed',
+        why: 'provider',
+      })
+      expect(generate).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not draw again when the model declined to search', async () => {
+      // A judgement, not a draw: the model will make it again.
+      const generate = vi.fn<Generator>(async () => ({ kind: 'nothing' }))
+
+      expect(await askArchive(deps(generate), { question: 'Anthropic' })).toEqual({
+        kind: 'failed',
+        why: 'unsearched',
+      })
+      expect(generate).toHaveBeenCalledTimes(1)
+    })
   })
 
   it('never falls back to an answer of its own', async () => {
     // The failure carries no sentences and no counts. There is no partial
     // answer, no cached one, and no sentence written by this module — the
     // product would rather say nothing than say something it cannot source.
+    //
+    // `why` is the one thing it does carry, and it is named here rather than
+    // waved through: this assertion is what would catch a future failure that
+    // smuggles a half-answer out alongside the cause.
     const failures = await Promise.all([
       askArchive(
         deps(async () => {
@@ -269,7 +358,7 @@ describe('askArchive', () => {
       ),
     ])
 
-    for (const failure of failures) expect(Object.keys(failure)).toEqual(['kind'])
+    for (const failure of failures) expect(Object.keys(failure).sort()).toEqual(['kind', 'why'])
   })
 
   // ── The model that answers without searching ──────────────────────────────
@@ -298,6 +387,7 @@ describe('askArchive', () => {
       // answer to give.
       expect(await askArchive(deps(unsearched), { question: 'Anthropic' })).toEqual({
         kind: 'failed',
+        why: 'unsearched',
       })
     })
 
@@ -314,6 +404,7 @@ describe('askArchive', () => {
 
       expect(await askArchive(deps(citesWithoutSearching), { question: 'Anthropic' })).toEqual({
         kind: 'failed',
+        why: 'unsearched',
       })
     })
 
@@ -328,6 +419,7 @@ describe('askArchive', () => {
 
       expect(await askArchive(deps(invented), { question: 'Anthropic' })).toEqual({
         kind: 'failed',
+        why: 'unsearched',
       })
     })
   })
@@ -382,11 +474,11 @@ describe('askArchive', () => {
 
     expect(
       await askArchive(deps(generate), { question: 'q'.repeat(MAX_QUESTION_CHARS + 1) }),
-    ).toEqual({ kind: 'failed' })
+    ).toEqual({ kind: 'failed', why: 'invalid' })
 
     // An empty question is the same refusal, and for a plainer reason: there is
     // nothing to search for.
-    expect(await askArchive(deps(generate), { question: '   ' })).toEqual({ kind: 'failed' })
+    expect(await askArchive(deps(generate), { question: '   ' })).toEqual({ kind: 'failed', why: 'invalid' })
 
     // The cap is worth having only if it is applied before the paid call.
     expect(generate).not.toHaveBeenCalled()
@@ -442,6 +534,7 @@ describe('askArchive', () => {
 
       expect(await askArchive(deps(cite(OPUS)), { question: 'The quantum one?' })).toEqual({
         kind: 'failed',
+        why: 'rejected',
       })
     })
 
@@ -585,7 +678,7 @@ describe('askArchive', () => {
         { question: 'What happened this week?' },
       )
 
-      expect(result).toEqual({ kind: 'failed' })
+      expect(result).toEqual({ kind: 'failed', why: 'rejected' })
     })
   })
 })
