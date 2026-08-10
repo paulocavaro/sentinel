@@ -354,14 +354,14 @@ describe('POST /api/ask', () => {
     expect(archiveIndex).not.toHaveBeenCalled()
   })
 
-  it('500s without leaking the failure, when the model call fails', async () => {
+  it('503s without leaking the failure, when the model call fails', async () => {
     deps.generate = async () => {
       throw new Error('529 overloaded: key sk-ant-secret rejected by upstream')
     }
 
     const response = await ask({ question: 'What did Anthropic ship?' })
 
-    expect(response.status).toBe(500)
+    expect(response.status).toBe(503)
 
     const body = await response.text()
     expect(body).not.toContain('529')
@@ -384,21 +384,31 @@ describe('POST /api/ask', () => {
     expect(await response.text()).not.toContain('/var/task')
   })
 
-  it('500s rather than answers when the answer cites an unseen id', async () => {
+  it('does not 500 when the answer cites an unseen id — that is the guarantee working', async () => {
     // The phase's guarantee, seen from the outside: an answer that cites
     // something the search did not return never reaches a reader, and it is not
     // repaired into a shorter one. To the reader it is the same failure as a
     // provider outage, which is deliberate — the difference matters in the log
     // and not on the screen.
-    deps.generate = async ({ tools }) => {
+    //
+    // **The status is 200 and that is the point of this test.** A rejected draft
+    // is this server working exactly as designed; a 500 says it is broken. The
+    // two were the same status until production ran at roughly one failure in
+    // six and every one of them looked like an outage.
+    const generate = vi.fn<Generator>(async ({ tools }) => {
       await search(tools, 'Opus')
       return { kind: 'answer', sentences: [{ text: 'A cable was cut.', ids: [UNSEEN] }] }
-    }
+    })
+    deps.generate = generate
 
     const response = await ask({ question: 'What happened this week?' })
 
-    expect(response.status).toBe(500)
+    expect(response.status).toBe(200)
     expect(await response.json()).toMatchObject({ kind: 'failed' })
+
+    // Twice: a rejected draft is redrawn once before the reader is told no.
+    // A model that rejects deterministically still ends here, one call poorer.
+    expect(generate).toHaveBeenCalledTimes(2)
   })
 
   it('returns the refusal as 200, because refusing is an answer', async () => {
@@ -442,7 +452,7 @@ describe('POST /api/ask', () => {
       throw new Error(`upstream refused the prompt: ${MARKER}`)
     }
     const failed = await ask({ question: MARKER })
-    expect(failed.status).toBe(500)
+    expect(failed.status).toBe(503)
     expect(await failed.text()).not.toContain('zqx-marker')
 
     deps.generate = answers

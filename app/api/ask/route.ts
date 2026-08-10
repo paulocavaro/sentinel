@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { listEditionDates } from '@/lib/edition'
 import { MAX_QUESTIONS, MAX_QUESTION_CHARS, askArchive, defaultGenerator } from '@/lib/search/ask'
-import type { AskResult, Generator } from '@/lib/search/ask'
+import type { AskFailure, AskResult, Generator } from '@/lib/search/ask'
 import { archiveIndex } from '@/lib/search/corpus'
 import { bucketKey, takeToken } from '@/lib/search/limit'
 
@@ -100,6 +100,53 @@ function refuse(
   return Response.json({ kind, message, ...extra }, { status, headers })
 }
 
+/**
+ * One row per way an answer can fail to survive: what the log says, what the
+ * status is, and what the caller is told.
+ *
+ * **The statuses differ because only one of these is a fault of this server.**
+ * That distinction was worth making the day production started failing about one
+ * question in six and every one of them was a 500 — a status that says *this
+ * server is broken*, on a path where the server was mostly working exactly as
+ * designed. A 500 in the dashboard should mean something is wrong here.
+ *
+ * - `rejected` and `unsearched` are **200**, for the same reason `nothing` is:
+ *   the request was handled correctly and the answer is the honest outcome. The
+ *   system looked at a draft it could not verify against the archive and
+ *   declined to show it. That is the product working. The panel renders its
+ *   `failed` state from the body's `kind`, not from the status, so the reader
+ *   sees no difference.
+ * - `provider` is **503**: the model was unreachable or refused. Genuinely
+ *   upstream, genuinely transient, and a status a monitor should be allowed to
+ *   alert on.
+ * - `invalid` is **400** and is unreachable from here — the body schema rejects
+ *   an empty or over-long question long before `askArchive` sees it. It is in
+ *   the table because the type says it can happen, and a table with a hole in it
+ *   is how the next reader learns nothing.
+ */
+const FAILURES: Record<AskFailure, { status: number; log: string; message: string }> = {
+  invalid: {
+    status: 400,
+    log: 'the question was empty or over the cap — the body schema should have caught this',
+    message: 'That request could not be read.',
+  },
+  provider: {
+    status: 503,
+    log: 'the model call threw — provider unreachable, rate limited, or the SDK rejected the schema',
+    message: 'The search could not run. Try again.',
+  },
+  unsearched: {
+    status: 200,
+    log: 'the model answered without searching, over material the archive holds',
+    message: 'That question could not be answered from the archive.',
+  },
+  rejected: {
+    status: 200,
+    log: 'the answer failed validation twice — most likely a citation the model was never shown',
+    message: 'That answer could not be checked against the archive, so it was not shown.',
+  },
+}
+
 export async function POST(request: Request): Promise<Response> {
   // 1. The rate limit, before any I/O.
   //
@@ -172,14 +219,9 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   if (result.kind === 'failed') {
-    // Three different events reach this line — the provider fell over, the
-    // model answered without searching, or the answer cited something it was
-    // never shown — and `askArchive` collapses them into one on purpose,
-    // because the reader is told the same thing for all three. The cost is
-    // that the log cannot tell them apart either, which is worth writing down
-    // rather than discovering while reading logs at the wrong moment.
-    console.error('[api/ask] no answer survived: the model call failed or the object was rejected')
-    return refuse(500, 'failed', 'The search could not run. Try again.')
+    const { status, log, message } = FAILURES[result.why]
+    console.error(`[api/ask] ${log}`)
+    return refuse(status, 'failed', message)
   }
 
   // A refusal is a 200. "Nothing about that has run here" is a correct,

@@ -245,16 +245,39 @@ export type AskQuestion = {
 }
 
 /**
+ * Why no answer survived.
+ *
+ * **The reader is told the same sentence for all of these, and that has not
+ * changed.** What changed is that the *log* can now tell them apart, because the
+ * day came when it mattered: production was failing roughly one question in six,
+ * the log line said only "the model call failed or the object was rejected", and
+ * there was no way to learn which. Collapsing four events into one message was
+ * right for the reader and wrong for everyone operating this.
+ *
+ * - `invalid` — the question was empty or over the cap. Nothing was paid for.
+ * - `provider` — the model call threw: a 429, a 529, a schema violation the SDK
+ *   raised. The only one of the four that is somebody else's outage.
+ * - `unsearched` — the model answered without searching, over material the
+ *   archive demonstrably holds. It had no standing to refuse and did not look.
+ * - `rejected` — the object failed validation. Usually a citation the model was
+ *   never shown, which is the guarantee doing its job rather than a fault.
+ */
+export type AskFailure = 'invalid' | 'provider' | 'unsearched' | 'rejected'
+
+/**
  * The three things that can come back.
  *
  * `nothing` carries the two numbers its sentence is built from. Without them
  * *"nothing about that has run here"* is unfalsifiable — a reader cannot tell a
  * thorough search of a year from a shrug over two days.
+ *
+ * `why` never reaches the reader: the route builds the failure body itself and
+ * this field stays on the server, where the operator is.
  */
 export type AskResult =
   | { kind: 'answer'; sentences: Sentence[] }
   | { kind: 'nothing'; editions: number; from: string }
-  | { kind: 'failed' }
+  | { kind: 'failed'; why: AskFailure }
 
 /**
  * The rules the validation already enforces, said out loud.
@@ -354,7 +377,7 @@ export async function askArchive(
   const asked = question.trim()
   // Before anything is paid for. A cap applied after the model call is a cap on
   // nothing.
-  if (asked === '' || asked.length > MAX_QUESTION_CHARS) return { kind: 'failed' }
+  if (asked === '' || asked.length > MAX_QUESTION_CHARS) return { kind: 'failed', why: 'invalid' }
 
   // Computed rather than read off either end of the list: the caller's ordering
   // is `listEditionDates`' business today, and the sentence a reader sees must
@@ -369,6 +392,44 @@ export async function askArchive(
   // there is nothing to pay a model to search.
   if (dates.length === 0) return refusal()
 
+  const first = await attempt({ index, generate }, asked, previous)
+
+  // **One retry, and only for `rejected`.**
+  //
+  // Measured in production on 10 August: the same question, posted three times
+  // eight seconds apart, answered twice and was rejected once. Identical input,
+  // different outcome — so the variable is the model's own output and not load,
+  // not the archive, not the hour. A second draw of a sample that succeeds most
+  // of the time is worth the seconds it costs.
+  //
+  // The other three are not retried, for three different reasons. `provider` is
+  // an outage: asking a second time makes a slow failure out of a fast one, and
+  // the reader's own retry is the better instrument. `unsearched` is the model
+  // declining to look at material that exists, which is a judgement it will
+  // repeat. `invalid` never reaches here.
+  const outcome =
+    first.kind === 'failed' && first.why === 'rejected'
+      ? await attempt({ index, generate }, asked, previous)
+      : first
+
+  return outcome.kind === 'nothing' ? refusal() : outcome
+}
+
+/**
+ * One question, one model call, one verdict.
+ *
+ * **`seen` is built here and dies here, and that is why the retry is a whole
+ * second attempt rather than a second `generate`.** `seen` means one thing —
+ * *the items this model was shown* — and every citation is checked against it.
+ * Two conversations sharing one map would let the second answer cite an item
+ * only the first was given, which is precisely the forgery the map exists to
+ * make impossible. A fresh attempt is a fresh conversation in every sense.
+ */
+async function attempt(
+  { index, generate }: Pick<AskDeps, 'index' | 'generate'>,
+  asked: string,
+  previous: readonly string[],
+): Promise<{ kind: 'answer'; sentences: Sentence[] } | { kind: 'nothing' } | { kind: 'failed'; why: AskFailure }> {
   const seen = new Map<string, Hit>()
   const tally = { searches: 0 }
 
@@ -381,9 +442,9 @@ export async function askArchive(
     })
   } catch {
     // A 429, a 529, a refusal from the safety classifier, a schema violation
-    // the SDK threw on. The reader is told the same thing for all of them, so
-    // the cause belongs in the route's log and not in this branch.
-    return { kind: 'failed' }
+    // the SDK threw on. One name for all of them: from here they are the same
+    // event, somebody else's, and the route logs it as such.
+    return { kind: 'failed', why: 'provider' }
   }
 
   // **The model answered without ever searching.**
@@ -410,15 +471,15 @@ export async function askArchive(
   // kept by construction rather than by the order of two statements.
   if (tally.searches === 0) {
     const confirming = searchNews(index, asked)
-    if (confirming.length > 0) return { kind: 'failed' }
+    if (confirming.length > 0) return { kind: 'failed', why: 'unsearched' }
   }
 
-  if (seen.size === 0) return refusal()
+  if (seen.size === 0) return { kind: 'nothing' }
 
   const answer = validateAnswer(raw, seen)
-  if (answer === null) return { kind: 'failed' }
+  if (answer === null) return { kind: 'failed', why: 'rejected' }
 
-  return answer.kind === 'nothing' ? refusal() : { kind: 'answer', sentences: answer.sentences }
+  return answer.kind === 'nothing' ? { kind: 'nothing' } : { kind: 'answer', sentences: answer.sentences }
 }
 
 /**
