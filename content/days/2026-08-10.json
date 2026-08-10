@@ -1,0 +1,608 @@
+{
+  "date": "2026-08-10",
+  "generatedAt": "2026-08-10T10:40:17.511Z",
+  "summary": "Today's mix runs from OpenAI's safety pause and AI's growing grip on finance to Ukraine's deadliest drone strike on Russia, a mass typhoon evacuation in China, GTA 6's surprise Netflix debut, and Nolan's new box-office record.",
+  "targetCount": 30,
+  "items": [
+    {
+      "id": "7d464ada04d9",
+      "rank": 1,
+      "title": "OpenAI to pause some work on AI model Astra due to security concerns",
+      "url": "https://www.theguardian.com/technology/2026/aug/08/openai-astra-security-concerns",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T17:00:41.000Z",
+      "description": "OpenAI pauses work on its Astra model after finding it could autonomously find and exploit security vulnerabilities.",
+      "topics": [
+        "safety",
+        "security",
+        "openai"
+      ],
+      "theme": "ai",
+      "image": "/img/7d464ada04d9.webp"
+    },
+    {
+      "id": "29ec870629a7",
+      "rank": 2,
+      "title": "Israel rejects Trump's 15-point plan for Gaza, Netanyahu says",
+      "url": "https://www.bbc.co.uk/news/articles/c5yw4lpe0yeo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T21:25:04.000Z",
+      "description": "Netanyahu rejects Trump's Gaza peace plan, vowing Israeli troops won't leave until Hamas fully disarms.",
+      "topics": [
+        "gaza",
+        "israel",
+        "netanyahu"
+      ],
+      "theme": "world",
+      "image": "/img/29ec870629a7.webp"
+    },
+    {
+      "id": "96f291aba45b",
+      "rank": 3,
+      "title": "At least 13 killed in Ukrainian strike on Russia's Tatarstan region, officials say",
+      "url": "https://www.bbc.co.uk/news/articles/cvgjvgv926po?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T10:03:58.000Z",
+      "description": "A Ukrainian drone strike on Russia's Tatarstan region kills at least 13, among the deadliest such attacks of the war.",
+      "topics": [
+        "ukraine",
+        "russia",
+        "war"
+      ],
+      "theme": "world",
+      "image": "/img/96f291aba45b.webp"
+    },
+    {
+      "id": "dd7532472780",
+      "rank": 4,
+      "title": "China evacuates one million from homes as massive storm arrives",
+      "url": "https://www.bbc.co.uk/news/articles/cx2rgzyplg2o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T07:23:54.000Z",
+      "description": "Typhoon Dolphin forces the evacuation of a million people as it slams into eastern China, including Shanghai.",
+      "topics": [
+        "typhoon",
+        "china",
+        "weather"
+      ],
+      "theme": "world",
+      "image": "/img/dd7532472780.webp"
+    },
+    {
+      "id": "b500779b9a8b",
+      "rank": 5,
+      "title": "Anthropic is turning Claude Code’s auto mode on by default",
+      "url": "https://techcrunch.com/2026/08/09/anthropic-is-turning-claude-codes-auto-mode-on-by-default/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T19:20:32.000Z",
+      "description": "Anthropic will make Claude Code's autonomous auto mode the default for most plans, cutting human oversight of AI coding.",
+      "topics": [
+        "anthropic",
+        "coding",
+        "automation"
+      ],
+      "theme": "ai",
+      "image": "/img/b500779b9a8b.webp"
+    },
+    {
+      "id": "ca94a963c86d",
+      "rank": 6,
+      "title": "AI push is putting banks at mercy of tech firms, warns Moody’s",
+      "url": "https://www.theguardian.com/business/2026/aug/09/ai-push-banks-tech-firms-moodys-risks-financial-sector",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T09:00:10.000Z",
+      "description": "Moody's warns that banks racing to adopt AI are becoming dangerously dependent on a handful of Silicon Valley tech firms.",
+      "topics": [
+        "finance",
+        "banks",
+        "risk"
+      ],
+      "theme": "ai",
+      "image": "/img/ca94a963c86d.webp"
+    },
+    {
+      "id": "69601b61bffd",
+      "rank": 7,
+      "title": "SA premier announces royal commission into AI – as it happened",
+      "url": "https://www.theguardian.com/australia-news/live/2026/aug/10/australia-news-live-transport-minister-sydney-airport-air-traffic-control-catherine-king-aukus-public-inquiry-malcolm-turnbull-alan-jones-trial-ntwnfb",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T07:56:39.000Z",
+      "description": "South Australia's premier announces a royal commission into artificial intelligence, adding to global regulatory scrutiny.",
+      "topics": [
+        "regulation",
+        "australia",
+        "policy"
+      ],
+      "theme": "ai",
+      "image": "/img/69601b61bffd.webp"
+    },
+    {
+      "id": "5bffc74a84d9",
+      "rank": 8,
+      "title": "Israel accused of weaponising archaeology at ancient West Bank sites",
+      "url": "https://www.bbc.co.uk/news/articles/c20d8qre98do?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T23:43:44.000Z",
+      "description": "Israel is accused of weaponising archaeology to justify large-scale land seizures in the occupied West Bank.",
+      "topics": [
+        "israel",
+        "westbank",
+        "archaeology"
+      ],
+      "theme": "world",
+      "image": "/img/5bffc74a84d9.webp"
+    },
+    {
+      "id": "c9c7d458fb23",
+      "rank": 9,
+      "title": "As AI guzzles water and energy, we are already facing a choice: datacentres or homes? | John Harris",
+      "url": "https://www.theguardian.com/commentisfree/2026/aug/09/slough-famous-the-office-datacentres-locals-hub-europe",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T11:03:18.000Z",
+      "description": "Britain's datacentre boom is pitting AI's voracious water and energy use against the needs of nearby communities.",
+      "topics": [
+        "datacenters",
+        "energy",
+        "uk"
+      ],
+      "theme": "world",
+      "image": "/img/c9c7d458fb23.webp"
+    },
+    {
+      "id": "d2f68b094d46",
+      "rank": 10,
+      "title": "Embattled hedge fund Situational Awareness invests $400M in chip startup Source Foundry",
+      "url": "https://techcrunch.com/2026/08/09/embattled-hedge-fund-situational-awareness-invests-400m-in-chip-startup-source-foundry/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T20:35:17.000Z",
+      "description": "Struggling hedge fund Situational Awareness pours 400 million dollars into chip startup Source Foundry, doubling down on AI bets.",
+      "topics": [
+        "chips",
+        "investment",
+        "hedgefund"
+      ],
+      "theme": "ai",
+      "image": "/img/d2f68b094d46.webp"
+    },
+    {
+      "id": "54f70afdedf1",
+      "rank": 11,
+      "title": "\"I'm sure you're going to watch it because everyone is\" - GTA 6 premiering on Netflix represents Rockstar \"trying new things\", says Take-Two boss",
+      "url": "https://www.eurogamer.net/take-two-boss-gta-6-netflix-trailer",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T10:22:30.000Z",
+      "description": "Grand Theft Auto 6's next reveal will premiere on Netflix, an unusual streaming-first move Take-Two says shows Rockstar trying new things.",
+      "topics": [
+        "gta6",
+        "rockstar",
+        "netflix"
+      ],
+      "theme": "games",
+      "image": "/img/54f70afdedf1.webp"
+    },
+    {
+      "id": "58cd9a64f147",
+      "rank": 12,
+      "title": "SpaceX rocket crashes into the moon as cyberattacks hit U.S. water systems",
+      "url": "https://www.scientificamerican.com/podcast/episode/spacex-rocket-crashes-into-the-moon-as-cyberattacks-hit-u-s-water-systems/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T10:00:00.000Z",
+      "description": "Scientists analyse an accidental SpaceX rocket impact on the moon amid a busy week of space and cybersecurity news.",
+      "topics": [
+        "spacex",
+        "moon",
+        "spaceflight"
+      ],
+      "theme": "science",
+      "image": "/img/58cd9a64f147.webp"
+    },
+    {
+      "id": "c0391a32cb01",
+      "rank": 13,
+      "title": "These startups are chasing the next big thing in LLMs",
+      "url": "https://www.technologyreview.com/2026/08/10/1141511/these-startups-are-chasing-the-next-big-thing-in-llms/",
+      "publisher": "MIT Technology Review",
+      "feed": {
+        "name": "MIT Technology Review",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T09:00:00.000Z",
+      "description": "A wave of startups is racing to find the next breakthrough beyond today's large language models.",
+      "topics": [
+        "startups",
+        "llms",
+        "research"
+      ],
+      "theme": "ai",
+      "image": "/img/c0391a32cb01.webp"
+    },
+    {
+      "id": "9931103d47d2",
+      "rank": 14,
+      "title": "AI for science needs reasoning, not just data",
+      "url": "https://www.technologyreview.com/2026/08/10/1141384/ai-agents-for-science/",
+      "publisher": "MIT Technology Review",
+      "feed": {
+        "name": "MIT Technology Review",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T09:00:00.000Z",
+      "description": "Researchers argue AI needs genuine reasoning ability, not just more data, to meaningfully accelerate scientific discovery.",
+      "topics": [
+        "research",
+        "science",
+        "reasoning"
+      ],
+      "theme": "ai",
+      "image": "/img/9931103d47d2.webp"
+    },
+    {
+      "id": "3f98d7032462",
+      "rank": 15,
+      "title": "Historian Jill Lepore says Silicon Valley misreads science fiction and undermines democracy",
+      "url": "https://techcrunch.com/2026/08/09/historian-jill-lepore-says-the-tech-industry-is-led-by-bad-readers-who-are-undermining-democracy/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T15:00:00.000Z",
+      "description": "Historian Jill Lepore argues Silicon Valley's misreading of science fiction is eroding democratic norms.",
+      "topics": [
+        "culture",
+        "democracy",
+        "scifi"
+      ],
+      "theme": "ai",
+      "image": "/img/3f98d7032462.webp"
+    },
+    {
+      "id": "e882e6020a0d",
+      "rank": 16,
+      "title": "Hundreds arrested over French wildfires, but who is to blame?",
+      "url": "https://www.bbc.co.uk/news/articles/cvgxjn92x9jo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-08T23:59:23.000Z",
+      "description": "Hundreds have been arrested as France tries to assign blame for the unprecedented wildfires that tore through the country.",
+      "topics": [
+        "wildfires",
+        "france",
+        "climate"
+      ],
+      "theme": "world",
+      "image": "/img/e882e6020a0d.webp"
+    },
+    {
+      "id": "a18a268488d8",
+      "rank": 17,
+      "title": "Suspected crime boss Kinahan spends first night in custody in Ireland",
+      "url": "https://www.bbc.co.uk/news/articles/c62qd5plzp6o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T09:33:25.000Z",
+      "description": "Suspected crime boss Daniel Kinahan spends his first night in Irish custody after extradition from Dubai.",
+      "topics": [
+        "crime",
+        "ireland",
+        "extradition"
+      ],
+      "theme": "world",
+      "image": "/img/a18a268488d8.webp"
+    },
+    {
+      "id": "070224c541b6",
+      "rank": 18,
+      "title": "70% of AI revenue comes from OpenAI and Anthropic [video]",
+      "url": "https://www.youtube.com/watch?v=68X8yEatepQ",
+      "publisher": "YouTube",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-09T11:56:16.000Z",
+      "description": "A striking 70 percent of all AI industry revenue is concentrated in just two companies, OpenAI and Anthropic.",
+      "topics": [
+        "industry",
+        "revenue",
+        "market"
+      ],
+      "theme": "ai",
+      "image": null
+    },
+    {
+      "id": "da028e261bd9",
+      "rank": 19,
+      "title": "SAP stops most travel and hiring because of AI's soaring cost",
+      "url": "https://www.404media.co/software-giant-sap-stops-most-travel-and-hiring-because-of-ais-soaring-cost/",
+      "publisher": "404media",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-09T08:00:51.000Z",
+      "description": "Enterprise software giant SAP halts most travel and hiring, citing the soaring cost of its AI investments.",
+      "topics": [
+        "business",
+        "cost",
+        "enterprise"
+      ],
+      "theme": "ai",
+      "image": "/img/da028e261bd9.webp"
+    },
+    {
+      "id": "a99954212c97",
+      "rank": 20,
+      "title": "Blizzard is Microsoft's \"top performing\" studio, thanks largely to Diablo 4 and Overwatch",
+      "url": "https://www.eurogamer.net/blizzard-is-microsofts-top-performing-studio-thanks-largely-to-diablo-4-and-overwatch",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T09:07:11.000Z",
+      "description": "Blizzard has become Microsoft's top-performing studio, buoyed by Diablo 4 and Overwatch, even as Xbox restructures.",
+      "topics": [
+        "blizzard",
+        "microsoft",
+        "xbox"
+      ],
+      "theme": "games",
+      "image": "/img/a99954212c97.webp"
+    },
+    {
+      "id": "2af70f3bb58b",
+      "rank": 21,
+      "title": "You can now stream PS Plus games to Steam Deck without owning a PS5 - and without buying a PS Portal",
+      "url": "https://www.eurogamer.net/steam-deck-ps5-streaming-app-asobi",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T16:16:25.000Z",
+      "description": "A new playtest lets players stream PlayStation games to Steam Deck without owning a PS5 or PS Portal.",
+      "topics": [
+        "playstation",
+        "steamdeck",
+        "streaming"
+      ],
+      "theme": "games",
+      "image": "/img/2af70f3bb58b.webp"
+    },
+    {
+      "id": "5c6a44d34102",
+      "rank": 22,
+      "title": "You can now check if you've been selected for The Duskbloods network test - here's how",
+      "url": "https://www.eurogamer.net/the-duskbloods-check-network-test-access",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T09:33:03.000Z",
+      "description": "FromSoftware's next game, The Duskbloods, opens its first public network test, though access is limited.",
+      "topics": [
+        "fromsoftware",
+        "duskbloods",
+        "testing"
+      ],
+      "theme": "games",
+      "image": "/img/5c6a44d34102.webp"
+    },
+    {
+      "id": "2cf11d6b2d70",
+      "rank": 23,
+      "title": "Bandai Namco achieves record Q1 sales, but Digital segment operating profit drops 30.9%",
+      "url": "https://www.gamesindustry.biz/bandai-namco-achieves-record-q1-sales-but-digital-segment-operating-profit-drops-309",
+      "publisher": "GamesIndustry.biz",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T10:07:24.000Z",
+      "description": "Bandai Namco posts record first-quarter sales even as its digital segment's operating profit falls sharply.",
+      "topics": [
+        "bandainamco",
+        "earnings",
+        "business"
+      ],
+      "theme": "games",
+      "image": "/img/2cf11d6b2d70.webp"
+    },
+    {
+      "id": "578a1f525f2d",
+      "rank": 24,
+      "title": "Mount Toba eruption doesn't seem like it could nearly kill our species",
+      "url": "https://arstechnica.com/science/2026/08/mount-toba-eruption-doesnt-seem-like-it-could-nearly-kill-our-species/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica Science",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T11:00:14.000Z",
+      "description": "New research suggests the ancient Toba supervolcano eruption had far less climate impact than long believed.",
+      "topics": [
+        "volcano",
+        "climate",
+        "geology"
+      ],
+      "theme": "science",
+      "image": "/img/578a1f525f2d.webp"
+    },
+    {
+      "id": "be7165cd4a84",
+      "rank": 25,
+      "title": "Europe's wildfires are igniting forgotten WWII and Cold War bombs",
+      "url": "https://www.scientificamerican.com/article/europes-wildfires-are-igniting-forgotten-wwii-and-cold-war-bombs/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T12:00:00.000Z",
+      "description": "Europe's intensifying wildfires are now hot and long-lasting enough to detonate buried WWII and Cold War munitions.",
+      "topics": [
+        "wildfires",
+        "munitions",
+        "europe"
+      ],
+      "theme": "science",
+      "image": "/img/be7165cd4a84.webp"
+    },
+    {
+      "id": "24294b01d404",
+      "rank": 26,
+      "title": "How spaceflight changes astronauts' ability to eat and drink",
+      "url": "https://www.scientificamerican.com/article/how-spaceflight-changes-astronauts-ability-to-eat-and-drink/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T10:00:00.000Z",
+      "description": "Scientists are studying how microgravity affects astronauts' ability to eat and drink as spaceflights grow longer.",
+      "topics": [
+        "spaceflight",
+        "astronauts",
+        "health"
+      ],
+      "theme": "science",
+      "image": "/img/24294b01d404.webp"
+    },
+    {
+      "id": "ad9077277994",
+      "rank": 27,
+      "title": "In One Line, 'House of the Dragon' Just Quietly Retconned the Entire Plot of 'Game of Thrones'",
+      "url": "https://www.polygon.com/house-of-the-dragon-season-3-finale-prince-that-was-promised/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T03:00:12.000Z",
+      "description": "House of the Dragon's season three finale quietly rewrites a key piece of Game of Thrones lore.",
+      "topics": [
+        "houseofthedragon",
+        "gameofthrones",
+        "tv"
+      ],
+      "theme": "culture",
+      "image": "/img/ad9077277994.webp"
+    },
+    {
+      "id": "8eee5b7d3faf",
+      "rank": 28,
+      "title": "The Odyssey passes The Dark Knight Rises to become Nolan’s highest-grossing film ever",
+      "url": "https://www.polygon.com/the-odyssey-christopher-nolan-highest-grossing-film/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T18:55:23.000Z",
+      "description": "Christopher Nolan's The Odyssey overtakes The Dark Knight Rises to become his highest-grossing film ever.",
+      "topics": [
+        "nolan",
+        "boxoffice",
+        "film"
+      ],
+      "theme": "culture",
+      "image": "/img/8eee5b7d3faf.webp"
+    },
+    {
+      "id": "a368a516e990",
+      "rank": 29,
+      "title": "‘Spider-Man: Brand New Day’ Becomes Highest Grossing Hollywood Film in India",
+      "url": "https://variety.com/2026/film/box-office/spider-man-brand-new-day-india-box-office-record-1236827437/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T07:36:13.000Z",
+      "description": "Spider-Man: Brand New Day becomes the highest-grossing Hollywood film ever released in India.",
+      "topics": [
+        "spiderman",
+        "boxoffice",
+        "india"
+      ],
+      "theme": "culture",
+      "image": "/img/a368a516e990.webp"
+    },
+    {
+      "id": "6e4ef9348f77",
+      "rank": 30,
+      "title": "The Most Unhinged Sci-Fi Anime of 2026 Already Feels Like an Instant Cult Classic",
+      "url": "https://www.polygon.com/false-memory-anime-review/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T10:00:12.000Z",
+      "description": "Anime series Flint Sugar earns instant cult status for its striking animation and story about the cost of memory.",
+      "topics": [
+        "anime",
+        "animation",
+        "tv"
+      ],
+      "theme": "culture",
+      "image": "/img/6e4ef9348f77.webp"
+    }
+  ]
+}
