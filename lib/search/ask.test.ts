@@ -308,6 +308,50 @@ describe('askArchive', () => {
       })
     })
 
+    it('reports the redraw, exactly once, and only when one happens', async () => {
+      // The counter exists because a retry that works leaves no other trace.
+      // If this stops firing, the product loses its only evidence that the
+      // safety net is load-bearing — and nothing else in the suite would notice.
+      const onRedraw = vi.fn()
+
+      const clean: Generator = async ({ tools }) => {
+        await search(tools, 'Opus')
+        return { kind: 'answer', sentences: [{ text: 'It shipped.', ids: [OPUS] }] }
+      }
+      await askArchive({ ...deps(clean), onRedraw }, { question: 'What did Anthropic ship?' })
+      expect(onRedraw).not.toHaveBeenCalled()
+
+      const rejected: Generator = async ({ tools }) => {
+        await search(tools, 'Opus')
+        return { kind: 'answer', sentences: [{ text: 'It shipped.', ids: [UNSEEN] }] }
+      }
+      await askArchive({ ...deps(rejected), onRedraw }, { question: 'What did Anthropic ship?' })
+      expect(onRedraw).toHaveBeenCalledTimes(1)
+    })
+
+    it('reports the redraw even when the second draw also fails', async () => {
+      // A redraw is counted for happening, not for succeeding — otherwise the
+      // number would describe rescues rather than attempts, and the rate this
+      // exists to measure would be the one thing it could not tell you.
+      //
+      // This does **not** pin the call above the `await`: `attempt` catches its
+      // own throws, so either side counts the same, and a mutation moving it
+      // fails nothing. That was checked rather than assumed.
+      const onRedraw = vi.fn()
+      let call = 0
+      const thenThrows: Generator = async ({ tools }) => {
+        call += 1
+        if (call === 2) throw new Error('529 overloaded')
+        await search(tools, 'Opus')
+        return { kind: 'answer', sentences: [{ text: 'It shipped.', ids: [UNSEEN] }] }
+      }
+
+      expect(
+        await askArchive({ ...deps(thenThrows), onRedraw }, { question: 'What did Anthropic ship?' }),
+      ).toEqual({ kind: 'failed', why: 'provider' })
+      expect(onRedraw).toHaveBeenCalledTimes(1)
+    })
+
     it('does not draw again when the provider threw', async () => {
       // An outage is not a bad draw. Asking twice turns a fast failure into a
       // slow one and buys nothing the reader's own retry does not.

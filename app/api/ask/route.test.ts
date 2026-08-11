@@ -401,10 +401,20 @@ describe('POST /api/ask', () => {
     })
     deps.generate = generate
 
+    // The redraw is the only thing this route reports on a path that can
+    // succeed, and it is reported nowhere else — so this assertion is what
+    // proves the wiring rather than the module. Without it `onRedraw` could go
+    // unpassed and every test in `ask.test.ts` would stay green.
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
     const response = await ask({ question: 'What happened this week?' })
 
     expect(response.status).toBe(200)
     expect(await response.json()).toMatchObject({ kind: 'failed' })
+
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn.mock.calls[0]?.[0]).toContain('drawing again')
+    warn.mockRestore()
 
     // Twice: a rejected draft is redrawn once before the reader is told no.
     // A model that rejects deterministically still ends here, one call poorer.
