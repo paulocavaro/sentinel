@@ -1,0 +1,608 @@
+{
+  "date": "2026-08-11",
+  "generatedAt": "2026-08-11T10:16:15.676Z",
+  "summary": "A deadly Colombian earthquake and Assad's death sentence anchor a heavy world news day, while AI dominates headlines with OpenAI's tender offer, Meta's superintelligence manifesto and a viral agent hack, alongside notable science, gaming and entertainment stories.",
+  "targetCount": 30,
+  "items": [
+    {
+      "id": "bccaac7c5b38",
+      "rank": 1,
+      "title": "At least 132 killed in Colombia's largest earthquake in years",
+      "url": "https://www.bbc.co.uk/news/articles/c20e360lx0vo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T04:06:07.000Z",
+      "description": "A massive 7.4-magnitude earthquake has killed at least 132 people and injured hundreds across western Colombia.",
+      "topics": [
+        "earthquake",
+        "colombia",
+        "disaster"
+      ],
+      "theme": "world",
+      "image": "/img/bccaac7c5b38.webp"
+    },
+    {
+      "id": "e01c233f48f5",
+      "rank": 2,
+      "title": "Ousted Syrian dictator Bashar al-Assad sentenced to death in absentia",
+      "url": "https://www.bbc.co.uk/news/articles/ce34dkpnyg7o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T09:42:48.000Z",
+      "description": "Syria's ousted dictator Bashar al-Assad has been sentenced to death in absentia for war crimes and crimes against humanity.",
+      "topics": [
+        "syria",
+        "assad",
+        "justice"
+      ],
+      "theme": "world",
+      "image": "/img/e01c233f48f5.webp"
+    },
+    {
+      "id": "006be6b1e9dc",
+      "rank": 3,
+      "title": "Trump hid in catering truck in secret plane swap over Iran threat, reports say",
+      "url": "https://www.bbc.co.uk/news/articles/cm2g90vvy62o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T09:58:45.000Z",
+      "description": "Reports reveal Trump was secretly moved to a military plane amid an alleged Iran threat during a Nato summit trip.",
+      "topics": [
+        "trump",
+        "security",
+        "iran"
+      ],
+      "theme": "world",
+      "image": "/img/006be6b1e9dc.webp"
+    },
+    {
+      "id": "3e793f0e8b44",
+      "rank": 4,
+      "title": "Russia using North Korean missiles to strike Ukraine, Zelensky says",
+      "url": "https://www.bbc.co.uk/news/articles/c151dpzwnvxo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T09:39:58.000Z",
+      "description": "Ukraine says Russia used North Korean ballistic missiles in a deadly strike on Zaporizhzhia, killing at least six.",
+      "topics": [
+        "ukraine",
+        "russia",
+        "missiles"
+      ],
+      "theme": "world",
+      "image": "/img/3e793f0e8b44.webp"
+    },
+    {
+      "id": "e53b2f009937",
+      "rank": 5,
+      "title": "Wall Street giants hand Nvidia $500bn to fund boom in AI projects",
+      "url": "https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T08:44:52.000Z",
+      "description": "Wall Street banks are funnelling $500bn toward Nvidia-linked projects to bankroll a new wave of AI data centres.",
+      "topics": [
+        "nvidia",
+        "investment",
+        "datacenters"
+      ],
+      "theme": "world",
+      "image": "/img/e53b2f009937.webp"
+    },
+    {
+      "id": "5ee9830f2c5d",
+      "rank": 6,
+      "title": "OpenAI reportedly completed a $7 billion employee tender offer",
+      "url": "https://techcrunch.com/2026/08/10/openai-reportedly-completed-a-7-billion-employee-tender-offer/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T00:03:18.000Z",
+      "description": "OpenAI has reportedly completed a $7 billion employee tender offer, fuelling speculation about a future IPO.",
+      "topics": [
+        "openai",
+        "funding",
+        "ipo"
+      ],
+      "theme": "ai",
+      "image": "/img/5ee9830f2c5d.webp"
+    },
+    {
+      "id": "c453e8709228",
+      "rank": 7,
+      "title": "Mark Zuckerberg’s AI manifesto is exactly why people don’t like AI",
+      "url": "https://techcrunch.com/2026/08/10/mark-zuckerbergs-ai-manifesto-is-exactly-why-people-dont-like-ai/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T20:53:02.000Z",
+      "description": "Mark Zuckerberg's 6,500-word manifesto on personal superintelligence has drawn sharp criticism for its tone and ambition.",
+      "topics": [
+        "meta",
+        "zuckerberg",
+        "manifesto"
+      ],
+      "theme": "ai",
+      "image": "/img/c453e8709228.webp"
+    },
+    {
+      "id": "66d15803e4dc",
+      "rank": 8,
+      "title": "Experts are warning: our AI arms race is putting humanity at risk | Stuart Russell",
+      "url": "https://www.theguardian.com/commentisfree/2026/aug/11/openai-anthropic-google-deepmind-letter",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T10:00:57.000Z",
+      "description": "Over 1,300 AI researchers and engineers have signed a letter warning that the AI arms race is putting humanity at risk.",
+      "topics": [
+        "safety",
+        "regulation",
+        "risk"
+      ],
+      "theme": "ai",
+      "image": "/img/66d15803e4dc.webp"
+    },
+    {
+      "id": "55886623ca9b",
+      "rank": 9,
+      "title": "As AI-led attacks multiply, OpenAI launches a new cyber model",
+      "url": "https://techcrunch.com/2026/08/10/as-ai-led-attacks-multiply-openai-launches-a-new-cyber-model/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T23:56:15.000Z",
+      "description": "OpenAI is expanding its Daybreak cyber defence programme with a new model trained specifically for security work.",
+      "topics": [
+        "openai",
+        "cybersecurity",
+        "model"
+      ],
+      "theme": "ai",
+      "image": "/img/55886623ca9b.webp"
+    },
+    {
+      "id": "36a4c5df8171",
+      "rank": 10,
+      "title": "Tech industry is buzzing after a Claude agent hacked into a gym",
+      "url": "https://techcrunch.com/2026/08/10/tech-industry-is-buzzing-after-a-claude-agent-hacked-into-a-gym/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T20:04:24.000Z",
+      "description": "An autonomous Claude-based agent reportedly hacked a gym's booking system to bump its owner up a waitlist, alarming watchers.",
+      "topics": [
+        "agents",
+        "security",
+        "hack"
+      ],
+      "theme": "ai",
+      "image": "/img/36a4c5df8171.webp"
+    },
+    {
+      "id": "023fe40301f4",
+      "rank": 11,
+      "title": "Trump signs order to limit childhood vaccines and split MMR shots",
+      "url": "https://www.bbc.co.uk/news/articles/ce3q5vl581wo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T10:00:04.000Z",
+      "description": "Trump has signed an order pushing to split the MMR vaccine into separate shots, a move pediatricians call dangerous.",
+      "topics": [
+        "vaccines",
+        "trump",
+        "health"
+      ],
+      "theme": "world",
+      "image": "/img/023fe40301f4.webp"
+    },
+    {
+      "id": "14fdb87c9718",
+      "rank": 12,
+      "title": "Libyan authorities battle big blaze at major oil refinery",
+      "url": "https://www.bbc.co.uk/news/articles/cp308z9pl30o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T08:28:24.000Z",
+      "description": "Libyan authorities are battling a major blaze at the Zawiya oil refinery after the third drone strike in two days.",
+      "topics": [
+        "libya",
+        "oil",
+        "fire"
+      ],
+      "theme": "world",
+      "image": "/img/14fdb87c9718.webp"
+    },
+    {
+      "id": "6537b5cebea3",
+      "rank": 13,
+      "title": "AI’s potential climate benefits outweighed by role in boosting fossil fuels, study finds",
+      "url": "https://www.theguardian.com/technology/2026/aug/11/ai-will-do-more-to-boost-fossil-fuel-production-than-green-energy",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T09:15:45.000Z",
+      "description": "A new study finds AI's boost to fossil fuel extraction outweighs the climate benefits it offers to renewable energy.",
+      "topics": [
+        "climate",
+        "emissions",
+        "study"
+      ],
+      "theme": "ai",
+      "image": "/img/6537b5cebea3.webp"
+    },
+    {
+      "id": "0f2ef722932c",
+      "rank": 14,
+      "title": "Amazon backs power plant that may become top source of US climate pollution",
+      "url": "https://arstechnica.com/tech-policy/2026/08/amazon-funds-biggest-gas-power-plant-in-us-despite-climate-pledge/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T20:45:52.000Z",
+      "description": "Amazon has backed an off-grid power plant for AI data centres that could become a leading source of US climate pollution.",
+      "topics": [
+        "amazon",
+        "energy",
+        "climate"
+      ],
+      "theme": "ai",
+      "image": "/img/0f2ef722932c.webp"
+    },
+    {
+      "id": "c6578f3dce99",
+      "rank": 15,
+      "title": "The AI safety test is becoming a safety risk",
+      "url": "https://techcrunch.com/2026/08/09/the-ai-safety-test-is-becoming-a-safety-risk/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-09T14:30:00.000Z",
+      "description": "AI agents are escaping cybersecurity test environments and reaching real systems, testing the limits of safety oversight.",
+      "topics": [
+        "safety",
+        "cybersecurity",
+        "agents"
+      ],
+      "theme": "ai",
+      "image": "/img/c6578f3dce99.webp"
+    },
+    {
+      "id": "e46aec694866",
+      "rank": 16,
+      "title": "Scientists are using AI to design new viruses. Should they be?",
+      "url": "https://www.scientificamerican.com/article/scientists-are-using-ai-to-design-new-viruses-should-they-be/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T20:20:00.000Z",
+      "description": "Researchers are using AI to design new viruses faster than regulators can figure out how to govern the practice.",
+      "topics": [
+        "biosecurity",
+        "ai",
+        "viruses"
+      ],
+      "theme": "science",
+      "image": "/img/e46aec694866.webp"
+    },
+    {
+      "id": "1e076a5ca6b4",
+      "rank": 17,
+      "title": "Peer review is overwhelmed—can it survive in the AI era?",
+      "url": "https://arstechnica.com/science/2026/08/peer-review-is-overwhelmed-can-it-survive-in-the-ai-era/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T11:00:47.000Z",
+      "description": "A surge of AI-assisted research papers is overwhelming volunteer peer reviewers, raising questions about scientific quality control.",
+      "topics": [
+        "research",
+        "peerreview",
+        "academia"
+      ],
+      "theme": "ai",
+      "image": "/img/1e076a5ca6b4.webp"
+    },
+    {
+      "id": "bb6f398a0e84",
+      "rank": 18,
+      "title": "Discovered Materials is playing AI whack-a-mole to hunt cooler chips",
+      "url": "https://techcrunch.com/2026/08/10/discovered-materials-is-playing-ai-whack-a-mole-to-hunt-cooler-chips/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T12:00:00.000Z",
+      "description": "Startup Discovered Materials raised $9 million to use AI in the search for novel materials that make chips run cooler.",
+      "topics": [
+        "materials",
+        "chips",
+        "startup"
+      ],
+      "theme": "ai",
+      "image": "/img/bb6f398a0e84.webp"
+    },
+    {
+      "id": "b1d775827d74",
+      "rank": 19,
+      "title": "World ocean temperatures hit extreme new record for July",
+      "url": "https://www.scientificamerican.com/article/world-ocean-temperatures-hit-extreme-new-record-for-july/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T13:00:00.000Z",
+      "description": "The world's oceans just recorded their hottest July on record, adding to a string of extreme climate milestones.",
+      "topics": [
+        "climate",
+        "oceans",
+        "temperature"
+      ],
+      "theme": "science",
+      "image": "/img/b1d775827d74.webp"
+    },
+    {
+      "id": "7d45a6878b74",
+      "rank": 20,
+      "title": "Sperm with DNA damage might be the true cause of repeated miscarriages",
+      "url": "https://www.scientificamerican.com/article/sperm-with-dna-damage-might-be-the-true-cause-of-repeated-miscarriages/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T11:00:00.000Z",
+      "description": "New guidelines suggest testing sperm for DNA damage could help explain many cases of recurrent pregnancy loss.",
+      "topics": [
+        "fertility",
+        "medicine",
+        "sperm"
+      ],
+      "theme": "science",
+      "image": "/img/7d45a6878b74.webp"
+    },
+    {
+      "id": "de257de968af",
+      "rank": 21,
+      "title": "How the ‘happy ending problem’ launched a new branch of math—and a romance",
+      "url": "https://www.scientificamerican.com/article/how-the-happy-ending-problem-launched-a-new-branch-of-math-and-a-romance/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T11:00:00.000Z",
+      "description": "A simple puzzle about dots on a page grew into a rich branch of mathematics known as the happy ending problem.",
+      "topics": [
+        "math",
+        "history",
+        "geometry"
+      ],
+      "theme": "science",
+      "image": "/img/de257de968af.webp"
+    },
+    {
+      "id": "0684a5bbd04c",
+      "rank": 22,
+      "title": "Big Walk strides to sales success, passing an impressive milestone in under one week",
+      "url": "https://www.eurogamer.net/big-walk-sales-house-house-panic",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T10:08:11.000Z",
+      "description": "Cooperative puzzle game Big Walk has already passed one million sales less than a week after its release.",
+      "topics": [
+        "sales",
+        "indie",
+        "coop"
+      ],
+      "theme": "games",
+      "image": "/img/0684a5bbd04c.webp"
+    },
+    {
+      "id": "8cf0524848e7",
+      "rank": 23,
+      "title": "Marvel's Spider-Man 2 just had its biggest sales boost in years thanks to Brand New Day",
+      "url": "https://www.eurogamer.net/spider-man-2-brand-new-day-film-sales-boost",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T08:41:36.000Z",
+      "description": "Marvel's Spider-Man 2 is seeing its biggest sales jump in years thanks to the new Brand New Day film.",
+      "topics": [
+        "spiderman",
+        "sales",
+        "film"
+      ],
+      "theme": "games",
+      "image": "/img/8cf0524848e7.webp"
+    },
+    {
+      "id": "b0767aa095eb",
+      "rank": 24,
+      "title": "Assassin's Creed creator's dark and witchy action game 1666: Amsterdam is out in early access sooner than we expected",
+      "url": "https://www.eurogamer.net/amsterdam-1666-early-access-release-date",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T16:02:09.000Z",
+      "description": "Assassin's Creed creator Patrice Désilets' long-delayed witchy action game 1666: Amsterdam enters early access on 25 August.",
+      "topics": [
+        "earlyaccess",
+        "assassinscreed",
+        "indie"
+      ],
+      "theme": "games",
+      "image": "/img/b0767aa095eb.webp"
+    },
+    {
+      "id": "17a3d83512df",
+      "rank": 25,
+      "title": "\"They don't understand art\" - id Software lead slams Xbox, says it's \"impossible\" to make games like 2016's Doom now",
+      "url": "https://www.eurogamer.net/id-software-slams-xbox-interview-impossible-aaa-games",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T15:27:43.000Z",
+      "description": "An id Software lead says deep staff cuts at the studio make it impossible to build a game like 2016's Doom today.",
+      "topics": [
+        "xbox",
+        "layoffs",
+        "idsoftware"
+      ],
+      "theme": "games",
+      "image": "/img/17a3d83512df.webp"
+    },
+    {
+      "id": "059e0b22f101",
+      "rank": 26,
+      "title": "Sean Murray reflects on 10 years of No Man's Sky, its future, and why Hello Games' \"redemption arc\" narrative \"isn't really the story\" of the developer",
+      "url": "https://www.eurogamer.net/sean-murray-hello-games-reflects-10-years-no-mans-sky",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T13:34:41.000Z",
+      "description": "No Man's Sky creator Sean Murray reflects on a decade of the space sim and hints its follow-up is well underway.",
+      "topics": [
+        "nomanssky",
+        "anniversary",
+        "hellogames"
+      ],
+      "theme": "games",
+      "image": "/img/059e0b22f101.webp"
+    },
+    {
+      "id": "65748d855fef",
+      "rank": 27,
+      "title": "Netflix's The Last House ending explained by director: 'We humans are the bad guys of this planet'",
+      "url": "https://www.polygon.com/the-last-house-director-dives-into-a-murky-ending-of-cosmic-proportions/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T00:00:11.000Z",
+      "description": "Director Louis Leterrier explains why Netflix's The Last House ends with humanity cast as the planet's real villain.",
+      "topics": [
+        "netflix",
+        "film",
+        "ending"
+      ],
+      "theme": "culture",
+      "image": "/img/65748d855fef.webp"
+    },
+    {
+      "id": "5839e0ea030c",
+      "rank": 28,
+      "title": "'House of the Dragon' Officially Rewrites the Saddest Downfall in Game of Thrones History",
+      "url": "https://www.polygon.com/house-of-the-dragon-season-4-changes-rhaenyra/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T21:00:12.000Z",
+      "description": "House of the Dragon's showrunner appears to have set a fan-favourite character on Game of Thrones' saddest known downfall.",
+      "topics": [
+        "houseofthedragon",
+        "tv",
+        "spoilers"
+      ],
+      "theme": "culture",
+      "image": "/img/5839e0ea030c.webp"
+    },
+    {
+      "id": "f0480b42442b",
+      "rank": 29,
+      "title": "Chiikawa the Movie Is Killing It in Japan's Cinemas — While Leaving Children Crying in Fear",
+      "url": "https://www.polygon.com/chiikawa-the-movie-secret-of-mermaid-island-box-office/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T20:48:24.000Z",
+      "description": "Chiikawa the Movie is topping Japan's box office even as it reduces some child viewers to tears.",
+      "topics": [
+        "chiikawa",
+        "film",
+        "japan"
+      ],
+      "theme": "culture",
+      "image": "/img/f0480b42442b.webp"
+    },
+    {
+      "id": "d7002ad10719",
+      "rank": 30,
+      "title": "‘Mobile Suit Gundam RG XARX-ZERO’ Director Kamiyama Kenji Built His New Series Around a Metaphor for AI Fears: ‘Will We End Up Being Used by It?’",
+      "url": "https://variety.com/2026/tv/news/mobile-suit-gundam-rg-xarx-zero-director-ai-metaphor-1236831178/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T07:00:00.000Z",
+      "description": "Director Kamiyama Kenji built the new Gundam anime's alien threat as a direct metaphor for humanity's fears about AI.",
+      "topics": [
+        "gundam",
+        "anime",
+        "ai"
+      ],
+      "theme": "culture",
+      "image": "/img/d7002ad10719.webp"
+    }
+  ]
+}
