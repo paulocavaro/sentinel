@@ -1,0 +1,548 @@
+{
+  "date": "2026-08-12",
+  "generatedAt": "2026-08-12T10:31:47.651Z",
+  "summary": "Colombia's earthquake recovery and Trump's dramatic plane swap dominate world news, while OpenAI's COO exit, Meta's new open models and a possible Riemann hypothesis breakthrough highlight a turbulent day for AI, alongside a total solar eclipse, games industry layoffs and Hollywood labor disputes.",
+  "targetCount": 30,
+  "items": [
+    {
+      "id": "d31af025e114",
+      "rank": 1,
+      "title": "Earthquake response strains Colombia's new government and rescuers",
+      "url": "https://www.npr.org/2026/08/12/g-s1-138315/colombia-earthquake-updates",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T05:13:06.000Z",
+      "description": "Colombia's government and rescue teams are strained as the earthquake death toll climbs past 180 with thousands still missing.",
+      "topics": [
+        "colombia",
+        "earthquake",
+        "disaster"
+      ],
+      "theme": "world",
+      "image": "/img/d31af025e114.webp"
+    },
+    {
+      "id": "11bdba0fe573",
+      "rank": 2,
+      "title": "Trump confirms he switched planes after Nato summit because of possible threat",
+      "url": "https://www.bbc.co.uk/news/articles/c980r4wpl9lo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T03:44:55.000Z",
+      "description": "Trump confirms he secretly swapped planes leaving a NATO summit after a possible threat, alarming even his own staff.",
+      "topics": [
+        "trump",
+        "security",
+        "nato"
+      ],
+      "theme": "world",
+      "image": "/img/11bdba0fe573.webp"
+    },
+    {
+      "id": "c12ffc80efe7",
+      "rank": 3,
+      "title": "US says helicopter fired missiles to disable ship breaking Iran blockade",
+      "url": "https://www.bbc.co.uk/news/articles/cvg8lyyyjedo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T21:14:56.000Z",
+      "description": "A US helicopter fired missiles to disable a cargo ship accused of breaking the Iran blockade, marking a military escalation.",
+      "topics": [
+        "iran",
+        "military",
+        "blockade"
+      ],
+      "theme": "world",
+      "image": "/img/c12ffc80efe7.webp"
+    },
+    {
+      "id": "d436d55d90be",
+      "rank": 4,
+      "title": "Former Syrian President Assad sentenced to death in absentia",
+      "url": "https://www.npr.org/2026/08/11/g-s1-138166/syria-assad-sentenced-to-death",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T10:07:14.000Z",
+      "description": "A Syrian court sentenced former president Assad and his brother to death in absentia for crimes against humanity.",
+      "topics": [
+        "syria",
+        "assad",
+        "justice"
+      ],
+      "theme": "world",
+      "image": "/img/d436d55d90be.webp"
+    },
+    {
+      "id": "a134bfd1c67f",
+      "rank": 5,
+      "title": "Brad Lightcap, OpenAI’s longtime COO, is leaving to ‘start something new’",
+      "url": "https://techcrunch.com/2026/08/11/brad-lightcap-openais-longtime-coo-is-leaving-to-start-something-new/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T17:41:34.000Z",
+      "description": "OpenAI's longtime COO Brad Lightcap is departing to start something new, a major shakeup atop the company.",
+      "topics": [
+        "openai",
+        "leadership",
+        "departure"
+      ],
+      "theme": "ai",
+      "image": "/img/a134bfd1c67f.webp"
+    },
+    {
+      "id": "0deb7f666bec",
+      "rank": 6,
+      "title": "General Catalyst leads $1.1B round into 2-month-old River AI",
+      "url": "https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T17:41:22.000Z",
+      "description": "General Catalyst led a $1.1 billion round into two-month-old River AI, founded by xAI co-founder Igor Babuschkin.",
+      "topics": [
+        "funding",
+        "startup",
+        "agents"
+      ],
+      "theme": "ai",
+      "image": "/img/0deb7f666bec.webp"
+    },
+    {
+      "id": "995ebf25fa23",
+      "rank": 7,
+      "title": "An unreleased Anthropic model made progress on one of math’s biggest unsolved problems",
+      "url": "https://techcrunch.com/2026/08/11/an-unreleased-anthropic-model-made-progress-on-one-of-maths-biggest-unsolved-problems/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T16:25:20.000Z",
+      "description": "An unreleased Anthropic model made unexpected progress on the 150-year-old Riemann hypothesis, one of math's hardest problems.",
+      "topics": [
+        "anthropic",
+        "mathematics",
+        "research"
+      ],
+      "theme": "ai",
+      "image": "/img/995ebf25fa23.webp"
+    },
+    {
+      "id": "8740e87f6197",
+      "rank": 8,
+      "title": "Google’s Gemini app surges to 1 billion users",
+      "url": "https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T18:49:12.000Z",
+      "description": "Google's Gemini app has surged to one billion users, becoming the company's fastest-growing product ever.",
+      "topics": [
+        "google",
+        "gemini",
+        "growth"
+      ],
+      "theme": "ai",
+      "image": "/img/8740e87f6197.webp"
+    },
+    {
+      "id": "f071c32e1acb",
+      "rank": 9,
+      "title": "With new open models, Meta pitches another reboot of its struggling AI strategy",
+      "url": "https://arstechnica.com/ai/2026/08/with-new-open-models-meta-pitches-another-reboot-of-its-struggling-ai-strategy/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T22:13:03.000Z",
+      "description": "Meta released new open-weight AI models in an attempt to reboot a struggling strategy against rivals.",
+      "topics": [
+        "meta",
+        "openweights",
+        "strategy"
+      ],
+      "theme": "ai",
+      "image": "/img/f071c32e1acb.webp"
+    },
+    {
+      "id": "16c54852a543",
+      "rank": 10,
+      "title": "Bernie Sanders calls on Silicon Valley to ‘pause AI development’ in interest of humanity",
+      "url": "https://www.theguardian.com/technology/2026/aug/10/bernie-sanders-ai-development-pause-letter",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T17:44:21.000Z",
+      "description": "Senator Bernie Sanders urged OpenAI, Anthropic and Meta to pause AI development, warning of coming Senate regulation.",
+      "topics": [
+        "regulation",
+        "sanders",
+        "policy"
+      ],
+      "theme": "ai",
+      "image": "/img/16c54852a543.webp"
+    },
+    {
+      "id": "ce21d6b2d62e",
+      "rank": 11,
+      "title": "Lebanon parliament votes to abolish death penalty",
+      "url": "https://www.bbc.co.uk/news/articles/c8enj8p1xwgo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T15:24:07.000Z",
+      "description": "Lebanon's parliament voted to abolish the death penalty, poised to make it the first Middle Eastern country to do so.",
+      "topics": [
+        "lebanon",
+        "law",
+        "humanrights"
+      ],
+      "theme": "world",
+      "image": "/img/ce21d6b2d62e.webp"
+    },
+    {
+      "id": "bf12789fd78f",
+      "rank": 12,
+      "title": "Turkey's parliament approves a pardon-like bill for thousands of PKK militants",
+      "url": "https://www.npr.org/2026/08/11/g-s1-138162/turkey-kurdish-militants",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T06:03:49.000Z",
+      "description": "Turkey's parliament approved a conditional pardon for thousands of PKK militants, advancing a peace initiative with Kurdish insurgents.",
+      "topics": [
+        "turkey",
+        "kurds",
+        "peace"
+      ],
+      "theme": "world",
+      "image": "/img/bf12789fd78f.webp"
+    },
+    {
+      "id": "90fbd0006955",
+      "rank": 13,
+      "title": "Anthropic says it will watermark text generated by its AI models",
+      "url": "https://techcrunch.com/2026/08/11/anthropic-says-it-will-watermark-text-generated-by-its-ai-models/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T12:13:47.000Z",
+      "description": "Anthropic will begin watermarking text generated by its AI models, extending the feature to older models too.",
+      "topics": [
+        "anthropic",
+        "watermarking",
+        "safety"
+      ],
+      "theme": "ai",
+      "image": "/img/90fbd0006955.webp"
+    },
+    {
+      "id": "c1abfcb8bf8d",
+      "rank": 14,
+      "title": "Spotify will label ‘AI Persona’ profiles and exclude their music from recommendations",
+      "url": "https://techcrunch.com/2026/08/11/spotify-will-label-ai-persona-profiles-and-exclude-their-music-from-recommendations/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T13:00:00.000Z",
+      "description": "Spotify will label AI-generated 'Persona' artist profiles and exclude their music from recommendations by default.",
+      "topics": [
+        "spotify",
+        "music",
+        "labeling"
+      ],
+      "theme": "ai",
+      "image": "/img/c1abfcb8bf8d.webp"
+    },
+    {
+      "id": "fe48db9d1d7e",
+      "rank": 15,
+      "title": "AI was supposed to destroy jobs. Where’s the carnage?",
+      "url": "https://www.theguardian.com/technology/2026/aug/12/ai-job-destruction",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T10:00:27.000Z",
+      "description": "The predicted AI jobs apocalypse hasn't materialized as forecast, though economists say deeper workplace changes are still coming.",
+      "topics": [
+        "jobs",
+        "economy",
+        "labor"
+      ],
+      "theme": "ai",
+      "image": "/img/fe48db9d1d7e.webp"
+    },
+    {
+      "id": "06df0150cedf",
+      "rank": 16,
+      "title": "The total solar eclipse happens today—here’s what you need to know",
+      "url": "https://www.scientificamerican.com/article/the-total-solar-eclipse-happens-today-heres-what-you-need-to-know/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T10:00:00.000Z",
+      "description": "A total solar eclipse is happening today, drawing global attention to one of astronomy's most dramatic spectacles.",
+      "topics": [
+        "eclipse",
+        "astronomy",
+        "space"
+      ],
+      "theme": "science",
+      "image": "/img/06df0150cedf.webp"
+    },
+    {
+      "id": "d426ad9007dd",
+      "rank": 17,
+      "title": "Trump issues executive order aimed at rewriting childhood vaccine schedule",
+      "url": "https://www.scientificamerican.com/article/trump-signs-executive-order-aimed-at-rewriting-childhood-vaccine-schedule/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T19:00:00.000Z",
+      "description": "Trump issued an executive order to split the MMR vaccine into separate shots, despite decades of evidence for its safety.",
+      "topics": [
+        "vaccines",
+        "health",
+        "policy"
+      ],
+      "theme": "science",
+      "image": "/img/d426ad9007dd.webp"
+    },
+    {
+      "id": "4814e31a24ee",
+      "rank": 18,
+      "title": "WGA Slams David Ellison’s Plan to Pull Paramount From California: ‘This Type of Behavior Is Precisely Why the Merger Should Be Blocked’",
+      "url": "https://variety.com/2026/film/news/wga-david-ellison-paramount-move-california-warner-bros-1236832685/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T02:50:57.000Z",
+      "description": "The Writers Guild slammed Paramount Skydance's threat to leave California, calling it leverage against an antitrust suit.",
+      "topics": [
+        "hollywood",
+        "labor",
+        "paramount"
+      ],
+      "theme": "culture",
+      "image": "/img/4814e31a24ee.webp"
+    },
+    {
+      "id": "cd33c1fd4163",
+      "rank": 19,
+      "title": "AI Music Generator Suno Strikes Licensing Deal With BMG as It Preps New Label-Backed Models",
+      "url": "https://variety.com/2026/music/news/suno-ai-licensing-deal-bmg-1236832703/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T10:00:00.000Z",
+      "description": "AI music generator Suno struck a licensing deal with BMG, adding a major label partner as it preps new models.",
+      "topics": [
+        "music",
+        "ai",
+        "licensing"
+      ],
+      "theme": "culture",
+      "image": "/img/cd33c1fd4163.webp"
+    },
+    {
+      "id": "a4b78741a7f0",
+      "rank": 20,
+      "title": "AI-Generated Turkish Series ‘Castle Walls’ Launches on Prime Video in What Is Being Touted as a Worldwide Streaming First – Trailer (EXCLUSIVE)",
+      "url": "https://variety.com/2026/tv/global/ai-generated-turkish-tv-series-castle-walls-prime-video-first-1236832779/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T09:01:32.000Z",
+      "description": "AI-generated Turkish drama Castle Walls launches on Prime Video, billed as the first end-to-end AI series on a major platform.",
+      "topics": [
+        "streaming",
+        "ai",
+        "television"
+      ],
+      "theme": "culture",
+      "image": "/img/a4b78741a7f0.webp"
+    },
+    {
+      "id": "8a9f79dab75f",
+      "rank": 21,
+      "title": "Xbox CEO Asha Sharma's internal playthrough of The Elder Scrolls 6 disrupted by a giant inflatable rat, as Bethesda union protests cuts",
+      "url": "https://www.eurogamer.net/elder-scrolls-6-giant-inflatable-rat",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T09:16:25.000Z",
+      "description": "Xbox CEO's internal preview of The Elder Scrolls 6 was interrupted by a giant inflatable rat as Bethesda workers protested cuts.",
+      "topics": [
+        "bethesda",
+        "eldersscrolls",
+        "labor"
+      ],
+      "theme": "games",
+      "image": "/img/8a9f79dab75f.webp"
+    },
+    {
+      "id": "24b5eb6ebad0",
+      "rank": 22,
+      "title": "GTA 6 might not cost $100, but most of the people pre-ordering it are buying it at that price, Take-Two reveals",
+      "url": "https://www.eurogamer.net/gta-6-pre-orders-ultimate-edition-100-dollars",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T10:42:09.000Z",
+      "description": "Take-Two says most GTA 6 preorders are for the pricier Ultimate edition even as debate rages over the game's cost.",
+      "topics": [
+        "gta6",
+        "pricing",
+        "rockstar"
+      ],
+      "theme": "games",
+      "image": "/img/24b5eb6ebad0.webp"
+    },
+    {
+      "id": "3098330e7f6c",
+      "rank": 23,
+      "title": "Halo: Campaign Evolved struggles to sell in anywhere near the quantities the recent Black Ops revivals did, and the probable reason? Lack of multiplayer",
+      "url": "https://www.eurogamer.net/halo-campaign-evolved-launch-sales-numbers",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T08:50:25.000Z",
+      "description": "Halo: Campaign Evolved is struggling to match recent Call of Duty remake sales, likely due to its lack of multiplayer.",
+      "topics": [
+        "halo",
+        "sales",
+        "multiplayer"
+      ],
+      "theme": "games",
+      "image": "/img/3098330e7f6c.webp"
+    },
+    {
+      "id": "75fd2ceab1fa",
+      "rank": 24,
+      "title": "Until Dawn and Little Nightmares 3 studio Supermassive announces further layoffs, with as many as 75 people expected to lose their jobs",
+      "url": "https://www.eurogamer.net/little-nightmares-3-dark-pictures-supermassive-layoffs",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T13:12:33.000Z",
+      "description": "Until Dawn studio Supermassive Games announced a third round of layoffs in three years, affecting up to 75 workers.",
+      "topics": [
+        "layoffs",
+        "supermassive",
+        "studios"
+      ],
+      "theme": "games",
+      "image": "/img/75fd2ceab1fa.webp"
+    },
+    {
+      "id": "e28f6d34f9d4",
+      "rank": 25,
+      "title": "Leaked emails reveal Blizzard is Xbox's top-performing studio for FY26",
+      "url": "https://www.gamesindustry.biz/leaked-emails-reveal-blizzard-is-xboxs-top-performing-studio-for-fy26",
+      "publisher": "GamesIndustry.biz",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-10T16:07:39.000Z",
+      "description": "Leaked emails reveal Blizzard was Xbox's top-performing studio in fiscal 2026, according to internal documents.",
+      "topics": [
+        "blizzard",
+        "xbox",
+        "leak"
+      ],
+      "theme": "games",
+      "image": "/img/e28f6d34f9d4.webp"
+    },
+    {
+      "id": "656c723485b2",
+      "rank": 26,
+      "title": "The birth of modern life was fueled by poop, new theory proposes",
+      "url": "https://www.scientificamerican.com/article/the-birth-of-modern-life-was-fueled-by-poop-new-theory-proposes/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T11:00:00.000Z",
+      "description": "A new theory proposes that the Cambrian explosion, a pivotal moment for complex life, may have been driven by ancient waste.",
+      "topics": [
+        "cambrian",
+        "evolution",
+        "biology"
+      ],
+      "theme": "science",
+      "image": "/img/656c723485b2.webp"
+    },
+    {
+      "id": "8a656777c26c",
+      "rank": 27,
+      "title": "Scientists are closer than ever to understanding the power of the vagus nerve",
+      "url": "https://www.scientificamerican.com/article/scientists-are-closer-than-ever-to-understanding-the-power-of-the-vagus-nerve/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T12:00:00.000Z",
+      "description": "Scientists are gaining a clearer picture of the vagus nerve, the body's key highway linking the brain to major organs.",
+      "topics": [
+        "vagusnerve",
+        "neuroscience",
+        "health"
+      ],
+      "theme": "science",
+      "image": "/img/8a656777c26c.webp"
+    }
+  ]
+}
