@@ -1,0 +1,592 @@
+{
+  "date": "2026-08-13",
+  "generatedAt": "2026-08-13T10:32:28.405Z",
+  "summary": "Today's briefing spans a worsening Ebola outbreak and Ukraine's grinding war, a shake-up atop OpenAI and a huge Anthropic acquisition, a landmark physics discovery, and cultural moments from BTS to Deep Purple.",
+  "targetCount": 30,
+  "items": [
+    {
+      "id": "842c7618ad35",
+      "rank": 1,
+      "title": "Ebola outbreak on track to be deadliest ever, WHO chief says",
+      "url": "https://www.bbc.co.uk/news/articles/cgk4pex4mn8o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T01:31:21.000Z",
+      "description": "The WHO warns the current Ebola outbreak has already caused more than 2,000 deaths and is on track to become the deadliest ever recorded.",
+      "topics": [
+        "ebola",
+        "health",
+        "africa"
+      ],
+      "theme": "world",
+      "image": "/img/842c7618ad35.webp"
+    },
+    {
+      "id": "7ffa1a1d3af4",
+      "rank": 2,
+      "title": "Putin can no longer claim victory in Ukraine, Nobel Peace Prize winner tells BBC",
+      "url": "https://www.bbc.co.uk/news/articles/c74grmy2v7ko?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T04:55:58.000Z",
+      "description": "Nobel Peace Prize winner Dmitry Muratov tells the BBC that Putin can only destroy Ukraine, not conquer it, as the war enters its fifth year.",
+      "topics": [
+        "ukraine",
+        "russia",
+        "war"
+      ],
+      "theme": "world",
+      "image": "/img/7ffa1a1d3af4.webp"
+    },
+    {
+      "id": "74843ca90c28",
+      "rank": 3,
+      "title": "OpenAI COO Resigns",
+      "url": "https://xcancel.com/bradlightcap/status/2087211567012032862",
+      "publisher": "Xcancel",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-11T20:42:30.000Z",
+      "description": "OpenAI's chief operating officer has resigned, extending a run of high-profile departures from the company.",
+      "topics": [
+        "openai",
+        "leadership"
+      ],
+      "theme": "ai",
+      "image": null
+    },
+    {
+      "id": "5682d193601c",
+      "rank": 4,
+      "title": "Anthropic in Talks to Buy World Model AI Startup Decart for $6B",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-13/anthropic-said-in-talks-to-buy-ai-startup-decart-for-6-billion",
+      "publisher": "Bloomberg",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-13T01:50:27.000Z",
+      "description": "Anthropic is reportedly in talks to acquire world-model startup Decart for around six billion dollars, expanding into generative video and simulation.",
+      "topics": [
+        "anthropic",
+        "acquisition"
+      ],
+      "theme": "ai",
+      "image": null
+    },
+    {
+      "id": "aaf704272f8b",
+      "rank": 5,
+      "title": "Major Russian grain export terminals hit in Ukraine Black Sea port attack",
+      "url": "https://www.bbc.co.uk/news/articles/c5y49xp2wrno?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T03:28:56.000Z",
+      "description": "Major Russian grain export terminals were struck in a Ukrainian Black Sea attack as both sides hit each other's shipping infrastructure.",
+      "topics": [
+        "ukraine",
+        "russia",
+        "trade"
+      ],
+      "theme": "world",
+      "image": "/img/aaf704272f8b.webp"
+    },
+    {
+      "id": "1d2d44cb50e6",
+      "rank": 6,
+      "title": "Gemini becomes Google's fastest-growing product ever as it hits 1B users",
+      "url": "https://arstechnica.com/ai/2026/08/google-says-gemini-has-reached-1b-users-faster-than-any-other-google-product/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T19:48:12.000Z",
+      "description": "Google's Gemini has become the company's fastest-growing product ever, surpassing one billion users.",
+      "topics": [
+        "google",
+        "gemini"
+      ],
+      "theme": "ai",
+      "image": "/img/1d2d44cb50e6.webp"
+    },
+    {
+      "id": "314e77618c7f",
+      "rank": 7,
+      "title": "As AI safety concerns mount, three pioneers make the case for staying open",
+      "url": "https://techcrunch.com/2026/08/12/as-ai-safety-concerns-mount-three-pioneers-make-the-case-for-staying-open/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T17:51:00.000Z",
+      "description": "Geoffrey Hinton, Fei-Fei Li and Andrew Ng publicly clashed over AI regulation and open-source access at the Ai4 conference.",
+      "topics": [
+        "safety",
+        "regulation",
+        "openweights"
+      ],
+      "theme": "ai",
+      "image": "/img/314e77618c7f.webp"
+    },
+    {
+      "id": "5e6251a19ae3",
+      "rank": 8,
+      "title": "More troops to be sent to West Bank village besieged by Israeli settlers",
+      "url": "https://www.bbc.co.uk/news/articles/cj4kppdk2qwo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T08:12:53.000Z",
+      "description": "More Israeli troops are being sent to a West Bank village where two Palestinian families remain besieged by settlers with water and power cut off.",
+      "topics": [
+        "israel",
+        "palestinians",
+        "westbank"
+      ],
+      "theme": "world",
+      "image": "/img/5e6251a19ae3.webp"
+    },
+    {
+      "id": "474530025ea7",
+      "rank": 9,
+      "title": "At least 44 die as ferry sinks in Zimbabwe's Lake Kariba",
+      "url": "https://www.bbc.co.uk/news/articles/czxe2vyxd7do?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T13:55:56.000Z",
+      "description": "At least 44 people died after a ferry overturned in strong waves on Zimbabwe's Lake Kariba.",
+      "topics": [
+        "zimbabwe",
+        "disaster"
+      ],
+      "theme": "world",
+      "image": "/img/474530025ea7.webp"
+    },
+    {
+      "id": "286d352d7d8d",
+      "rank": 10,
+      "title": "Woman pulled alive from rubble 36 hours after Colombia quake",
+      "url": "https://www.bbc.co.uk/news/articles/cz7d2e5wlgno?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T22:41:46.000Z",
+      "description": "A woman was pulled alive from rubble 36 hours after a devastating earthquake struck Colombia.",
+      "topics": [
+        "colombia",
+        "earthquake",
+        "rescue"
+      ],
+      "theme": "world",
+      "image": "/img/286d352d7d8d.webp"
+    },
+    {
+      "id": "23948c6655eb",
+      "rank": 11,
+      "title": "Some Claude users are mad that Anthropic’s new watermarks will catch them using it at their jobs, classes",
+      "url": "https://techcrunch.com/2026/08/12/some-claude-users-are-mad-that-anthropics-new-watermarks-will-catch-them-cheating-at-their-jobs-classes/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T22:26:37.000Z",
+      "description": "Some Claude users are angry that Anthropic's new watermarking system could expose their AI use at work or school.",
+      "topics": [
+        "anthropic",
+        "watermarking"
+      ],
+      "theme": "ai",
+      "image": "/img/23948c6655eb.webp"
+    },
+    {
+      "id": "185e252c5e11",
+      "rank": 12,
+      "title": "AI coding startup Cognition reportedly already in talks to raise at $40B valuation",
+      "url": "https://techcrunch.com/2026/08/12/ai-coding-startup-cognition-reportedly-already-in-talks-to-raise-at-40b-valuation/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T18:19:12.000Z",
+      "description": "AI coding startup Cognition is reportedly in talks to raise funding at a forty billion dollar valuation, months after its last round.",
+      "topics": [
+        "funding",
+        "coding",
+        "startup"
+      ],
+      "theme": "ai",
+      "image": "/img/185e252c5e11.webp"
+    },
+    {
+      "id": "0a318e15530f",
+      "rank": 13,
+      "title": "Have physicists finally discovered glueballs? New evidence points to yes.",
+      "url": "https://arstechnica.com/science/2026/08/have-physicists-finally-discovered-glueballs-new-evidence-points-to-yes/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica Science",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T21:13:39.000Z",
+      "description": "Physicists report the strongest evidence yet for glueballs, exotic particles made purely from the strong force's gluons.",
+      "topics": [
+        "physics",
+        "particles"
+      ],
+      "theme": "science",
+      "image": "/img/0a318e15530f.webp"
+    },
+    {
+      "id": "2cf4574e9b4b",
+      "rank": 14,
+      "title": "ICE plans to equip agents with gloves that can deliver electric shocks",
+      "url": "https://www.bbc.co.uk/news/articles/c20d292gdp4o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T21:53:26.000Z",
+      "description": "US immigration agency ICE is spending twenty million dollars on gloves designed to deliver electric shocks to compel compliance.",
+      "topics": [
+        "immigration",
+        "policy",
+        "usa"
+      ],
+      "theme": "world",
+      "image": "/img/2cf4574e9b4b.webp"
+    },
+    {
+      "id": "a922582d39b4",
+      "rank": 15,
+      "title": "Taiwan says it was hit by ‘abnormal’ AI-assisted cyber-attack",
+      "url": "https://www.theguardian.com/technology/2026/aug/13/taiwan-ai-assisted-cyber-attacks-overseas",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T05:02:28.000Z",
+      "description": "Taiwan says government agencies were hit by an 'abnormal' AI-assisted cyber-attack, a day after reports of a first-of-its-kind China-linked breach.",
+      "topics": [
+        "cybersecurity",
+        "taiwan",
+        "china"
+      ],
+      "theme": "ai",
+      "image": "/img/a922582d39b4.webp"
+    },
+    {
+      "id": "e0f3cee3b824",
+      "rank": 16,
+      "title": "Terabytes of credentials leaked in massive supply-chain attack",
+      "url": "https://arstechnica.com/security/2026/08/terabytes-of-credentials-leaked-in-massive-supply-chain-attack/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T21:43:21.000Z",
+      "description": "A massive supply-chain attack exfiltrated terabytes of credentials from thousands of users of a compromised AI package.",
+      "topics": [
+        "security",
+        "breach"
+      ],
+      "theme": "ai",
+      "image": "/img/e0f3cee3b824.webp"
+    },
+    {
+      "id": "ba17fbe9ce62",
+      "rank": 17,
+      "title": "Amazon will train on Twitch streamers’ content by default, unless they opt out",
+      "url": "https://techcrunch.com/2026/08/12/amazon-will-train-on-twitch-streamers-content-by-default-unless-they-opt-out/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T20:10:40.000Z",
+      "description": "Amazon will train AI on Twitch streamers' content by default, prompting backlash and forcing users to opt out.",
+      "topics": [
+        "twitch",
+        "amazon",
+        "privacy"
+      ],
+      "theme": "ai",
+      "image": "/img/ba17fbe9ce62.webp"
+    },
+    {
+      "id": "847e04a73596",
+      "rank": 18,
+      "title": "Everything announced at Made by Google ’26: Pixel 11, Pixel Watch 5, Pixel Tag, and tons of Gemini features",
+      "url": "https://techcrunch.com/2026/08/12/google-unveils-pixel-11-lineup-new-airtag-rival-and-gemini-features-at-made-by-google-2026/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T14:20:33.000Z",
+      "description": "Google's Made by Google 2026 event unveiled the Pixel 11 lineup, a new Pixel Watch and Pixel Tag, alongside a wave of Gemini features.",
+      "topics": [
+        "google",
+        "hardware",
+        "gemini"
+      ],
+      "theme": "ai",
+      "image": "/img/847e04a73596.webp"
+    },
+    {
+      "id": "aac730549939",
+      "rank": 19,
+      "title": "JWST images illuminate ‘black hole stars’ at cosmic dawn",
+      "url": "https://www.scientificamerican.com/article/jwst-images-illuminate-black-hole-stars-at-cosmic-dawn/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T15:00:00.000Z",
+      "description": "New JWST images illuminate mysterious 'black hole stars' at cosmic dawn, first spotted as tiny red dots in deep-space surveys.",
+      "topics": [
+        "space",
+        "jwst",
+        "blackholes"
+      ],
+      "theme": "science",
+      "image": "/img/aac730549939.webp"
+    },
+    {
+      "id": "dce1f3530fb8",
+      "rank": 20,
+      "title": "Stop Killing Games backs Dutch consumer rights lawsuit against Sony's PlayStation digital store \"monopoly\"",
+      "url": "https://www.eurogamer.net/stop-killing-games-consumer-rights-lawsuit-netherlands-sony-playstation-monopoly",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T08:21:53.000Z",
+      "description": "The Stop Killing Games campaign has joined a Dutch lawsuit accusing Sony of monopolising digital game sales on the PlayStation Store.",
+      "topics": [
+        "playstation",
+        "lawsuit",
+        "consumer"
+      ],
+      "theme": "games",
+      "image": "/img/dce1f3530fb8.webp"
+    },
+    {
+      "id": "cf1267b80f84",
+      "rank": 21,
+      "title": "Immortality creator Sam Barlow's new video-scouring game is sci-fi horror Precognition, a collab with filmmaker Brandon Cronenberg, in which you see and change the future",
+      "url": "https://www.eurogamer.net/sam-barlow-immortality-precognition-brandon-cronenberg",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T19:30:00.000Z",
+      "description": "Immortality creator Sam Barlow has revealed Precognition, a sci-fi horror collaboration with filmmaker Brandon Cronenberg due in 2028.",
+      "topics": [
+        "indie",
+        "horror"
+      ],
+      "theme": "games",
+      "image": "/img/cf1267b80f84.webp"
+    },
+    {
+      "id": "6ca101df2f43",
+      "rank": 22,
+      "title": "Witcher multiplayer spin-off Project Sirius hit by fresh layoffs",
+      "url": "https://www.gamesindustry.biz/witcher-multiplayer-spin-off-project-sirius-hit-by-fresh-layoffs",
+      "publisher": "GamesIndustry.biz",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T16:33:08.000Z",
+      "description": "CD Projekt Red has confirmed fresh layoffs on its multiplayer Witcher spin-off Project Sirius amid a broader strategy shift.",
+      "topics": [
+        "cdprojekt",
+        "layoffs"
+      ],
+      "theme": "games",
+      "image": "/img/6ca101df2f43.webp"
+    },
+    {
+      "id": "a564fee05433",
+      "rank": 23,
+      "title": "Graduate Student Proves a Quantum Uncertainty Principle for Fractals",
+      "url": "https://www.quantamagazine.org/graduate-student-proves-the-fractal-uncertainty-principle-20260812/",
+      "publisher": "Quanta Magazine",
+      "feed": {
+        "name": "Quanta Magazine",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T14:14:42.000Z",
+      "description": "A graduate student has proved a quantum uncertainty principle for fractals, a result hailed as a foundational mathematical breakthrough.",
+      "topics": [
+        "mathematics",
+        "physics"
+      ],
+      "theme": "science",
+      "image": "/img/a564fee05433.webp"
+    },
+    {
+      "id": "3342d7d45b0a",
+      "rank": 24,
+      "title": "BTS’ V Reveals Hearing Loss Amid World Tour",
+      "url": "https://variety.com/2026/music/news/bts-v-hearing-loss-1236833589/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T08:55:18.000Z",
+      "description": "BTS member V revealed during a livestream that he is being treated for hearing loss in his right ear amid the group's world tour.",
+      "topics": [
+        "kpop",
+        "health",
+        "music"
+      ],
+      "theme": "culture",
+      "image": "/img/3342d7d45b0a.webp"
+    },
+    {
+      "id": "e72631c691da",
+      "rank": 25,
+      "title": "Ritchie Blackmore Performs With Deep Purple for First Time Since Acrimonious Split in Early ’90s, After Warning Fans: ‘I Have Not Played Rock Music in 25 Years’",
+      "url": "https://variety.com/2026/music/news/ritchie-blackmore-deep-purple-performs-smoke-on-the-water-1236833509/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T04:27:15.000Z",
+      "description": "Guitarist Ritchie Blackmore performed with Deep Purple for the first time since their acrimonious early-1990s split.",
+      "topics": [
+        "music",
+        "deeppurple"
+      ],
+      "theme": "culture",
+      "image": "/img/e72631c691da.webp"
+    },
+    {
+      "id": "7b68d0c98845",
+      "rank": 26,
+      "title": "Supermassive Games announces layoffs, up to 75 workers may be affected",
+      "url": "https://www.gamesindustry.biz/supermassive-games-announces-layoffs-up-to-75-workers-may-be-affected",
+      "publisher": "GamesIndustry.biz",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-11T13:05:23.000Z",
+      "description": "Supermassive Games announced a third round of layoffs in three years, potentially affecting up to 75 staff.",
+      "topics": [
+        "layoffs",
+        "studio"
+      ],
+      "theme": "games",
+      "image": "/img/7b68d0c98845.webp"
+    },
+    {
+      "id": "81cced814b04",
+      "rank": 27,
+      "title": "Meccha Chameleon has now sold 20 million copies in two months",
+      "url": "https://www.eurogamer.net/meccha-chameleon-20-million-sales",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T11:49:44.000Z",
+      "description": "Indie hide-and-seek game Meccha Chameleon has sold 20 million copies just two months after launch.",
+      "topics": [
+        "indie",
+        "sales"
+      ],
+      "theme": "games",
+      "image": "/img/81cced814b04.webp"
+    },
+    {
+      "id": "2bd907b94441",
+      "rank": 28,
+      "title": "Estrogen-only hormone therapy could lower risk of Alzheimer’s",
+      "url": "https://www.scientificamerican.com/article/estrogen-only-hormone-therapy-could-lower-risk-of-alzheimers/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Scientific American",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T20:52:00.000Z",
+      "description": "A retrospective study finds people on estrogen-only hormone therapy for menopause showed fewer signs of dementia.",
+      "topics": [
+        "health",
+        "alzheimers"
+      ],
+      "theme": "science",
+      "image": "/img/2bd907b94441.webp"
+    },
+    {
+      "id": "f8abdf62d344",
+      "rank": 29,
+      "title": "‘Othello’ Royal Shakespeare Company Adaptation Starring Sharon D. Clarke Postponed as She Undergoes Cancer Treatment",
+      "url": "https://variety.com/2026/theater/news/sharon-d-clarke-othello-postponed-cancer-treatment-1236833617/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T10:16:15.000Z",
+      "description": "The Royal Shakespeare Company has postponed its Othello starring Sharon D. Clarke so she can undergo cancer treatment.",
+      "topics": [
+        "theatre",
+        "shakespeare"
+      ],
+      "theme": "culture",
+      "image": "/img/f8abdf62d344.webp"
+    },
+    {
+      "id": "2ce7cf65aa3a",
+      "rank": 30,
+      "title": "‘The Wrong Girls’ Review: Kristen Stewart and Alia Shawkat Are a Good Time in Dylan Meyer’s Shaggy Stoner Comedy",
+      "url": "https://variety.com/2026/film/reviews/the-wrong-girls-review-kristen-stewart-1236833555/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T07:47:48.000Z",
+      "description": "Kristen Stewart and Alia Shawkat headline Dylan Meyer's absurdist stoner comedy The Wrong Girls in a well-received festival debut.",
+      "topics": [
+        "film",
+        "comedy"
+      ],
+      "theme": "culture",
+      "image": "/img/2ce7cf65aa3a.webp"
+    }
+  ]
+}
