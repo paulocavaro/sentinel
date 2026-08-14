@@ -1,0 +1,588 @@
+{
+  "date": "2026-08-14",
+  "generatedAt": "2026-08-14T10:29:14.845Z",
+  "summary": "Anthropic's blockbuster IPO valuation and a deadly Colombian earthquake led a day dominated by AI industry consolidation, fresh model releases, and grim world news.",
+  "targetCount": 30,
+  "items": [
+    {
+      "id": "cc050b32d46b",
+      "rank": 1,
+      "title": "Anthropic could be worth $2 trillion when it goes public",
+      "url": "https://arstechnica.com/ai/2026/08/anthropic-could-be-worth-2-trillion-when-it-goes-public/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T13:58:56.000Z",
+      "description": "Anthropic's rapid revenue growth has investors speculating its IPO could become the largest listing in history at a $2 trillion valuation.",
+      "topics": [
+        "anthropic",
+        "ipo",
+        "valuation"
+      ],
+      "theme": "ai",
+      "image": "/img/cc050b32d46b.webp"
+    },
+    {
+      "id": "bc181d077293",
+      "rank": 2,
+      "title": "Hit hard by the earthquake in western Colombia, the mayor of Cali gets to work",
+      "url": "https://www.npr.org/2026/08/13/nx-s1-5930188/around-the-clock-search-continues-to-reach-victims-of-the-7-4-earthquake-in-colombia",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T21:39:19.000Z",
+      "description": "Rescue teams in Cali keep digging for survivors as the death toll from Colombia's 7.4 magnitude earthquake passes 250.",
+      "topics": [
+        "earthquake",
+        "colombia",
+        "disaster"
+      ],
+      "theme": "world",
+      "image": "/img/bc181d077293.webp"
+    },
+    {
+      "id": "a30075e62439",
+      "rank": 3,
+      "title": "By sky and sea, Ukraine's drone strikes challenge Russia's grip on Crimea",
+      "url": "https://www.npr.org/2026/08/13/nx-s1-5904418/ukraine-crimea-russia-drone-strikes",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T15:18:27.000Z",
+      "description": "Ukraine's escalating drone campaign against Crimea is upending daily life and challenging Russia's decade-long grip on the peninsula.",
+      "topics": [
+        "ukraine",
+        "russia",
+        "crimea"
+      ],
+      "theme": "world",
+      "image": "/img/a30075e62439.webp"
+    },
+    {
+      "id": "6405b0175bf0",
+      "rank": 4,
+      "title": "Google announces Gemini 3.7 Flash just three weeks after previous release",
+      "url": "https://arstechnica.com/ai/2026/08/google-announces-gemini-3-7-flash-just-three-weeks-after-previous-release/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T17:00:13.000Z",
+      "description": "Google shipped Gemini 3.7 Flash just three weeks after 3.6, underscoring the breakneck pace of AI model releases.",
+      "topics": [
+        "gemini",
+        "google",
+        "models"
+      ],
+      "theme": "ai",
+      "image": "/img/6405b0175bf0.webp"
+    },
+    {
+      "id": "d796dd4f41b1",
+      "rank": 5,
+      "title": "OpenAI introduces ‘Ultrafast,’ a new mode that makes GPT-5.6 Sol work at 14x the speed",
+      "url": "https://techcrunch.com/2026/08/13/openai-introduces-ultrafast-a-new-mode-that-makes-gpt-5-6-sol-work-at-14x-the-speed/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T19:22:40.000Z",
+      "description": "OpenAI's new Ultrafast tier runs GPT-5.6 Sol up to 14 times faster, powered by Cerebras hardware, as it courts enterprise customers.",
+      "topics": [
+        "openai",
+        "gpt",
+        "speed"
+      ],
+      "theme": "ai",
+      "image": "/img/d796dd4f41b1.webp"
+    },
+    {
+      "id": "6d4e506a2896",
+      "rank": 6,
+      "title": "Nvidia’s new $500B plan is risky but brilliant, especially for aging GPUs",
+      "url": "https://techcrunch.com/2026/08/13/nvidias-new-500b-plan-is-risky-but-brilliant-especially-for-aging-gpus/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T15:08:00.000Z",
+      "description": "Nvidia's $500 billion financing plan aims to keep AI buildouts flowing by convincing new lenders its aging GPUs won't lose value.",
+      "topics": [
+        "nvidia",
+        "finance",
+        "gpus"
+      ],
+      "theme": "ai",
+      "image": "/img/6d4e506a2896.webp"
+    },
+    {
+      "id": "31b6cf628065",
+      "rank": 7,
+      "title": "Databricks wanted to raise $1B, investors wanted $15B. It settled on $5B at a $190B valuation.",
+      "url": "https://techcrunch.com/2026/08/13/databricks-wanted-to-raise-1b-investors-wanted-15b-it-settled-on-5b-at-a-190b-valuation/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T20:14:39.000Z",
+      "description": "Databricks settled for $5 billion at a $190 billion valuation after investor demand far outstripped its original $1 billion target.",
+      "topics": [
+        "databricks",
+        "funding",
+        "valuation"
+      ],
+      "theme": "ai",
+      "image": "/img/31b6cf628065.webp"
+    },
+    {
+      "id": "9a2ddf92ac93",
+      "rank": 8,
+      "title": "IBM partners with OpenAI to bolster enterprise AI push",
+      "url": "https://techcrunch.com/2026/08/13/ibm-partners-with-openai-to-bolster-enterprise-ai-push/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T19:19:49.000Z",
+      "description": "IBM will train and certify tens of thousands of consultants on OpenAI's technology as part of a new enterprise AI partnership.",
+      "topics": [
+        "ibm",
+        "openai",
+        "enterprise"
+      ],
+      "theme": "ai",
+      "image": "/img/9a2ddf92ac93.webp"
+    },
+    {
+      "id": "647c46da607a",
+      "rank": 9,
+      "title": "Anthropic set AI agents loose on the same task. They started a turf war.",
+      "url": "https://techcrunch.com/2026/08/13/anthropic-set-ai-agents-loose-on-the-same-task-they-started-a-turf-war/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T18:28:14.000Z",
+      "description": "Anthropic researchers found AI agents can clash, collude and coordinate unpredictably, raising doubts about current multi-agent safety testing.",
+      "topics": [
+        "anthropic",
+        "agents",
+        "safety"
+      ],
+      "theme": "ai",
+      "image": "/img/647c46da607a.webp"
+    },
+    {
+      "id": "8e77a85b47dd",
+      "rank": 10,
+      "title": "Microsoft kills off unsuccessful AI features while merging its separate Copilot apps",
+      "url": "https://techcrunch.com/2026/08/13/microsoft-kills-off-unsuccessful-ai-features-while-merging-its-separate-copilot-apps/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T15:30:52.000Z",
+      "description": "Microsoft is merging its consumer and business Copilot apps while quietly dropping several underused AI features.",
+      "topics": [
+        "microsoft",
+        "copilot",
+        "products"
+      ],
+      "theme": "ai",
+      "image": "/img/8e77a85b47dd.webp"
+    },
+    {
+      "id": "96c36e3dea43",
+      "rank": 11,
+      "title": "US says dozens of countries helped China dodge Trump's tariffs",
+      "url": "https://www.bbc.co.uk/news/articles/c78gy6ep3n5o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T08:39:46.000Z",
+      "description": "A new US report accuses dozens of countries of helping China reroute goods to dodge Trump-era tariffs.",
+      "topics": [
+        "trade",
+        "tariffs",
+        "china"
+      ],
+      "theme": "world",
+      "image": "/img/96c36e3dea43.webp"
+    },
+    {
+      "id": "afea4b36ebd1",
+      "rank": 12,
+      "title": "'Unprecedented' rain in Japan kills six people",
+      "url": "https://www.bbc.co.uk/news/articles/cq561gpen8lo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T07:00:56.000Z",
+      "description": "Unprecedented rainfall in Japan has killed six people, cut power to thousands and stranded travelers at Narita airport.",
+      "topics": [
+        "japan",
+        "weather",
+        "disaster"
+      ],
+      "theme": "world",
+      "image": "/img/afea4b36ebd1.webp"
+    },
+    {
+      "id": "e8ad5f1ad21d",
+      "rank": 13,
+      "title": "Vladimir Putin's first visit to disputed Pacific islands draws Tokyo protest",
+      "url": "https://www.npr.org/2026/08/13/g-s1-138631/vladimir-putins-first-visit-to-disputed-pacific-islands-draws-tokyo-protest",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T16:40:26.000Z",
+      "description": "Vladimir Putin's first visit to disputed Pacific islands has drawn a formal protest from Tokyo, reviving a decades-old territorial dispute.",
+      "topics": [
+        "russia",
+        "japan",
+        "territory"
+      ],
+      "theme": "world",
+      "image": "/img/e8ad5f1ad21d.webp"
+    },
+    {
+      "id": "22c213ac4701",
+      "rank": 14,
+      "title": "U.S. ambassador slams Israeli settlers besieging home of Palestinian-American",
+      "url": "https://www.npr.org/2026/08/13/nx-s1-5930275/u-s-ambassador-slams-israeli-settlers-besieging-home-of-palestinian-american",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T21:11:59.000Z",
+      "description": "The US ambassador to Israel called Jewish settlers besieging a Palestinian-American family's West Bank home 'terrorists'.",
+      "topics": [
+        "israel",
+        "settlers",
+        "diplomacy"
+      ],
+      "theme": "world",
+      "image": "/img/22c213ac4701.webp"
+    },
+    {
+      "id": "e9f8a6f47ed9",
+      "rank": 15,
+      "title": "Flock is tightening its rules in response to a growing surveillance backlash",
+      "url": "https://www.technologyreview.com/2026/08/13/1141904/flock-is-tightening-its-rules-in-response-to-a-growing-surveillance-backlash/",
+      "publisher": "MIT Technology Review",
+      "feed": {
+        "name": "MIT Technology Review",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T13:41:10.000Z",
+      "description": "Police-tech giant Flock is loosening officer access rules to its license-plate reader network amid a mounting surveillance backlash.",
+      "topics": [
+        "surveillance",
+        "policing",
+        "privacy"
+      ],
+      "theme": "ai",
+      "image": "/img/e9f8a6f47ed9.webp"
+    },
+    {
+      "id": "6cb7ea29a44c",
+      "rank": 16,
+      "title": "The web’s newest weapon against AI scrapers is a font",
+      "url": "https://arstechnica.com/ai/2026/08/new-font-turns-ordinary-webpages-into-nonsense-for-ai-scrapers/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T22:02:25.000Z",
+      "description": "A new font called ShieldFont aims to quietly poison AI training data scraped from web pages without harming human readability.",
+      "topics": [
+        "scraping",
+        "copyright",
+        "tools"
+      ],
+      "theme": "ai",
+      "image": "/img/6cb7ea29a44c.webp"
+    },
+    {
+      "id": "ba134a0de4ec",
+      "rank": 17,
+      "title": "Sensor Tower: 89% of GTA6 preorders are for the $100 ultimate edition",
+      "url": "https://www.gamesindustry.biz/sensor-tower-89-of-gta6-preorders-are-for-the-100-ultimate-edition",
+      "publisher": "GamesIndustry.biz",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T14:00:44.000Z",
+      "description": "Sensor Tower reports 89% of GTA6 preorders are for the pricier $100 ultimate edition rather than the $80 standard version.",
+      "topics": [
+        "gta6",
+        "sales",
+        "preorders"
+      ],
+      "theme": "games",
+      "image": "/img/ba134a0de4ec.webp"
+    },
+    {
+      "id": "714fa21bbb34",
+      "rank": 18,
+      "title": "Abandon single-player, move development to Saudi Arabia, \"reduce labour\"? Experts on what EA's huge buyout debt could really mean",
+      "url": "https://www.eurogamer.net/ea-private-experts-financial-strain-cuts-politics",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T11:59:07.000Z",
+      "description": "Industry experts weigh what Electronic Arts' huge private-equity buyout debt could mean for single-player games and studio jobs.",
+      "topics": [
+        "ea",
+        "buyout",
+        "studios"
+      ],
+      "theme": "games",
+      "image": "/img/714fa21bbb34.webp"
+    },
+    {
+      "id": "c3654101e40d",
+      "rank": 19,
+      "title": "Netflix shutters Night School Studio and Moonloot Games",
+      "url": "https://www.gamesindustry.biz/netflix-shutters-night-school-studio-and-moonloot-games",
+      "publisher": "GamesIndustry.biz",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T08:11:46.000Z",
+      "description": "Netflix has closed Oxenfree developer Night School Studio and Moonloot Games as it retreats further from original game development.",
+      "topics": [
+        "netflix",
+        "studios",
+        "closures"
+      ],
+      "theme": "games",
+      "image": "/img/c3654101e40d.webp"
+    },
+    {
+      "id": "5ab217333dab",
+      "rank": 20,
+      "title": "Arc Raiders generates $114.9m during Nexon's Q2, sells an additional 800,000 units",
+      "url": "https://www.gamesindustry.biz/arc-raiders-generates-1149m-during-nexons-q2-sells-an-additional-800000-units",
+      "publisher": "GamesIndustry.biz",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T10:28:03.000Z",
+      "description": "Embark Studios' Arc Raiders generated nearly $115 million in Nexon's latest quarter, selling another 800,000 units.",
+      "topics": [
+        "arcraiders",
+        "nexon",
+        "sales"
+      ],
+      "theme": "games",
+      "image": "/img/5ab217333dab.webp"
+    },
+    {
+      "id": "01411932b81c",
+      "rank": 21,
+      "title": "Marvel Tōkon: Fighting Souls looks to have sold almost half a million copies in a week",
+      "url": "https://www.eurogamer.net/marvel-tokon-fighting-souls-half-a-million-sales-one-week",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T09:07:36.000Z",
+      "description": "Marvel Tokon: Fighting Souls has reportedly sold almost half a million copies in its first week, a strong showing for a fighting game.",
+      "topics": [
+        "marvel",
+        "fighting",
+        "sales"
+      ],
+      "theme": "games",
+      "image": "/img/01411932b81c.webp"
+    },
+    {
+      "id": "383b67ce2abf",
+      "rank": 22,
+      "title": "We've flown a radiation-blocking vest to the Moon and back, and it worked",
+      "url": "https://arstechnica.com/science/2026/08/weve-flown-a-radiation-blocking-vest-to-the-moon-and-back-and-it-worked/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica Science",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T13:48:55.000Z",
+      "description": "A radiation-blocking vest successfully flew to the Moon and back, offering a new way to protect astronauts instead of spacecraft.",
+      "topics": [
+        "space",
+        "radiation",
+        "astronauts"
+      ],
+      "theme": "science",
+      "image": "/img/383b67ce2abf.webp"
+    },
+    {
+      "id": "c3a5f1faf17a",
+      "rank": 23,
+      "title": "Heart aerospace completes first flight of largest electric aircraft",
+      "url": "https://www.heartaerospace.com/newsroom/heart-aerospace-completes-first-flight-of-world-s-largest-electric-aircraft",
+      "publisher": "Heartaerospace",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-13T14:11:51.000Z",
+      "description": "Heart Aerospace completed the first flight of what it calls the largest electric aircraft yet built.",
+      "topics": [
+        "aviation",
+        "electric",
+        "engineering"
+      ],
+      "theme": "science",
+      "image": "/img/c3a5f1faf17a.webp"
+    },
+    {
+      "id": "f2fee9e003ef",
+      "rank": 24,
+      "title": "European scientists developed a tactile sensor capable of 100 μm resolution",
+      "url": "https://spectrum.ieee.org/robot-finger",
+      "publisher": "Ieee",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-12T12:05:59.000Z",
+      "description": "European scientists developed a tactile sensor with 100 micrometer resolution, a leap for robotic touch sensing.",
+      "topics": [
+        "sensors",
+        "robotics",
+        "research"
+      ],
+      "theme": "science",
+      "image": "/img/f2fee9e003ef.webp"
+    },
+    {
+      "id": "141631b2dbdd",
+      "rank": 25,
+      "title": "Did poop enable the evolution of complex animals?",
+      "url": "https://arstechnica.com/science/2026/08/feces-fueled-a-flurry-of-evolution-during-the-cambrian-study-suggests/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica Science",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-12T12:34:38.000Z",
+      "description": "A new study suggests that ancient animal waste may have helped enable the evolution of complex life forms.",
+      "topics": [
+        "evolution",
+        "biology",
+        "research"
+      ],
+      "theme": "science",
+      "image": "/img/141631b2dbdd.webp"
+    },
+    {
+      "id": "4dc772ade2c2",
+      "rank": 26,
+      "title": "Spider-Man: Beyond the Spider-Verse Clip Has Leaked, and Sony Is Working Hard to Take It Down",
+      "url": "https://www.polygon.com/spider-man-beyond-the-spider-verse-leaked-clip-trailer/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T09:58:45.000Z",
+      "description": "A leaked four-minute clip from Spider-Man: Beyond the Spider-Verse has spread online despite Sony's efforts to take it down.",
+      "topics": [
+        "spiderman",
+        "animation",
+        "leak"
+      ],
+      "theme": "culture",
+      "image": "/img/4dc772ade2c2.webp"
+    },
+    {
+      "id": "36e5aa717c79",
+      "rank": 27,
+      "title": "New Sci-Fi Thriller From Godzilla Director Officially Drops in 3 Weeks",
+      "url": "https://www.polygon.com/onslaught-release-date-adria-arjona/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T10:00:12.000Z",
+      "description": "Godzilla director Adam Wingard's new sci-fi thriller Onslaught blends horror and action ahead of its September release.",
+      "topics": [
+        "film",
+        "scifi",
+        "thriller"
+      ],
+      "theme": "culture",
+      "image": "/img/36e5aa717c79.webp"
+    },
+    {
+      "id": "6fe2f6003c84",
+      "rank": 28,
+      "title": "‘The Devil Wears Prada 2’ Is Drawing Tourists to Milan Prompting an 18% Increase in Visitors to the Film’s Locations in Italy’s Fashion Capital",
+      "url": "https://variety.com/2026/film/global/the-devil-wears-prada-2-tourists-milan-italy-fashion-1236833591/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T10:00:00.000Z",
+      "description": "The Devil Wears Prada 2 has boosted tourist visits to its Milan filming locations by 18 percent.",
+      "topics": [
+        "film",
+        "tourism",
+        "milan"
+      ],
+      "theme": "culture",
+      "image": "/img/6fe2f6003c84.webp"
+    },
+    {
+      "id": "d88e1b452e70",
+      "rank": 29,
+      "title": "A Pokémon Game Becomes the Second Best-Selling Nintendo Switch 2 Game",
+      "url": "https://www.polygon.com/pokemon-pokopia-5-million-sales-switch-2/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T09:33:49.000Z",
+      "description": "Pokémon Pokopia has become the second best-selling Nintendo Switch 2 game, owned by nearly a quarter of console owners.",
+      "topics": [
+        "pokemon",
+        "nintendo",
+        "sales"
+      ],
+      "theme": "culture",
+      "image": "/img/d88e1b452e70.webp"
+    }
+  ]
+}
