@@ -1,0 +1,608 @@
+{
+  "date": "2026-08-15",
+  "generatedAt": "2026-08-15T09:45:28.210Z",
+  "summary": "A deadly Indonesian earthquake, Google's Gemini 3.7 Flash launch and an intensifying US-China AI price war lead a day also marked by Taliban anniversary reporting, new game releases and Disney's D23 showcase.",
+  "targetCount": 30,
+  "items": [
+    {
+      "id": "3f9f3c2f0ffc",
+      "rank": 1,
+      "title": "Powerful 7.7-magnitude earthquake kills at least 38 in Indonesia",
+      "url": "https://www.bbc.co.uk/news/articles/c5y0zz63gero?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T08:52:55.000Z",
+      "description": "A powerful 7.7-magnitude earthquake struck eastern Indonesia, killing at least 38 people and triggering a search for survivors.",
+      "topics": [
+        "earthquake",
+        "indonesia",
+        "disaster"
+      ],
+      "theme": "world",
+      "image": "/img/3f9f3c2f0ffc.webp"
+    },
+    {
+      "id": "d8531b3bebba",
+      "rank": 2,
+      "title": "Introducing Gemini 3.7 Flash",
+      "url": "https://deepmind.google/blog/introducing-gemini-3-7-flash/",
+      "publisher": "Google DeepMind",
+      "feed": {
+        "name": "Google DeepMind",
+        "kind": "blog"
+      },
+      "publishedAt": "2026-08-13T17:04:18.000Z",
+      "description": "Google DeepMind launched Gemini 3.7 Flash, its latest fast, low-cost model aimed at high-volume developer use.",
+      "topics": [
+        "gemini",
+        "google",
+        "models"
+      ],
+      "theme": "ai",
+      "image": "/img/d8531b3bebba.webp"
+    },
+    {
+      "id": "f1b6cd2e9cfe",
+      "rank": 3,
+      "title": "'I shot Mr Thompson'- What it was like inside court as Mangione pleaded guilty",
+      "url": "https://www.bbc.co.uk/news/articles/c4gkyez7195o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T18:54:58.000Z",
+      "description": "Luigi Mangione pleaded guilty in a courtroom account of the killing of a healthcare CEO that drew worldwide attention.",
+      "topics": [
+        "mangione",
+        "crime",
+        "courts"
+      ],
+      "theme": "world",
+      "image": "/img/f1b6cd2e9cfe.webp"
+    },
+    {
+      "id": "4bc8b8918301",
+      "rank": 4,
+      "title": "OpenAI and Anthropic in price war as Chinese AI rivals gain ground",
+      "url": "https://arstechnica.com/ai/2026/08/openai-and-anthropic-in-price-war-as-chinese-ai-rivals-gain-ground/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T14:27:14.000Z",
+      "description": "OpenAI and Anthropic are cutting prices as Chinese AI labs close the gap, squeezing the economics behind trillion-dollar valuations.",
+      "topics": [
+        "pricing",
+        "competition",
+        "china"
+      ],
+      "theme": "ai",
+      "image": "/img/4bc8b8918301.webp"
+    },
+    {
+      "id": "9216ddbf85fe",
+      "rank": 5,
+      "title": "US aircraft carrier on way to relieve USS Lincoln after issues reported aboard",
+      "url": "https://www.bbc.co.uk/news/articles/c171yp5zdrxo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T17:36:27.000Z",
+      "description": "A US aircraft carrier is being sent to relieve the USS Lincoln after reports of food shortages and broken plumbing among its crew.",
+      "topics": [
+        "navy",
+        "military",
+        "usslincoln"
+      ],
+      "theme": "world",
+      "image": "/img/9216ddbf85fe.webp"
+    },
+    {
+      "id": "d3f5f16afd1d",
+      "rank": 6,
+      "title": "South Korea proposes talks to officially end war with North",
+      "url": "https://www.bbc.co.uk/news/articles/c8en2z9jp2xo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T09:35:23.000Z",
+      "description": "South Korea's president proposed talks to formally end the Korean War, more than seven decades after the armistice.",
+      "topics": [
+        "korea",
+        "diplomacy",
+        "war"
+      ],
+      "theme": "world",
+      "image": "/img/d3f5f16afd1d.webp"
+    },
+    {
+      "id": "6a8fd307ba5f",
+      "rank": 7,
+      "title": "BBC seeks to subpoena Trump's family members in Panorama lawsuit",
+      "url": "https://www.bbc.co.uk/news/articles/cd69ely319eo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T00:01:53.000Z",
+      "description": "The BBC is seeking to subpoena members of Trump's family over his intentions in a January 6 speech, in an ongoing Panorama lawsuit.",
+      "topics": [
+        "trump",
+        "bbc",
+        "lawsuit"
+      ],
+      "theme": "world",
+      "image": "/img/6a8fd307ba5f.webp"
+    },
+    {
+      "id": "741d11c463c9",
+      "rank": 8,
+      "title": "Afghan women tell the BBC their lives are unrecognisable after five years of Taliban rule",
+      "url": "https://www.bbc.co.uk/news/articles/clyje43dz4eo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T18:25:38.000Z",
+      "description": "Five years into Taliban rule, Afghan women describe floggings, lost jobs and blocked healthcare access to the BBC.",
+      "topics": [
+        "afghanistan",
+        "taliban",
+        "women"
+      ],
+      "theme": "world",
+      "image": "/img/741d11c463c9.webp"
+    },
+    {
+      "id": "81e1fd255642",
+      "rank": 9,
+      "title": "France's top court blocks social media ban for under-15s",
+      "url": "https://www.bbc.co.uk/news/articles/cx2vj433xqlo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T16:35:06.000Z",
+      "description": "France's top court struck down a planned social media ban for under-15s as an infringement on free expression.",
+      "topics": [
+        "france",
+        "socialmedia",
+        "law"
+      ],
+      "theme": "world",
+      "image": "/img/81e1fd255642.webp"
+    },
+    {
+      "id": "dc254a6490b0",
+      "rank": 10,
+      "title": "Activists try to deliver aid to Palestinians in homes besieged by Israeli settlers",
+      "url": "https://www.bbc.co.uk/news/articles/c1w1ylw0p3no?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T17:03:17.000Z",
+      "description": "Activists tried to deliver aid to Palestinian families besieged in their West Bank homes by Israeli settlers for days.",
+      "topics": [
+        "westbank",
+        "israel",
+        "palestinians"
+      ],
+      "theme": "world",
+      "image": "/img/dc254a6490b0.webp"
+    },
+    {
+      "id": "297d6cc2d693",
+      "rank": 11,
+      "title": "Meta’s ‘open’ AI, and a $250M deal gone very wrong",
+      "url": "https://techcrunch.com/podcast/metas-open-ai-and-a-250m-deal-gone-very-wrong/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T14:00:00.000Z",
+      "description": "Meta's release of an open-weight model alongside Zuckerberg's 'AI for everyone' pitch coincides with a reported $250 million deal turning sour.",
+      "topics": [
+        "meta",
+        "zuckerberg",
+        "openweight"
+      ],
+      "theme": "ai",
+      "image": "/img/297d6cc2d693.webp"
+    },
+    {
+      "id": "9ff06a4356e7",
+      "rank": 12,
+      "title": "OpenAI hires new CRO as executive shake-up continues",
+      "url": "https://techcrunch.com/2026/08/13/openai-hires-new-cro-as-executive-shake-up-continues/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T17:07:13.000Z",
+      "description": "OpenAI replaced its chief revenue officer after just nine months, part of a continuing executive shake-up at the frontier lab.",
+      "topics": [
+        "openai",
+        "executives",
+        "business"
+      ],
+      "theme": "ai",
+      "image": "/img/9ff06a4356e7.webp"
+    },
+    {
+      "id": "72878d74ff8a",
+      "rank": 13,
+      "title": "Hyperscalers might regret embracing natural gas if new forecast proves correct",
+      "url": "https://techcrunch.com/2026/08/14/hyperscalers-might-regret-embracing-natural-gas-if-new-forecast-proves-correct/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T14:05:00.000Z",
+      "description": "A forecast that natural gas prices could triple threatens to hit hyperscalers with huge bills for powering AI data centers.",
+      "topics": [
+        "energy",
+        "datacenters",
+        "costs"
+      ],
+      "theme": "ai",
+      "image": "/img/72878d74ff8a.webp"
+    },
+    {
+      "id": "f40d536e546c",
+      "rank": 14,
+      "title": "Apple in talks to pay publishers to provide Siri with current news: report",
+      "url": "https://techcrunch.com/2026/08/13/apple-in-talks-to-pay-publishers-to-provide-siri-with-current-news-report/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T14:34:43.000Z",
+      "description": "Apple is reportedly considering a nine-figure budget to pay publishers so Siri can deliver current news.",
+      "topics": [
+        "apple",
+        "siri",
+        "publishers"
+      ],
+      "theme": "ai",
+      "image": "/img/f40d536e546c.webp"
+    },
+    {
+      "id": "44f5ffd58af3",
+      "rank": 15,
+      "title": "Suspecting court of using AI, man injected prompts in filings to try to win case",
+      "url": "https://arstechnica.com/tech-policy/2026/08/suspecting-court-of-using-ai-man-injected-prompts-in-filings-to-try-to-win-case/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T17:26:53.000Z",
+      "description": "A judge warned that pro se litigants are misusing chatbots after a man injected prompts into court filings to try to sway an AI-assisted judge.",
+      "topics": [
+        "courts",
+        "chatbots",
+        "legal"
+      ],
+      "theme": "ai",
+      "image": "/img/44f5ffd58af3.webp"
+    },
+    {
+      "id": "db35a37005ef",
+      "rank": 16,
+      "title": "Google will now allow users to remove visible watermark from its AI generations",
+      "url": "https://techcrunch.com/2026/08/14/google-will-now-allow-users-to-remove-visible-watermark-from-its-ai-generations/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T16:13:40.000Z",
+      "description": "Google will let users strip the visible watermark from its AI-generated images, though invisible detection marks remain.",
+      "topics": [
+        "google",
+        "watermarks",
+        "images"
+      ],
+      "theme": "ai",
+      "image": "/img/db35a37005ef.webp"
+    },
+    {
+      "id": "00fddd522fad",
+      "rank": 17,
+      "title": "Claude's new Scarlet Letter watermark is invisible—for now",
+      "url": "https://arstechnica.com/tech-policy/2026/08/claudes-new-scarlet-letter-watermark-is-invisible-for-now/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T11:10:18.000Z",
+      "description": "Anthropic's new Claude watermark flags AI-touched text but remains invisible to users for now.",
+      "topics": [
+        "anthropic",
+        "claude",
+        "watermarks"
+      ],
+      "theme": "ai",
+      "image": "/img/00fddd522fad.webp"
+    },
+    {
+      "id": "c2387aa89734",
+      "rank": 18,
+      "title": "The new Instagram logo is the perfect embodiment of AI slop",
+      "url": "https://arstechnica.com/ai/2026/08/the-new-instagram-logo-is-the-perfect-embodiment-of-ai-slop/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T17:32:10.000Z",
+      "description": "Critics say Instagram's new wordmark logo is a perfect, unintentional embodiment of low-quality AI-generated design.",
+      "topics": [
+        "instagram",
+        "design",
+        "aislop"
+      ],
+      "theme": "ai",
+      "image": "/img/c2387aa89734.webp"
+    },
+    {
+      "id": "f8fd4b463c3b",
+      "rank": 19,
+      "title": "20 hours in, I cannot believe the scale, complexity, and ambition of Fire Emblem: Fortune's Weave",
+      "url": "https://www.eurogamer.net/fire-emblem-fortunes-weave-preview",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T13:00:44.000Z",
+      "description": "Fire Emblem: Fortune's Weave impresses reviewers with an unusually massive scale and branching choices early on.",
+      "topics": [
+        "fireemblem",
+        "nintendo",
+        "rpg"
+      ],
+      "theme": "games",
+      "image": "/img/f8fd4b463c3b.webp"
+    },
+    {
+      "id": "735a7a5e4226",
+      "rank": 20,
+      "title": "Nintendo announces Pokémon Pokopia has sold over 5m copies, meaning that roughly one in four Switch 2 users now owns the game",
+      "url": "https://www.eurogamer.net/pokemon-pokopia-5m-sales",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T13:19:08.000Z",
+      "description": "Pokémon Pokopia has sold over five million copies, meaning roughly a quarter of Switch 2 owners now have the game.",
+      "topics": [
+        "pokemon",
+        "nintendo",
+        "sales"
+      ],
+      "theme": "games",
+      "image": "/img/735a7a5e4226.webp"
+    },
+    {
+      "id": "ab04a43aa6cd",
+      "rank": 21,
+      "title": "Netflix's gaming \"secret weapon\" is no more - Oxenfree studio Night School is to close",
+      "url": "https://www.eurogamer.net/netflix-games-oxenfree-unhinged-studio-night-school-closed",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T10:40:50.000Z",
+      "description": "Netflix's Oxenfree studio Night School is closing, ending hopes the streamer would back more ambitious games.",
+      "topics": [
+        "netflix",
+        "studio",
+        "closure"
+      ],
+      "theme": "games",
+      "image": "/img/ab04a43aa6cd.webp"
+    },
+    {
+      "id": "c1f21198c953",
+      "rank": 22,
+      "title": "Marvel's Wolverine \"fully playable\" on disc when it releases, Insomniac clarifies, perhaps making it one of the last few PlayStation games that will be",
+      "url": "https://www.eurogamer.net/marvels-wolverine-ps5-disc-insomniac-1",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-13T15:00:20.000Z",
+      "description": "Insomniac confirms Marvel's Wolverine will be fully playable on disc at launch, likely one of PlayStation's last such releases.",
+      "topics": [
+        "wolverine",
+        "playstation",
+        "insomniac"
+      ],
+      "theme": "games",
+      "image": "/img/c1f21198c953.webp"
+    },
+    {
+      "id": "51cbc227c118",
+      "rank": 23,
+      "title": "EA Sports FC might be getting a proper football game challenger, as 2K sets up new studio to make its \"next blockbuster sports franchise\"",
+      "url": "https://www.eurogamer.net/2k-sports-new-studio-ea-sports-fc-football-challenger",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T11:53:36.000Z",
+      "description": "2K is setting up a new studio led by a former FIFA producer to challenge EA Sports FC's dominance in football games.",
+      "topics": [
+        "2k",
+        "football",
+        "sportsgames"
+      ],
+      "theme": "games",
+      "image": "/img/51cbc227c118.webp"
+    },
+    {
+      "id": "77cc05423392",
+      "rank": 24,
+      "title": "Why Aging May Be a Program, Not a Breakdown",
+      "url": "https://www.quantamagazine.org/why-aging-may-be-a-program-not-a-breakdown-20260814/",
+      "publisher": "Quanta Magazine",
+      "feed": {
+        "name": "Quanta Magazine",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T13:10:26.000Z",
+      "description": "New research on millions of mouse cells suggests aging is a programmed remodeling process rather than random decay.",
+      "topics": [
+        "aging",
+        "biology",
+        "cells"
+      ],
+      "theme": "science",
+      "image": "/img/77cc05423392.webp"
+    },
+    {
+      "id": "d1f50a4a9f03",
+      "rank": 25,
+      "title": "Satellite Will Breathe Air to Stay in Orbit",
+      "url": "https://gizmodo.com/this-satellite-will-literally-breathe-air-to-stay-in-orbit-2000796713",
+      "publisher": "Gizmodo",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-14T19:41:13.000Z",
+      "description": "A new satellite design draws on atmospheric air to stay in low orbit longer, easing the need for onboard propellant.",
+      "topics": [
+        "satellite",
+        "orbit",
+        "spacetech"
+      ],
+      "theme": "science",
+      "image": null
+    },
+    {
+      "id": "abea839dbbbb",
+      "rank": 26,
+      "title": "AI productivity gains drive net CO₂ increase in global energy–economy model",
+      "url": "https://www.nature.com/articles/s44168-026-00411-0",
+      "publisher": "Nature",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-15T01:42:40.000Z",
+      "description": "A global energy-economy model finds AI productivity gains are driving a net increase in CO2 emissions, not a decrease.",
+      "topics": [
+        "climate",
+        "emissions",
+        "aieconomy"
+      ],
+      "theme": "science",
+      "image": null
+    },
+    {
+      "id": "3c2546e90fd8",
+      "rank": 27,
+      "title": "Disney's D23 2026: All the trailers, news, and reveals in one place",
+      "url": "https://www.polygon.com/d23-2026-marvel-trailers-star-wars-frozen-pixar-kingdom-hearts/",
+      "publisher": "Polygon",
+      "feed": {
+        "name": "Polygon",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T01:55:44.000Z",
+      "description": "Disney's D23 2026 event delivered a flood of trailers and reveals spanning Marvel, Star Wars, Pixar and more.",
+      "topics": [
+        "disney",
+        "d23",
+        "trailers"
+      ],
+      "theme": "culture",
+      "image": "/img/3c2546e90fd8.webp"
+    },
+    {
+      "id": "ba6036833b52",
+      "rank": 28,
+      "title": "Marvel’s ‘X-Men’ Reboot Sets May 2028 Release Date",
+      "url": "https://variety.com/2026/film/news/x-men-release-date-marvel-reboot-1236816959/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T04:50:40.000Z",
+      "description": "Marvel confirmed its X-Men reboot's cast and a May 2028 release date, folding the mutants into the MCU at last.",
+      "topics": [
+        "xmen",
+        "marvel",
+        "mcu"
+      ],
+      "theme": "culture",
+      "image": "/img/ba6036833b52.webp"
+    },
+    {
+      "id": "e67832bc70c8",
+      "rank": 29,
+      "title": "‘Ahsoka’ Season 2 Trailer: Ahsoka and Anakin Reunite as Grand Admiral Thrawn Declares War on the Rebels",
+      "url": "https://variety.com/2026/tv/news/ahsoka-season-2-trailer-release-date-star-wars-1236826698/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T04:25:07.000Z",
+      "description": "Ahsoka season 2 gets a January 2027 release date, with Thrawn declaring war on the Rebels in a new trailer.",
+      "topics": [
+        "ahsoka",
+        "starwars",
+        "disneyplus"
+      ],
+      "theme": "culture",
+      "image": "/img/e67832bc70c8.webp"
+    },
+    {
+      "id": "dab15f88e395",
+      "rank": 30,
+      "title": "‘Zootopia 3’ in the Works at Disney",
+      "url": "https://variety.com/2026/film/news/zootopia-3-disney-1236835053/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T04:31:12.000Z",
+      "description": "Disney confirmed Zootopia 3 is in development after Zootopia 2 became its highest-grossing animated film ever.",
+      "topics": [
+        "zootopia",
+        "disney",
+        "animation"
+      ],
+      "theme": "culture",
+      "image": "/img/dab15f88e395.webp"
+    }
+  ]
+}
