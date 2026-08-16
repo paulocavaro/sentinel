@@ -1,0 +1,608 @@
+{
+  "date": "2026-08-16",
+  "generatedAt": "2026-08-16T09:47:09.962Z",
+  "summary": "Today's news mixes deadly disasters and conflicts worldwide with fresh AI safety and industry controversies, notable science findings, big game release news and Hollywood award highlights.",
+  "targetCount": 30,
+  "items": [
+    {
+      "id": "0c7e95b967e3",
+      "rank": 1,
+      "title": "Five killed as Russia launches fresh aerial attacks across Ukraine",
+      "url": "https://www.bbc.co.uk/news/articles/c1411pgje8xo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-16T09:04:14.000Z",
+      "description": "Russia's fresh aerial attacks killed five and hit civilian infrastructure across Ukraine, deepening the war's toll.",
+      "topics": [
+        "ukraine",
+        "russia",
+        "war"
+      ],
+      "theme": "world",
+      "image": "/img/0c7e95b967e3.webp"
+    },
+    {
+      "id": "83ae32ea35dd",
+      "rank": 2,
+      "title": "Thousands displaced by deadly Indonesia earthquake as rescue efforts continue",
+      "url": "https://www.bbc.co.uk/news/articles/c3v00w5ylw9o?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-16T08:23:38.000Z",
+      "description": "A deadly Indonesian earthquake has displaced thousands and killed at least 51 people as rescues continue.",
+      "topics": [
+        "earthquake",
+        "indonesia",
+        "disaster"
+      ],
+      "theme": "world",
+      "image": "/img/83ae32ea35dd.webp"
+    },
+    {
+      "id": "f939cd824404",
+      "rank": 3,
+      "title": "Woman claims her stepfather used Grok to transform childhood photo into explicit imagery",
+      "url": "https://techcrunch.com/2026/08/15/woman-claims-her-stepfather-used-grok-to-transform-childhood-photo-into-explicit-imagery/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T21:29:19.000Z",
+      "description": "A woman says her stepfather used Grok to turn a childhood photo into explicit imagery, spotlighting AI's abuse risks.",
+      "topics": [
+        "grok",
+        "abuse",
+        "safety"
+      ],
+      "theme": "ai",
+      "image": "/img/f939cd824404.webp"
+    },
+    {
+      "id": "5be8c8acff0f",
+      "rank": 4,
+      "title": "Eleven killed in Israeli strikes on southern Lebanon, authorities say",
+      "url": "https://www.bbc.co.uk/news/articles/c4gjygx4gjeo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T20:21:14.000Z",
+      "description": "Israeli strikes on southern Lebanon killed eleven, escalating tensions with Hezbollah.",
+      "topics": [
+        "lebanon",
+        "israel",
+        "conflict"
+      ],
+      "theme": "world",
+      "image": "/img/5be8c8acff0f.webp"
+    },
+    {
+      "id": "1a3adb0a42db",
+      "rank": 5,
+      "title": "Hurricane Lala lashes Hawaii with strong winds and torrential rain",
+      "url": "https://www.bbc.co.uk/news/articles/crmrr7kjy9vo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-16T08:49:32.000Z",
+      "description": "Hurricane Lala threatens Hawaii with its first direct hit in 34 years, bringing strong winds and torrential rain.",
+      "topics": [
+        "hurricane",
+        "hawaii",
+        "weather"
+      ],
+      "theme": "world",
+      "image": "/img/1a3adb0a42db.webp"
+    },
+    {
+      "id": "ee013739777e",
+      "rank": 6,
+      "title": "Twelve killed as Polish bus veers off Hungarian motorway",
+      "url": "https://www.bbc.co.uk/news/articles/ckg4424zd7go?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-16T07:04:17.000Z",
+      "description": "Twelve people died when a Polish tourist bus veered off a Hungarian motorway.",
+      "topics": [
+        "accident",
+        "bus",
+        "europe"
+      ],
+      "theme": "world",
+      "image": "/img/ee013739777e.webp"
+    },
+    {
+      "id": "b89f894a66c0",
+      "rank": 7,
+      "title": "Anthropic shares more details about how Claude’s new watermarks will work",
+      "url": "https://techcrunch.com/2026/08/15/anthropic-shares-more-details-about-how-claudes-new-watermarks-will-work/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T18:58:39.000Z",
+      "description": "Anthropic details how Claude's new text watermarking works, including its resilience to editing and effect on code.",
+      "topics": [
+        "anthropic",
+        "watermark",
+        "claude"
+      ],
+      "theme": "ai",
+      "image": "/img/b89f894a66c0.webp"
+    },
+    {
+      "id": "4c2801492334",
+      "rank": 8,
+      "title": "SpaceX officially closes its Cursor acquisition",
+      "url": "https://techcrunch.com/2026/08/15/spacex-officially-closes-its-cursor-acquisition/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T16:30:00.000Z",
+      "description": "SpaceX has officially completed its acquisition of AI coding startup Cursor, folding it into Musk's empire.",
+      "topics": [
+        "spacex",
+        "cursor",
+        "acquisition"
+      ],
+      "theme": "ai",
+      "image": "/img/4c2801492334.webp"
+    },
+    {
+      "id": "2e958920dea6",
+      "rank": 9,
+      "title": "The first anti-AI protester to be jailed has a message for OpenAI, Anthropic and Meta: ‘Regain your humanity’",
+      "url": "https://www.theguardian.com/us-news/2026/aug/16/california-openai-protester-wynd-kaufman",
+      "publisher": "The Guardian",
+      "feed": {
+        "name": "The Guardian AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-16T08:00:20.000Z",
+      "description": "The first person jailed for anti-AI protest urges OpenAI, Anthropic and Meta to 'regain your humanity'.",
+      "topics": [
+        "protest",
+        "activism",
+        "ai"
+      ],
+      "theme": "ai",
+      "image": "/img/2e958920dea6.webp"
+    },
+    {
+      "id": "bc223704ae1a",
+      "rank": 10,
+      "title": "US to tell partners they must pick sides in AI race with China",
+      "url": "https://www.reuters.com/world/china/us-tell-partners-they-must-pick-sides-ai-race-with-china-2026-08-14/",
+      "publisher": "Reuters",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-15T16:25:14.000Z",
+      "description": "The US is reportedly pressing allies to pick sides in its AI competition with China.",
+      "topics": [
+        "geopolitics",
+        "china",
+        "policy"
+      ],
+      "theme": "ai",
+      "image": null
+    },
+    {
+      "id": "9cf3728138b8",
+      "rank": 11,
+      "title": "OpenAI talent exodus raises 'huge red flag' ahead of IPO",
+      "url": "https://www.cnbc.com/2026/08/14/open-ai-ipo-red-flag.html",
+      "publisher": "Cnbc",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-14T19:05:21.000Z",
+      "description": "OpenAI's wave of departing talent is raising concerns as the company heads toward a possible IPO.",
+      "topics": [
+        "openai",
+        "ipo",
+        "talent"
+      ],
+      "theme": "ai",
+      "image": "/img/9cf3728138b8.webp"
+    },
+    {
+      "id": "23be1c8a10c0",
+      "rank": 12,
+      "title": "Does Mark Zuckerberg really believe AI is ‘for everyone’?",
+      "url": "https://techcrunch.com/video/does-mark-zuckerberg-really-believe-ai-is-for-everyone/",
+      "publisher": "TechCrunch",
+      "feed": {
+        "name": "TechCrunch AI",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T15:43:28.000Z",
+      "description": "Meta's Zuckerberg claims AI should be 'for everyone,' even as its most powerful model stays locked away.",
+      "topics": [
+        "meta",
+        "zuckerberg",
+        "openweights"
+      ],
+      "theme": "ai",
+      "image": "/img/23be1c8a10c0.webp"
+    },
+    {
+      "id": "026a83dad2db",
+      "rank": 13,
+      "title": "Anthropic Risk August 2026 [pdf]",
+      "url": "https://www-cdn.anthropic.com/f61d49fa5596956a5dec75fea0e973bf6a6a8378/Redacted%20Risk%20Report%20August%202026%20.pdf",
+      "publisher": "Anthropic",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-14T19:32:15.000Z",
+      "description": "Anthropic released a new risk report outlining its assessment of AI dangers as of August 2026.",
+      "topics": [
+        "anthropic",
+        "risk",
+        "safety"
+      ],
+      "theme": "ai",
+      "image": null
+    },
+    {
+      "id": "01a36e6784c2",
+      "rank": 14,
+      "title": "Five years after the Taliban swept to power, does the West have any influence?",
+      "url": "https://www.bbc.co.uk/news/articles/cm2gp5g0xngo?at_medium=RSS&at_campaign=rss",
+      "publisher": "BBC",
+      "feed": {
+        "name": "BBC World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T17:00:14.000Z",
+      "description": "Five years after the Taliban's takeover, analysts question what leverage the West still holds in Afghanistan.",
+      "topics": [
+        "afghanistan",
+        "taliban",
+        "geopolitics"
+      ],
+      "theme": "world",
+      "image": "/img/01a36e6784c2.webp"
+    },
+    {
+      "id": "4008c1c39a0f",
+      "rank": 15,
+      "title": "From Europe to Asia, floods to heatwaves, world experiences weather shocks",
+      "url": "https://www.npr.org/2026/08/14/g-s1-138727/europe-asia-floods-heatwaves-world-weather",
+      "publisher": "NPR",
+      "feed": {
+        "name": "NPR World",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T10:30:17.000Z",
+      "description": "Floods, heatwaves and wildfires are hitting Europe and Asia simultaneously as extreme weather intensifies globally.",
+      "topics": [
+        "climate",
+        "weather",
+        "disaster"
+      ],
+      "theme": "world",
+      "image": "/img/4008c1c39a0f.webp"
+    },
+    {
+      "id": "55ac7a10e85b",
+      "rank": 16,
+      "title": "So much solar: Digging into the list of every US power plant that went online this year",
+      "url": "https://arstechnica.com/science/2026/08/so-much-solar-digging-into-the-list-of-every-us-power-plant-that-went-online-this-year/",
+      "publisher": "Ars Technica",
+      "feed": {
+        "name": "Ars Technica Science",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T11:09:57.000Z",
+      "description": "Data on 2026's new US power plants shows solar and batteries dominating over fossil fuel additions.",
+      "topics": [
+        "solar",
+        "energy",
+        "climate"
+      ],
+      "theme": "science",
+      "image": "/img/55ac7a10e85b.webp"
+    },
+    {
+      "id": "0e379fe69fb9",
+      "rank": 17,
+      "title": "At-home test for infected ticks could improve Lyme Disease diagnosis",
+      "url": "https://www.smithsonianmag.com/innovation/the-first-at-home-test-for-infected-ticks-could-improve-lyme-disease-diagnosis-180989235/",
+      "publisher": "Smithsonianmag",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-15T14:04:49.000Z",
+      "description": "A new at-home test for infected ticks could improve early detection of Lyme disease.",
+      "topics": [
+        "lyme",
+        "health",
+        "diagnostics"
+      ],
+      "theme": "science",
+      "image": "/img/0e379fe69fb9.webp"
+    },
+    {
+      "id": "bba2ef91d85c",
+      "rank": 18,
+      "title": "Abdominal fat predicts heart disease risk better than BMI",
+      "url": "https://www.acc.org/about-acc/press-releases/2026/08/11/14/59/abdominal-fat-predicts-heart-disease-risk-better-than-bmi",
+      "publisher": "Acc",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-15T21:14:34.000Z",
+      "description": "Research finds abdominal fat is a better predictor of heart disease risk than BMI.",
+      "topics": [
+        "health",
+        "obesity",
+        "heart"
+      ],
+      "theme": "science",
+      "image": null
+    },
+    {
+      "id": "dbe7770d72bb",
+      "rank": 19,
+      "title": "Targeted marine cloud brightening weakens subsequent El Niño",
+      "url": "https://www.science.org/doi/10.1126/sciadv.adx3012",
+      "publisher": "Science",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-16T03:40:05.000Z",
+      "description": "A study finds targeted marine cloud brightening can weaken the following El Niño event.",
+      "topics": [
+        "climate",
+        "ocean",
+        "geoengineering"
+      ],
+      "theme": "science",
+      "image": null
+    },
+    {
+      "id": "7fa0012240d5",
+      "rank": 20,
+      "title": "388 years ago, Galileo worked out why human giants can't exist",
+      "url": "https://www.scientificamerican.com/article/388-years-ago-galileo-worked-out-why-human-giants-cant-exist-and-explained-a-law-of-nature/",
+      "publisher": "Scientific American",
+      "feed": {
+        "name": "Hacker News",
+        "kind": "forum"
+      },
+      "publishedAt": "2026-08-15T13:15:48.000Z",
+      "description": "388 years after Galileo, his reasoning on why giant humans can't exist still holds up physically.",
+      "topics": [
+        "physics",
+        "history",
+        "science"
+      ],
+      "theme": "science",
+      "image": null
+    },
+    {
+      "id": "08e5a5dfec53",
+      "rank": 21,
+      "title": "Kingdom Hearts 4 finally has a release window, if not quite a firm release date",
+      "url": "https://www.eurogamer.net/kingdom-hearts-release-window-2027",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T10:42:49.000Z",
+      "description": "Kingdom Hearts 4 finally gets a release window of late 2027 after years of anticipation.",
+      "topics": [
+        "kingdomhearts",
+        "squareenix",
+        "release"
+      ],
+      "theme": "games",
+      "image": "/img/08e5a5dfec53.webp"
+    },
+    {
+      "id": "dbfa3b8cb6d7",
+      "rank": 22,
+      "title": "Killing PlayStation discs could make PS Store games cheaper, according to a former Square Enix exec",
+      "url": "https://www.eurogamer.net/ps-store-prices-cheaper-disc-production-end",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T16:21:22.000Z",
+      "description": "A former Square Enix executive says killing PlayStation discs could actually lower PS Store prices.",
+      "topics": [
+        "playstation",
+        "pricing",
+        "digital"
+      ],
+      "theme": "games",
+      "image": "/img/dbfa3b8cb6d7.webp"
+    },
+    {
+      "id": "186aa29fc5e2",
+      "rank": 23,
+      "title": "Halo: Campaign Evolved studio outlines five key updates that'll drop with next week's big patch",
+      "url": "https://www.eurogamer.net/halo-campaign-evolved-patch-jackal-johnson",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T10:35:29.000Z",
+      "description": "Halo: Campaign Evolved's developer outlines five fixes coming in next week's major patch.",
+      "topics": [
+        "halo",
+        "patch",
+        "xbox"
+      ],
+      "theme": "games",
+      "image": "/img/186aa29fc5e2.webp"
+    },
+    {
+      "id": "97e4152b19aa",
+      "rank": 24,
+      "title": "2K establishes AAA sports developer Small Axe Studios",
+      "url": "https://www.gamesindustry.biz/2k-establishes-aaa-sports-developer-small-axe-studios",
+      "publisher": "GamesIndustry.biz",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T11:06:51.000Z",
+      "description": "2K has launched a new AAA sports studio, Small Axe, based in Vancouver.",
+      "topics": [
+        "2k",
+        "studio",
+        "sports"
+      ],
+      "theme": "games",
+      "image": "/img/97e4152b19aa.webp"
+    },
+    {
+      "id": "56d9b374a226",
+      "rank": 25,
+      "title": "Niko Partners: India games market exceeds $1bn, forecast to reach $1.2bn by end of 2026",
+      "url": "https://www.gamesindustry.biz/niko-partners-india-games-market-exceeds-1bn-forecast-to-reach-12bn-by-end-of-2026",
+      "publisher": "GamesIndustry.biz",
+      "feed": {
+        "name": "GamesIndustry.biz",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T13:47:08.000Z",
+      "description": "India's games market has topped $1 billion for the first time, growing nearly 15% year over year.",
+      "topics": [
+        "india",
+        "market",
+        "growth"
+      ],
+      "theme": "games",
+      "image": "/img/56d9b374a226.webp"
+    },
+    {
+      "id": "afe0ef19e0fd",
+      "rank": 26,
+      "title": "Compulsion Games becomes publisher of South of Midnight on Steam, suggesting departure from Xbox amid major restructuring is now complete",
+      "url": "https://www.eurogamer.net/compulsion-games-south-of-midnight-publisher-xbox-restructuring",
+      "publisher": "Eurogamer",
+      "feed": {
+        "name": "Eurogamer",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-14T14:17:44.000Z",
+      "description": "Compulsion Games appears to have completed its split from Xbox after becoming publisher of South of Midnight.",
+      "topics": [
+        "xbox",
+        "compulsion",
+        "publishing"
+      ],
+      "theme": "games",
+      "image": "/img/afe0ef19e0fd.webp"
+    },
+    {
+      "id": "1188a5e69678",
+      "rank": 27,
+      "title": "‘The Pitt,’ ‘Hacks’ and ‘Beef’ Among Astra TV Awards Winners",
+      "url": "https://variety.com/2026/awards/news/the-pitt-hacks-beef-astra-tv-awards-winners-1236835570/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-16T05:00:00.000Z",
+      "description": "The Pitt, Hacks and Beef swept the 2026 Astra TV Awards, with The Pitt taking home six trophies.",
+      "topics": [
+        "tvawards",
+        "television",
+        "awards"
+      ],
+      "theme": "culture",
+      "image": "/img/1188a5e69678.webp"
+    },
+    {
+      "id": "27f336082be4",
+      "rank": 28,
+      "title": "‘Monsters, Inc.’ Themed Land Will Open at Disney World in 2027",
+      "url": "https://variety.com/2026/film/news/monsters-inc-themed-land-will-disney-world-2027-1236834775/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-16T04:11:12.000Z",
+      "description": "Disney announced a new Monsters, Inc.-themed land opening at Disney World in 2027.",
+      "topics": [
+        "disney",
+        "themepark",
+        "monstersinc"
+      ],
+      "theme": "culture",
+      "image": null
+    },
+    {
+      "id": "b3b5374d6edf",
+      "rank": 29,
+      "title": "Slipknot Confirms Sid Wilson’s Sudden Exit: ‘We Wish Him the Best’",
+      "url": "https://variety.com/2026/music/news/slipknot-confirms-sid-wilson-sudden-exit-1236835546/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T21:41:30.000Z",
+      "description": "Slipknot confirmed the sudden exit of longtime member Sid Wilson after nearly 30 years with the band.",
+      "topics": [
+        "slipknot",
+        "music",
+        "band"
+      ],
+      "theme": "culture",
+      "image": "/img/b3b5374d6edf.webp"
+    },
+    {
+      "id": "4481c825a1ba",
+      "rank": 30,
+      "title": "‘Lanterns’ Bosses and Stars on How the Show’s Grounded Approach Ushers in an ‘Entirely Different Kind of Superhero’",
+      "url": "https://variety.com/2026/tv/news/lanterns-creators-grounded-show-future-dcu-1236835494/",
+      "publisher": "Variety",
+      "feed": {
+        "name": "Variety",
+        "kind": "press"
+      },
+      "publishedAt": "2026-08-15T20:30:06.000Z",
+      "description": "Lanterns' creators discuss how their grounded take reinvents the Green Lantern mythology for DC's new universe.",
+      "topics": [
+        "dc",
+        "lanterns",
+        "television"
+      ],
+      "theme": "culture",
+      "image": "/img/4481c825a1ba.webp"
+    }
+  ]
+}
